@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 2, Part 1: Special Relativity | Modern Physics</title>
+<meta name="description" content="Interactive lecture notes for Chapter 2 (Part 1) of an undergraduate Modern Physics course: Galilean invariance, the ether and the Michelson–Morley experiment, Einstein's postulates, the Lorentz transformation, time dilation, and length contraction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+
+
+:root{
+  --paper:#F3F5F7; --surface:#FFFFFF; --ink:#0E1420; --muted:#3E4859; --rule:#C3CBD6;
+  --up:#1537A8; --down:#B35F00; --crit:#B3104E; --mark:#C2EDB0; --mark-edge:#2E8A1E;
+  --spin-up:#0A1F6E; --spin-down:#FFD23F;
+  --serif:"Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --ui-font:"IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0B1019; --surface:#131A27; --ink:#F4F6FA; --muted:#BAC4D3; --rule:#35415A;
+    --up:#8FAEFF; --down:#FFC23D; --crit:#FF7AA6; --mark:#244A1E; --mark-edge:#7EDB6A;
+    --spin-up:#1E3FBF; --spin-down:#FFD23F;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+a{color:var(--up);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--crit);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;font-weight:700}
+h2{font-size:1.9rem;margin:3.6rem 0 .6rem;letter-spacing:-.01em}
+h2 .sec{color:var(--muted);font-weight:400;margin-right:.35em}
+h3{font-size:1.3rem;margin:2.4rem 0 .4rem}
+p,ul,ol{max-width:68ch}
+p,li,figcaption,h3{overflow-wrap:break-word}
+.ui{font-family:var(--ui-font)}
+
+/* hero */
+header.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:3rem;align-items:center;
+  max-width:1180px;margin:0 auto;padding:3.5rem 1.5rem 2.5rem}
+.course{font-family:var(--ui-font);font-size:1rem;color:var(--muted);margin:0 0 1rem}
+.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);margin:0 0 1.2rem;letter-spacing:-.02em}
+.hero h1 span{display:block;font-weight:400;font-style:italic;font-size:.5em;letter-spacing:0;color:var(--muted);margin-top:.35em}
+.hero .lede{font-size:1.2rem;max-width:34ch}
+.lattice-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:12px}
+canvas.lattice{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px}
+.lattice-wrap .controls{margin-top:10px}
+
+/* layout */
+.page{display:grid;grid-template-columns:200px minmax(0,1fr);gap:3rem;max-width:1180px;margin:0 auto;padding:0 1.5rem 4rem}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1.5rem);align-self:start;font-family:var(--ui-font);font-size:.95rem;padding-top:3.8rem}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:.15rem 0}
+nav.toc ol ol{padding-left:.9rem;font-size:.9rem}
+nav.toc a{color:var(--muted);text-decoration:none;display:block;padding:.15rem 0 .15rem .6rem;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.active{color:var(--ink);border-left-color:var(--crit)}
+main{min-width:0}
+
+/* key results echo the green boxes of the handwritten notes */
+.result{background:var(--mark);border-left:4px solid var(--mark-edge);padding:.6rem 1rem;margin:1.2rem 0;max-width:68ch;overflow-x:auto}
+.result p{margin:.2rem 0}
+.aside{color:var(--muted);font-style:italic;border-left:1px solid var(--rule);padding-left:1rem}
+mark{background:linear-gradient(transparent 55%, var(--mark) 55%);color:inherit;padding:0 .1em}
+.question{border:1.5px solid var(--ink);padding:.9rem 1.2rem;margin:2rem 0 1rem;max-width:68ch}
+.question h3{margin:0;font-size:1.2rem}
+.question h3 b{color:var(--crit)}
+.math-scroll{overflow-x:auto;max-width:68ch}
+/* keep KaTeX's absolutely positioned accessibility markup inside scroll boxes */
+.result,.math-scroll,.table-scroll{position:relative}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+
+/* demos */
+figure.demo{margin:1.8rem 0 2.2rem;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.2rem 1rem}
+figure.demo > .title{font-family:var(--ui-font);font-weight:600;font-size:1.05rem;margin:0 0 .7rem}
+figure.demo figcaption{font-size:.95rem;color:var(--muted);margin-top:.8rem;max-width:80ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}
+.grid-lat{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.4rem;align-items:start}
+canvas.plot{display:block;width:100%;height:280px}
+.plot-label{font-family:var(--ui-font);font-size:.9rem;color:var(--muted);margin:0 0 .2rem}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;font-family:var(--ui-font);font-size:.95rem;margin-bottom:.8rem}
+.controls label{display:flex;align-items:center;gap:.5rem}
+.controls input[type=range]{width:150px;accent-color:var(--up)}
+.controls output{font-variant-numeric:tabular-nums;min-width:4.5ch;display:inline-block}
+button,select{font-family:var(--ui-font);font-size:.92rem;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:3px;padding:.3rem .7rem;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.readout{font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;margin:.5rem 0 0}
+.readout b{font-weight:600}
+.swatch{display:inline-block;width:.8em;height:.8em;border-radius:1px;vertical-align:-.05em;margin-right:.25em}
+
+table.exps{border-collapse:collapse;font-size:1rem;margin:1rem 0;min-width:520px}
+table.exps th,table.exps td{text-align:left;padding:.45rem .9rem .45rem 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.exps th{font-family:var(--ui-font);font-weight:600;color:var(--muted)}
+.table-scroll{overflow-x:auto}
+
+ol.timeline{list-style:none;padding:0;margin:1.2rem 0;max-width:72ch;border-left:2px solid var(--rule)}
+ol.timeline li{position:relative;padding:0 0 1.1rem 1.4rem}
+ol.timeline li::before{content:"";position:absolute;left:-7px;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--up)}
+ol.timeline .yr{font-family:var(--ui-font);font-weight:600;margin-right:.6rem}
+
+footer{max-width:1180px;margin:0 auto;padding:2rem 1.5rem 3rem;border-top:1px solid var(--rule);font-size:.95rem;color:var(--muted)}
+footer p{max-width:90ch}
+
+@media (max-width:980px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  nav.toc{display:none}
+  header.hero{grid-template-columns:minmax(0,1fr);gap:1.8rem;padding-top:2rem}
+  .lattice-wrap{max-width:460px}
+}
+@media (max-width:720px){
+  .grid2,.grid-lat{grid-template-columns:minmax(0,1fr)}
+  h2{font-size:1.6rem}
+  figure.demo{padding:.9rem .8rem}
+  .controls input[type=range]{width:110px}
+  .katex-display{font-size:.86em}
+  .result{padding:.5rem .7rem}
+  .controls label{flex-wrap:wrap}
+}
+
+/* chapter 2 additions */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+canvas.kymo{display:block;width:100%;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px;background:var(--spin-down)}
+.chapnav{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-family:var(--ui-font);font-size:1rem;margin:0 0 1rem}
+.chapnav a{color:var(--muted)}
+.checklist{list-style:none;padding:0;margin:.6rem 0 0;font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;max-width:none}
+.checklist li{margin:.15rem 0}
+.checklist .ok{color:var(--mark-edge);font-weight:600}
+.checklist .bad{color:var(--crit);font-weight:600}
+.proof{border-left:2px solid var(--rule);padding-left:1rem;margin:1rem 0;max-width:68ch}
+.proof > p:first-child{margin-top:0}
+.qed{font-family:var(--ui-font);font-size:.85rem;border:1px solid var(--ink);padding:0 .3rem;margin-left:.4rem}
+svg.frustration{display:block;width:100%;max-width:220px;height:auto}
+@media (max-width:900px){ .grid3{grid-template-columns:minmax(0,1fr)} }
+
+canvas.anim{display:block;width:100%;border-radius:2px;background:var(--surface)}
+.ko{font-family:var(--ui-font);color:var(--muted);font-size:.92em}
+.calc input[type=number]{font-family:var(--ui-font);font-size:.95rem;width:6.5em;padding:.2rem .4rem;border:1px solid var(--rule);border-radius:3px;background:var(--paper);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div>
+    <p class="course">Modern Physics <span class="ko">(현대물리학)</span>, undergraduate course, Department of Physics, Gyeongsang National University</p>
+    <h1>Chapter 2: Special theory of relativity<span>Part 1: from the ether to the Lorentz transformation</span></h1>
+    <p class="lede">Why the speed of light broke Newtonian space and time, and what replaced them: Einstein's two postulates, the Lorentz transformation, moving clocks that run slow, and moving rulers that shrink.</p>
+  </div>
+  <div class="lattice-wrap">
+    <canvas class="anim" id="hero-cv" style="height:300px" aria-label="A spaceship passing a row of synchronized clocks"></canvas>
+    <div class="controls" style="margin:10px 0 0">
+      <label>Speed \(v/c\) <input type="range" id="hero-v" min="0" max="0.98" step="0.01" value="0.8"> <output id="hero-v-out"></output></label>
+      <button id="hero-play" aria-pressed="false">Pause</button>
+    </div>
+    <p class="readout" id="hero-read" style="margin-top:.2rem;color:var(--muted)"></p>
+  </div>
+</header>
+
+<div class="page">
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li><a href="#s2-0">Inertial frames and Galilean invariance</a></li>
+    <li><a href="#s2-1">2.1 The apparent need for ether</a></li>
+    <li><a href="#s2-2">2.2 The Michelson–Morley experiment</a></li>
+    <li><a href="#s2-3">2.3 Einstein's postulates</a></li>
+    <li><a href="#s2-4">2.4 The Lorentz transformation</a></li>
+    <li><a href="#s2-5">2.5 Time dilation and length contraction</a></li>
+    <li><a href="#reading">Further reading</a></li>
+  </ol>
+  <p style="margin-top:1.5rem"><a href="ch02b-spacetime-and-relativistic-dynamics.html">Chapter 2, Part 2</a></p>
+  <p><a href="index.html">All chapters</a></p>
+</nav>
+
+<main>
+
+<!-- ======================= inertial frames ======================= -->
+<section id="s2-0">
+<h2>Inertial frames and Galilean invariance</h2>
+<p>An <mark>inertial reference frame</mark> <span class="ko">(관성기준틀)</span> is one in which Newton's laws are valid. Why not everywhere? Because \(\vec F = m\vec a\) holds only when the frame itself is not accelerating. In an accelerating frame, objects seem to accelerate with no force acting, and to keep Newton's laws we must invent <b>fictitious</b> (apparent) forces <span class="ko">(가상력)</span>, such as the inertial force <span class="ko">(관성력)</span> and the centrifugal force <span class="ko">(원심력)</span>. Two frames K and K′ in relative motion along their \(x\) axes are both inertial only when their relative velocity \(\vec v\) is constant.</p>
+<p><b>A reminder from Physics 1.</b> For an object P seen from two observers A and B, the positions satisfy \(\vec r_{PA} = \vec r_{PB} + \vec r_{BA}\). Differentiating with respect to time,</p>
+<div class="math-scroll">\[ \vec v_{PA} = \vec v_{PB} + \vec v_{BA},\qquad \vec a_{PA} = \vec a_{PB} \quad(\text{when } \vec v_{BA} \text{ is constant}). \]</div>
+<p>For example, if a car (P) moves at 100 km/h as seen by a person standing by the road (A), a second car (B) moving the same way at 50 km/h sees it moving at 50 km/h: \(100 = 50 + 50\). If the first car brakes to a stop over a time \(\Delta t\), its velocity changes by \(-100\) km/h for both observers (to 0 for A, to \(-50\) km/h for B), so both measure the same acceleration \(-100\,\text{km/h}/\Delta t\). The same force produces the same acceleration: Newton's laws hold in both frames.</p>
+<p>This "classical" invariance is <mark>Newton's principle of relativity</mark>, or Galilean invariance: <i>it is not possible to determine absolute motion in space by any experiment</i>. In addition, time and space are assumed to be completely separate. The coordinates in K and K′ are related by the <b>Galilean transformation</b></p>
+<div class="result"><p>\[ \begin{gathered} x' = x - vt,\quad y' = y,\quad z' = z,\quad t' = t\\ \text{or}\quad x = x' + vt,\quad y = y',\quad z = z',\quad t = t'. \end{gathered} \]</p></div>
+<p>Newton's laws have the same form under a Galilean transformation, but <mark>Maxwell's equations do not</mark>: a field that is purely electric in K can appear partly magnetic in K′. Albert Einstein proposed in 1905 that space and time are not separate, and that Newton's laws are only an approximation. This is the <b>special</b> theory of relativity <span class="ko">(특수상대성이론)</span>; "special" because it deals with inertial frames. The general theory, which includes gravity, comes in Chapter 15.</p>
+</section>
+
+<!-- ======================= 2.1 ======================= -->
+<section id="s2-1">
+<h2><span class="sec">2.1</span>The apparent need for ether</h2>
+<p>All known waves other than light need a medium <span class="ko">(매질)</span> to propagate: water waves need water, and sound waves need air. Physicists therefore assumed that light, an electromagnetic wave, travels through a hypothetical medium, the <mark>luminiferous ether</mark> <span class="ko">(에테르)</span>. Because everyday speeds are tiny compared with the speed of light, it was hard to see any effect of motion through it.</p>
+<p>Maxwell's theory gives the speed of light in vacuum as</p>
+<div class="result"><p>\[ c = \frac{1}{\sqrt{\mu_0\epsilon_0}} \approx 3\times10^8\ \text{m/s}, \]</p></div>
+<p>which depends only on the electromagnetic properties of the medium. By the classical laws, light moving with velocity \(\vec c\) in K′ should be measured as \(\vec c + \vec v\) in K. But Maxwell's equations do not distinguish between K and K′. Physicists of the late 19th century concluded that there must be one preferred inertial frame, in which the ether is stationary and the speed of light is exactly \(c\).</p>
+</section>
+
+<!-- ======================= 2.2 ======================= -->
+<section id="s2-2">
+<h2><span class="sec">2.2</span>The Michelson–Morley experiment</h2>
+<p>The Earth orbits the Sun at about \(v\approx3\times10^4\) m/s \(\approx10^{-4}c\). If the ether exists, the Earth moves through it, and from the Earth's point of view there is an "ether wind" blowing past. Michelson's <b>interferometer</b> splits a light beam at a partially silvered mirror A into two beams that travel along perpendicular arms of lengths \(\ell_1\) (parallel to \(\vec v\)) and \(\ell_2\) (perpendicular), reflect from mirrors, and recombine. Measuring the <mark>phase difference</mark> between the two beams, as a shift of the interference fringes, measures the difference in their travel times.</p>
+<p><b>Parallel arm</b> (\(A\to C\to A\)): the light moves against the ether wind at speed \(c-v\) and with it at \(c+v\),</p>
+<div class="math-scroll">\[ t_1 = \frac{\ell_1}{c+v} + \frac{\ell_1}{c-v} = \frac{2c\ell_1}{c^2-v^2} = \frac{2\ell_1}{c}\Big(\frac{1}{1-v^2/c^2}\Big). \]</div>
+<p><b>Perpendicular arm</b> (\(A\to D\to A\)): relative to the stationary ether, the light must travel along a slanted path so that \((ct_2/2)^2 = \ell_2^2 + (vt_2/2)^2\), the same on the way back by symmetry, so</p>
+<div class="math-scroll">\[ \begin{gathered} t_2 = \frac{2\ell_2}{\sqrt{c^2-v^2}} = \frac{2\ell_2}{c}\frac{1}{\sqrt{1-v^2/c^2}},\\ \Delta t = t_2 - t_1 = \frac2c\Big(\frac{\ell_2}{\sqrt{1-v^2/c^2}} - \frac{\ell_1}{1-v^2/c^2}\Big). \end{gathered} \]</div>
+<p>Since the arm lengths are not known to a fraction of a wavelength, Michelson rotated the apparatus by 90°, so that \(\ell_2\) is parallel to \(\vec v\) and \(\ell_1\) perpendicular:</p>
+<div class="math-scroll">\[ \Delta t' = t_2' - t_1' = \frac2c\Big(\frac{\ell_2}{1-v^2/c^2} - \frac{\ell_1}{\sqrt{1-v^2/c^2}}\Big). \]</div>
+<p>The observable is the difference between the time differences, original vs rotated:</p>
+<div class="math-scroll">\[ \Delta t' - \Delta t = \frac2c\Big(\frac{\ell_1+\ell_2}{1-v^2/c^2} - \frac{\ell_1+\ell_2}{\sqrt{1-v^2/c^2}}\Big). \]</div>
+<p>Because \(c\gg v\), use the series expansions \((1-v^2/c^2)^{-1}\approx1+v^2/c^2\) and \((1-v^2/c^2)^{-1/2}\approx1+v^2/2c^2\):</p>
+<div class="result"><p>\[ \Delta t' - \Delta t \approx \frac{v^2(\ell_1+\ell_2)}{c^3}. \]</p></div>
+<p>For Michelson's original apparatus, \(\ell_1\approx\ell_2\approx1.2\) m, so \(\Delta t'-\Delta t\approx8\times10^{-17}\) s. That is exceedingly small, but for visible light of wavelength \(6\times10^{-7}\) m the period is \(T = \lambda/c = 2\times10^{-15}\) s, so the effect is 0.04 of a fringe, which is measurable. <mark>No shift was observed.</mark> The improved 1887 apparatus of Michelson and Morley, with light reflected back and forth to make \(\ell\approx11\) m, should have produced a shift of about 0.4 fringe while detecting shifts as small as 0.005. Still no shift was observed: evidence of no ether.</p>
+
+<figure class="demo" id="demo-mm">
+  <p class="title">The Michelson–Morley interferometer, rotated slowly</p>
+  <div class="controls">
+    <label>Arm length \(\ell\) <input type="range" id="mm-l" min="0.5" max="15" step="0.1" value="11"> <output id="mm-l-out"></output></label>
+    <label>Earth's speed \(v\) <input type="range" id="mm-v" min="0" max="60" step="1" value="30"> <output id="mm-v-out"></output></label>
+    <label>Wavelength \(\lambda\) <input type="range" id="mm-lam" min="400" max="700" step="5" value="600"> <output id="mm-lam-out"></output></label>
+  </div>
+  <div class="controls">
+    <span role="group" aria-label="Hypothesis"><button id="mm-ether" aria-pressed="true">Ether, no contraction</button> <button id="mm-lfg" aria-pressed="false">Ether + Lorentz–FitzGerald contraction</button></span>
+    <button data-mm="1.2">Michelson 1881</button> <button data-mm="11">Michelson–Morley 1887</button>
+    <button id="mm-play" aria-pressed="false">Pause rotation</button>
+  </div>
+  <div class="grid3">
+    <div><p class="plot-label">The apparatus, seen from above</p><canvas class="anim" id="mm-app" style="height:240px" aria-label="Michelson interferometer rotating, with light pulses traveling along both arms"></canvas></div>
+    <div><p class="plot-label">Fringes in the telescope (crosshair fixed)</p><canvas class="anim" id="mm-fr" style="height:240px"></canvas></div>
+    <div><p class="plot-label">Predicted fringe shift vs rotation angle</p><canvas class="plot" id="mm-plot" style="height:240px"></canvas></div>
+  </div>
+  <p class="readout" id="mm-read"></p>
+  <figcaption>Left: light from the source S is split at the half-silvered mirror A; one beam travels along arm 1 to mirror M₁ and back, the other along arm 2 to M₂ and back (the compensator plate C equalizes the glass each beam passes through), and both recombine into the telescope T. The whole apparatus, floating on mercury, turns slowly while the supposed ether wind blows from a fixed direction. As the apparatus rotates by an angle \(\theta\), the ether theory predicts a fringe shift \(N(\theta) = \dfrac{v^2(\ell_1+\ell_2)}{c^2\lambda}\sin^2\theta\) relative to \(\theta = 0\), reaching its maximum at 90°. The dashed line marks the 1887 sensitivity of 0.005 fringe; the observed shift was zero (magenta). Switching on the Lorentz–FitzGerald contraction makes the prediction zero for every angle as well.</figcaption>
+</figure>
+
+<p>One possible explanation of the null result was the <b>ether drag</b> hypothesis: the Earth somehow drags the ether along with it as it rotates and orbits the Sun. It was rejected by several experiments, including <b>stellar aberration</b> <span class="ko">(별의 수차)</span>, observed by Bradley in 1728. A telescope moving at speed \(v\) must be tilted by a small angle \(\tan\theta = v/c\) to catch light from a star directly overhead, and as the Earth's velocity changes direction over the year, every star traces a small apparent circle. That effect is actually observed, which would be impossible if the ether moved with the Earth. So, combining the null Michelson–Morley result with stellar aberration: <mark>there is no ether</mark>. Light and electromagnetic waves need no medium, and there seems to be no single preferred inertial frame in which the speed of light is \(c\).</p>
+<p><b>Lorentz and FitzGerald</b> proposed instead that length is contracted by the factor \(\sqrt{1-v^2/c^2}\) in the direction of motion: \(\ell_1\) for \(\Delta t\), and \(\ell_2\) for \(\Delta t'\). Then</p>
+<div class="math-scroll">\[ \begin{gathered} \Delta t = \frac2c\Big(\frac{\ell_2}{\sqrt{1-v^2/c^2}} - \frac{\ell_1\sqrt{1-v^2/c^2}}{1-v^2/c^2}\Big) = \frac2c\frac{\ell_2-\ell_1}{\sqrt{1-v^2/c^2}},\\ \Delta t' = \frac2c\frac{\ell_2-\ell_1}{\sqrt{1-v^2/c^2}}. \end{gathered} \]</div>
+<p>So \(\Delta t = \Delta t'\), and rotating the apparatus produces no shift. (Neither time difference is zero unless \(\ell_1 = \ell_2\); what matters is that they are equal.) But <i>why</i> should lengths contract? And the hypothesis is hard to test, because any measuring device would presumably be shortened by the same factor. The puzzle remained until Einstein (1879–1955) presented his explanation.</p>
+</section>
+
+<!-- ======================= 2.3 ======================= -->
+<section id="s2-3">
+<h2><span class="sec">2.3</span>Einstein's postulates</h2>
+<p>Einstein believed that Maxwell's equations must be valid in all inertial frames, and he based special relativity on two postulates:</p>
+<div class="result">
+<p><b>1. The principle of relativity.</b> The laws of physics, including electromagnetism, are the same in all inertial systems. There is no way to detect absolute motion, and no preferred inertial system exists.</p>
+<p><b>2. The constancy of the speed of light.</b> Observers in all inertial systems measure the same value for the speed of light in a vacuum.</p>
+</div>
+<p>An inertial frame is now one in which <i>all</i> the laws of physics are valid. Previously it was assumed that \(t = t'\). Einstein insisted instead that each system must have <mark>its own observers with their own clocks and metersticks</mark>, and that an <b>event</b> in a given system is specified by both its space and time coordinates.</p>
+<p><b>The relativity of simultaneity.</b> Two light flashes go off at \(x = \pm1\) m in system K, and Frank, standing at \(x=0\) in K, sees them simultaneously. Mary, in system K′ moving to the right with speed \(v\), is beside Frank when the flashes go off. Because the speed of light is the same for Mary (postulate 2), the flash on the right reaches her before the flash on the left: for her the flashes are not simultaneous.</p>
+<div class="result"><p>Two events that are simultaneous in one reference frame (K) are not necessarily simultaneous in another reference frame (K′) moving with respect to the first.</p></div>
+
+<figure class="demo" id="demo-sim">
+  <p class="title">Two flashes, two observers</p>
+  <div class="controls">
+    <label>Mary's speed \(v/c\) <input type="range" id="sm-v" min="0" max="0.9" step="0.01" value="0.5"> <output id="sm-v-out"></output></label>
+    <label>Time \(t\) in K <input type="range" id="sm-t" min="0" max="7" step="0.01" value="0"> <output id="sm-t-out"></output></label>
+    <button id="sm-play" aria-pressed="false">Play</button>
+  </div>
+  <canvas class="anim" id="sm-cv" style="height:260px" aria-label="Light flashes converging on Frank and Mary"></canvas>
+  <p class="readout" id="sm-read"></p>
+  <figcaption>Viewed in K, where the flashes at \(\pm1\) m both go off at \(t=0\) (time in nanoseconds; light covers 1 m in 3.34 ns). Frank (blue, on the ground of K) receives both pulses at the same moment. Mary (magenta, riding the platform of K′ above him and passing him at \(t = 0\)) meets the right-hand pulse at \(t = (1\,\text{m})/(c+v)\) and the left-hand one at \((1\,\text{m})/(c-v)\). The Lorentz transformation (§2.4) shows that in K′ the right-hand flash really did go off first, by \(\Delta t' = 2\gamma v(1\,\text{m})/c^2\).</figcaption>
+</figure>
+
+<p>"Information" can travel only as fast as the finite speed of light. How, then, do we <b>synchronize</b> clocks? Clocks synchronized at one spot at rest would have to be moved to their positions, and moving them might affect the synchronization. This is exactly the question of \(t\) vs \(t'\).</p>
+</section>
+
+<!-- ======================= 2.4 ======================= -->
+<section id="s2-4">
+<h2><span class="sec">2.4</span>The Lorentz transformation</h2>
+<p>We need the <i>correct</i> transformation, the <b>Lorentz transformation</b>, which makes the laws of physics invariant between inertial frames. Let a light flash go off at the common origin when \(t = t' = 0\), with K′ moving along the \(x\) and \(x'\) axes at speed \(v\) (no motion along \(y\) and \(z\)). By postulate 2, the speed of light is \(c\) in both systems, so the wavefronts observed in both must be spheres centered on each system's own origin:</p>
+<div class="math-scroll">\[ x^2+y^2+z^2 = c^2t^2,\qquad x'^2+y'^2+z'^2 = c^2t'^2. \]</div>
+<p>This is inconsistent with the Galilean transformation: substituting \(x' = x-vt\), \(t'=t\) gives \(x^2+y^2+z^2 - 2xvt + v^2t^2 = c^2t^2\), with extra terms. The Lorentz transformation equations are</p>
+<div class="result"><p>\[ \begin{gathered} x' = \frac{x-vt}{\sqrt{1-v^2/c^2}},\qquad t' = \frac{t-(vx/c^2)}{\sqrt{1-v^2/c^2}},\\ y' = y,\qquad z' = z. \end{gathered} \]</p></div>
+<p>With \(\beta = v/c\) and the <b>relativistic factor</b></p>
+<div class="result"><p>\[ \gamma = \frac{1}{\sqrt{1-\beta^2}} = \frac{1}{\sqrt{1-v^2/c^2}}\ \ge 1\quad(\gamma=1 \text{ when } v=0), \]</p></div>
+<div class="math-scroll">\[ \begin{gathered} x' = \gamma(x-\beta ct),\quad y'=y,\quad z'=z,\quad t' = \gamma(t-\beta x/c),\\ \begin{pmatrix}x'\\ t'\end{pmatrix} = \begin{pmatrix}\gamma & -\gamma\beta c\\ -\gamma\beta/c & \gamma\end{pmatrix}\begin{pmatrix}x\\ t\end{pmatrix}, \end{gathered} \]</div>
+<p>a <i>linear</i> transformation. Check that it keeps the light sphere a sphere:</p>
+<div class="math-scroll">\[ \begin{aligned} x'^2+y'^2+z'^2 &= \gamma^2x^2 - 2\beta\gamma^2cxt + \gamma^2\beta^2c^2t^2 + y^2+z^2\\ &= (\gamma^2-1)x^2 - 2\beta\gamma^2cxt + \gamma^2\beta^2c^2t^2 + c^2t^2\\ &= \gamma^2\beta^2x^2 - 2\beta\gamma^2cxt + \gamma^2c^2t^2\\ &= c^2\gamma^2\big(t - \beta x/c\big)^2 = c^2t'^2. \end{aligned} \]</div>
+<p>(The second line uses \(y^2+z^2 = c^2t^2 - x^2\); the third uses \(\gamma^2-1 = \gamma^2\beta^2\) and \(\gamma^2\beta^2+1 = \gamma^2\).) Both systems have a spherical wavefront centered on their own origin under the Lorentz transformation. Note that \(t'\ne t\): each system must have its own clocks and metersticks, for example a lattice of synchronized clocks and uniform measuring sticks placed throughout the system.</p>
+<p><b>A "proof".</b> The textbook argues from the simplest linear transformation, \(x' = \gamma(x-vt)\) and \(x = \gamma'(x'+vt')\). Postulate 1 requires \(\gamma = \gamma'\), and \(\gamma\) must be close to 1 for \(v\ll c\). Following the wavefront of the light pulse along the \(x\) axes, \(x = ct\) and \(x' = ct'\):</p>
+<div class="math-scroll">\[ \begin{gathered} ct = \gamma(ct'+vt') \Rightarrow t = \gamma\Big(1+\frac vc\Big)t',\\ ct' = \gamma(ct-vt) \Rightarrow t' = \gamma\Big(1-\frac vc\Big)t, \end{gathered} \]</div>
+<p>so \(t' = \gamma^2(1-v/c)(1+v/c)\,t'\), which gives \(\gamma = 1/\sqrt{1-v^2/c^2}\). Then using \(t = x/c\) for the light pulse, \(t' = \gamma(t-vx/c^2)\). The full set and its inverse (swap primes and \(v\to-v\)):</p>
+<div class="result"><p>\[ \begin{aligned} x' &= \frac{x-vt}{\sqrt{1-v^2/c^2}}, & y'&=y, & z'&=z, & t' &= \frac{t-(vx/c^2)}{\sqrt{1-v^2/c^2}},\\ x &= \frac{x'+vt'}{\sqrt{1-v^2/c^2}}, & y&=y', & z&=z', & t &= \frac{t'+(vx'/c^2)}{\sqrt{1-v^2/c^2}}, \end{aligned} \]</p></div>
+<p>which reduce to the Galilean transformation when \(v\ll c\). Even at the Earth's orbital speed of 30 km/s, \(\gamma\approx1.000000005\); at \(v = 0.1c\), \(\gamma\approx1.005\). The linear equations ensure that a single event in one system is a single event in another. But space and time are not separate: to express \(x\) in K′ we need both \(x'\) and \(t'\). And the Lorentz transformation does not allow a speed greater than \(c\), since \(\gamma\) would become imaginary; later in this chapter we show that no object of nonzero mass can travel faster than \(c\).</p>
+
+<figure class="demo" id="demo-lt">
+  <p class="title">Galilean or Lorentz? Follow the light</p>
+  <div class="controls">
+    <label>\(\beta = v/c\) <input type="range" id="lt-b" min="0" max="0.95" step="0.01" value="0.6"> <output id="lt-b-out"></output></label>
+    <label>Time \(t'\) in K′ <input type="range" id="lt-t" min="0.2" max="2" step="0.01" value="1"> <output id="lt-t-out"></output></label>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Light wavefront seen in K′ at time \(t'\)</p><canvas class="plot" id="lt-wave" style="height:300px"></canvas></div>
+    <div><p class="plot-label">The relativistic factor \(\gamma(\beta)\)</p><canvas class="plot" id="lt-gamma" style="height:300px"></canvas></div>
+  </div>
+  <div class="controls calc" style="margin-top:.8rem">
+    <span>Transform an event from K:</span>
+    <label>\(x\) (light-seconds) <input type="number" id="lt-x" value="1" step="0.1"></label>
+    <label>\(t\) (s) <input type="number" id="lt-tt" value="0" step="0.1"></label>
+  </div>
+  <p class="readout" id="lt-read"></p>
+  <figcaption>Left: a flash at the origin at \(t=t'=0\). The Lorentz transformation (solid) gives a circle of radius \(ct'\) centered on K′'s own origin: light moves at \(c\) in every direction, as postulate 2 demands. The Galilean transformation (dashed) puts the center at \(x' = -vt\), so light would move at \(c+v\) backward and \(c-v\) forward. Right: \(\gamma\) stays very close to 1 until \(v\) is a sizable fraction of \(c\), then grows without bound. The event calculator uses units with \(c = 1\) light-second per second.</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 2.5 ======================= -->
+<section id="s2-5">
+<h2><span class="sec">2.5</span>Time dilation and length contraction</h2>
+<p>The Lorentz transformation has consequences for time and length measurements made by observers in different inertial frames.</p>
+
+<h3>Time dilation <span class="ko">(시간 팽창)</span></h3>
+<p>Frank lights a sparkler at position \(x_1\) in system K, and it burns out at the same place. The time it stays lit, measured by his clock at rest, is the <mark>proper time</mark> <span class="ko">(고유시간)</span> \(T_0 = t_2 - t_1\): the time interval between two events occurring at the same position in a system, as measured by a clock at rest in that system (the subscript 0 marks proper quantities). In the moving system K′ the two events (lit and burnt out) do not occur at the same place, so two observers with synchronized clocks are needed: Mary, beside the sparkler when it is lit, and Melinda, beside it when it goes out. Three clocks in all perform the measurement: \((x_1,t_1)\to(x_1,t_2)\) in K (Frank), and \((x_1',t_1')\) (Mary) and \((x_2',t_2')\) (Melinda) in K′. From the Lorentz transformation, with \(x_2 - x_1 = 0\),</p>
+<div class="math-scroll">\[ T' = t_2'-t_1' = \frac{(t_2-t_1) - \frac{v}{c^2}(x_2-x_1)}{\sqrt{1-v^2/c^2}} = \frac{T_0}{\sqrt{1-v^2/c^2}}, \]</div>
+<div class="result"><p>\[ T' = \gamma T_0 \ \ge\ T_0. \]</p></div>
+<p>The time interval measured in the moving system K′ is greater than the proper time measured in K, where the sparkler is at rest: <mark>time dilation</mark>, a direct result of Einstein's two postulates. It occurs because simultaneity is relative: the events do not occur at the same place and time coordinates in the two systems. In short, <b>moving clocks run slow by the factor \(\gamma^{-1}\)</b>, and this applies to any clock: an hourglass, a heartbeat, an atom. The proper time is always the smallest possible time interval between two events.</p>
+<p><b>Important:</b> each person claims that the clock in the <i>other</i> (moving) system is running slow. If Mary had a sparkler at rest in K′, Frank would measure a longer interval on his clocks, because the sparkler would be moving with respect to his system (Example 2.1: \(T = \gamma T_0'\)). There is no contradiction, because the two measurements compare different pairs of clocks.</p>
+<p><b>A gedanken ("thought") experiment.</b> Mary in K′ flashes a light along her \(y'\) axis toward a mirror at height \(L\) and measures the proper time for its return, \(T_0' = 2L/c\). Frank in K sees the light travel along a slanted path while K′ moves a distance \(vT\), so by postulate 2</p>
+<div class="math-scroll">\[ \begin{gathered} T = \frac{\text{distance}}{\text{speed}} = \frac{2\sqrt{(vT/2)^2+L^2}}{c},\qquad L = \frac{cT_0'}{2},\\ \Rightarrow\ c^2T^2 = v^2T^2 + c^2T_0'^2\ \Rightarrow\ T = \frac{T_0'}{\sqrt{1-v^2/c^2}} = \gamma T_0', \end{gathered} \]</div>
+<p>consistent with the earlier result.</p>
+
+<h3>Length contraction <span class="ko">(길이 수축)</span></h3>
+<p>A meterstick at rest in K′ has <b>proper length</b> <span class="ko">(고유길이)</span> \(L_0' = x_r' - x_\ell' = L_0\). Frank, at rest in K, measures the length of the moving stick. The key is to measure both ends <i>simultaneously</i> in K, at \(t = t_r = t_\ell\) (these are not simultaneous in K′: \(t_r'\ne t_\ell'\) in general). Then</p>
+<div class="math-scroll">\[ L_0 = x_r'-x_\ell' = \frac{(x_r-x_\ell) - v(t_r-t_\ell)}{\sqrt{1-v^2/c^2}} = \frac{L}{\sqrt{1-v^2/c^2}} = \gamma L, \]</div>
+<div class="result"><p>\[ L = L_0\sqrt{1-v^2/c^2} = \frac{L_0}{\gamma}\ \le\ L_0, \]</p></div>
+<p>the <mark>length or space contraction</mark> (Lorentz–FitzGerald contraction). It occurs only along the direction of motion.</p>
+<p><b>Another gedanken experiment.</b> Mary flashes a light along her \(x'\) axis toward a mirror at the end of a stick of proper length \(L_0\); the round trip takes \(\Delta t' = 2L_0/c\) in K′. Frank sees the stick moving, so the light needs \(ct_1 = vt_1 + L\) to catch the mirror, \(t_1 = L/(c-v)\), and \(c(t_2-t_1) = L - v(t_2-t_1)\) to come back, \(t_2 - t_1 = L/(c+v)\):</p>
+<div class="math-scroll">\[ \Delta t = t_2 = \frac{L}{c-v} + \frac{L}{c+v} = \frac{2cL}{c^2-v^2} = \frac{2L}{c(1-v^2/c^2)}, \]</div>
+<p>as in the Michelson–Morley experiment. Time dilation requires \(\Delta t = \gamma\Delta t'\), i.e. \(\frac{2L}{c(1-v^2/c^2)} = \frac{2L_0}{c\sqrt{1-v^2/c^2}}\), so again \(L = L_0\sqrt{1-v^2/c^2} = L_0/\gamma\) (Problem 18).</p>
+
+<figure class="demo" id="demo-clock">
+  <p class="title">Two light clocks on one spaceship</p>
+  <div class="controls">
+    <label>\(v/c\) <input type="range" id="lc-v" min="0" max="0.9" step="0.01" value="0.6"> <output id="lc-v-out"></output></label>
+    <span role="group" aria-label="Contraction"><button id="lc-on" aria-pressed="true">With length contraction</button> <button id="lc-off" aria-pressed="false">Without</button></span>
+    <button id="lc-reset">Reset</button>
+    <button id="lc-play" aria-pressed="false">Pause</button>
+  </div>
+  <canvas class="anim" id="lc-cv" style="height:260px" aria-label="Vertical and horizontal light clocks moving to the right"></canvas>
+  <p class="readout" id="lc-read"></p>
+  <figcaption>Mary's ship carries two identical light clocks of proper length \(L_0\): one across the direction of motion (Mary's \(y'\) axis) and one along it (her \(x'\) axis). Both tick every \(T_0 = 2L_0/c\) for Mary. Seen from K, the vertical clock ticks every \(\gamma T_0\). The horizontal clock ticks every \(\frac{2L}{c(1-v^2/c^2)}\), which matches only if its arm is contracted to \(L = L_0/\gamma\). Turn the contraction off and the two clocks drift apart. Mary, carrying both, would then see her own clocks disagree, which would let her detect her absolute motion, contradicting the principle of relativity. This is the Michelson–Morley experiment again.</figcaption>
+</figure>
+
+<h3>Example 2.2: a trip to Alpha Centauri</h3>
+<p>In the year 2150, antimatter-fueled spaceships carry provisions for 16 years of travel time. How fast must a ship go to make the round trip to a star 4.30 light-years away (one light-year, the distance light travels in a year, is \(9.46\times10^{15}\) m)? The astronauts' 16 years are the proper time \(T_0'\), since the trip begins and ends at the ship's location in K′; ignoring acceleration and turnaround, the time measured on Earth is \(T = 2L/v\), so</p>
+<div class="math-scroll">\[ \begin{gathered} T = \frac{2L}{v} = \frac{T_0'}{\sqrt{1-v^2/c^2}}\\ \Rightarrow\quad \frac{2(4.30\ \text{ly})(9.46\times10^{15}\ \text{m/ly})}{v} = \frac{16\ \text{y}}{\sqrt{1-v^2/c^2}}, \end{gathered} \]</div>
+<p>which gives \(v = 0.473c = 1.42\times10^8\) m/s. The astronauts age 16 years, but their friends on Earth age \(\gamma T_0' = 18.2\) years. Can that really be true? We return to the question in §2.8 (the twin paradox).</p>
+
+<figure class="demo" id="demo-trip">
+  <p class="title">Plan your own trip</p>
+  <div class="controls calc">
+    <label>Distance \(L\) (light-years) <input type="number" id="tr-L" value="4.30" step="0.1" min="0.01"></label>
+    <label>Provisions \(T_0'\) (years) <input type="number" id="tr-T" value="16" step="0.5" min="0.1"></label>
+  </div>
+  <canvas class="plot" id="tr-plot" style="height:230px"></canvas>
+  <p class="readout" id="tr-read"></p>
+  <figcaption>Solving \(2L/v = \gamma T_0'\) for \(v\): \(\beta = \big[1 + (cT_0'/2L)^2\big]^{-1/2}\). The plot shows the trip duration on Earth (\(2L/v\)) and aboard the ship (\(2L/\gamma v\)) against speed, for your distance. The ship's time can be made as short as you like by going fast enough; the Earth's time can never be less than \(2L/c\).</figcaption>
+</figure>
+
+<h3>What does a moving object look like?</h3>
+<p>Length contraction is a statement about where the parts of an object are <i>at the same time</i> in K. A camera, or an eye, records light that arrives at the same time, and light from farther parts of the object left earlier. Computer simulations (Scott and Viner, 1965) show that boxes moving at \(0.8c\) photographed this way are not simply squashed: horizontal lines are length-contracted, vertical lines become curves, and the objects appear slightly rotated.</p>
+
+<figure class="demo" id="demo-look">
+  <p class="title">Contracted vs photographed</p>
+  <div class="controls">
+    <label>\(v/c\) <input type="range" id="lk-v" min="0" max="0.95" step="0.01" value="0.8"> <output id="lk-v-out"></output></label>
+  </div>
+  <div class="grid3">
+    <div><p class="plot-label">At rest</p><canvas class="plot" id="lk-rest" style="height:230px"></canvas></div>
+    <div><p class="plot-label">Positions at one instant in K (contracted)</p><canvas class="plot" id="lk-snap" style="height:230px"></canvas></div>
+    <div><p class="plot-label">What a camera records</p><canvas class="plot" id="lk-photo" style="height:230px"></canvas></div>
+  </div>
+  <figcaption>Four wireframe boxes moving to the right, viewed by a pinhole camera at rest whose image plane faces them, with the nearest faces 5 units away. All three views share one scale, but each is centered on its own image, since light-travel delay also shifts the photographed boxes to the left. Middle: every point placed where it is at a single instant of K time, so the boxes are simply contracted along \(x\). Right: every point placed where it was when it emitted the light that reaches the camera at that instant, accounting for the light-travel time. Edges along the line of sight now bend and the boxes look rotated; the effect is purely optical, layered on top of the real contraction.</figcaption>
+</figure>
+<p class="aside">Chapter 2 continues in <a href="ch02b-spacetime-and-relativistic-dynamics.html">Part 2</a>.</p>
+</section>
+
+<section id="reading">
+<h2>Further reading</h2>
+<ul>
+  <li>S. T. Thornton, A. Rex, and C. E. Hood, <i>Modern Physics for Scientists and Engineers</i>, 5th ed. (Cengage Learning), Chapter 2.</li>
+  <li>A. A. Michelson and E. W. Morley, "On the relative motion of the Earth and the luminiferous ether," <i>Am. J. Sci.</i> <b>34</b>, 333 (1887).</li>
+  <li>A. Einstein, "Zur Elektrodynamik bewegter Körper," <i>Ann. Phys.</i> <b>17</b>, 891 (1905).</li>
+  <li>G. D. Scott and M. R. Viner, "The geometrical appearance of large objects moving at relativistic speeds," <i>Am. J. Phys.</i> <b>33</b>, 534 (1965).</li>
+  <li>J. Terrell, "Invisibility of the Lorentz contraction," <i>Phys. Rev.</i> <b>116</b>, 1041 (1959).</li>
+</ul>
+</section>
+</main>
+</div>
+
+<footer>
+  <nav class="chapnav" aria-label="Chapters">
+    <a href="index.html">All chapters</a>
+    <a href="ch02b-spacetime-and-relativistic-dynamics.html">Next: Chapter 2, Part 2, velocities, spacetime, momentum, and energy</a>
+  </nav>
+  <p>Interactive companion to Sang Hoon Lee's lecture notes on Chapter 2 of S. T. Thornton, A. Rex, and C. E. Hood, <i>Modern Physics for Scientists and Engineers</i> (5th ed.). The text paraphrases the notes; the diagrams and simulations are original. Created by Claude Opus 5.5 (Anthropic) based on Sang Hoon Lee's lecture notes, for the undergraduate course Modern Physics (현대물리학) of the Department of Physics, Gyeongsang National University. All calculations run client side with no data collection.</p>
+</footer>
+
+<script>
+"use strict";
+/* ---------- utilities ---------- */
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hexRGB(h){ h=h.replace('#',''); if(h.length===3) h=h.split('').map(c=>c+c).join(''); const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function rgba(hex,a){ const [r,g,b]=hexRGB(hex); return `rgba(${r},${g},${b},${a})`; }
+const SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const sup = s => String(s).split('').map(c=>SUP[c]||c).join('');
+function fmt(v){
+  if(v===0) return '0';
+  const a=Math.abs(v);
+  if(a>=1e4||a<1e-3){ const e=Math.floor(Math.log10(a)+1e-9); const mm=v/10**e; return (Math.abs(Math.abs(mm)-1)<1e-6?(mm<0?'−':''):(+mm.toFixed(1))+'×')+'10'+sup(e); }
+  return String(+v.toPrecision(3)).replace('-','−');
+}
+function niceTicks(a,b,n){
+  const raw=(b-a)/n, mag=10**Math.floor(Math.log10(raw)), norm=raw/mag;
+  const step=(norm<1.5?1:norm<3?2:norm<7?5:10)*mag, t=[];
+  for(let v=Math.ceil(a/step-1e-9)*step; v<=b+step*1e-6; v+=step){ const vv=Math.abs(v)<step*1e-6?0:v; t.push({v:vv,label:fmt(+vv.toPrecision(12))}); }
+  return t;
+}
+function logTicks(a,b){
+  const k0=Math.ceil(Math.log10(a)-1e-9), k1=Math.floor(Math.log10(b)+1e-9), span=k1-k0, t=[];
+  const mants = span<=1 ? [1,2,5] : [1];
+  const every = span>7 ? 2 : 1;
+  for(let k=k0-1;k<=k1;k++) for(const mt of mants){
+    const v=mt*10**k; if(v<a*(1-1e-9)||v>b*(1+1e-9)) continue;
+    if(mt===1 && (k-k0)%every!==0) { t.push({v,label:''}); continue; }
+    t.push({v,label: span<=1||(k>=-1&&k<=2)? fmt(v) : '10'+sup(k)});
+  }
+  return t;
+}
+/* generic canvas plot */
+function plot(cv,o){
+  const H=o.height||cv.clientHeight||280, dpr=window.devicePixelRatio||1, w=cv.clientWidth||600;
+  cv.width=Math.round(w*dpr); cv.height=Math.round(H*dpr);
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,H);
+  const ink=css('--ink'), muted=css('--muted'), rule=css('--rule'), font=css('--ui-font');
+  const m={l:52,r:12,t:10,b:40}, pw=w-m.l-m.r, ph=H-m.t-m.b;
+  const fx=o.xlog?Math.log10:(v=>v), fy=o.ylog?Math.log10:(v=>v);
+  const ax0=fx(o.xlim[0]),ax1=fx(o.xlim[1]),ay0=fy(o.ylim[0]),ay1=fy(o.ylim[1]);
+  const X=v=>m.l+(fx(v)-ax0)/(ax1-ax0)*pw, Y=v=>m.t+ph-(fy(v)-ay0)/(ay1-ay0)*ph;
+  ctx.font=`12px ${font}`; ctx.lineWidth=1;
+  const xt=o.xlog?logTicks(...o.xlim):niceTicks(...o.xlim,o.xticks||Math.max(3,Math.round(pw/90)));
+  const yt=o.ylog?logTicks(...o.ylim):niceTicks(...o.ylim,o.yticks||Math.max(3,Math.round(ph/55)));
+  ctx.strokeStyle=rule; ctx.fillStyle=muted;
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for(const t of xt){ const px=Math.round(X(t.v))+.5; ctx.beginPath(); ctx.moveTo(px,m.t); ctx.lineTo(px,m.t+ph); ctx.stroke(); if(t.label) ctx.fillText(t.label,px,m.t+ph+5); }
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(const t of yt){ const py=Math.round(Y(t.v))+.5; ctx.beginPath(); ctx.moveTo(m.l,py); ctx.lineTo(m.l+pw,py); ctx.stroke(); if(t.label&&!o.noYLabels) ctx.fillText(t.label,m.l-6,py); }
+  ctx.strokeStyle=muted; ctx.strokeRect(m.l+.5,m.t+.5,pw,ph);
+  ctx.save(); ctx.beginPath(); ctx.rect(m.l,m.t,pw,ph); ctx.clip();
+  for(const v of (o.vlines||[])){ ctx.strokeStyle=v.color||muted; ctx.setLineDash(v.dash||[4,4]); ctx.beginPath(); const px=X(v.x); ctx.moveTo(px,m.t); ctx.lineTo(px,m.t+ph); ctx.stroke(); ctx.setLineDash([]);
+    if(v.label){ ctx.fillStyle=v.color||muted; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText(v.label,px+4,m.t+4); } }
+  for(const v of (o.hlines||[])){ ctx.strokeStyle=v.color||muted; ctx.setLineDash(v.dash||[4,4]); ctx.beginPath(); const py=Y(v.y); ctx.moveTo(m.l,py); ctx.lineTo(m.l+pw,py); ctx.stroke(); ctx.setLineDash([]); }
+  const ok=(x,y)=>isFinite(x)&&isFinite(y)&&(!o.xlog||x>0)&&(!o.ylog||y>0);
+  for(const s of o.series){
+    ctx.globalAlpha=s.alpha??1;
+    if(s.points){
+      ctx.fillStyle=s.color;
+      for(const [x,y] of s.data){ if(!ok(x,y)) continue; ctx.beginPath(); ctx.arc(X(x),Y(y),s.r||3.2,0,2*Math.PI); ctx.fill(); }
+    } else {
+      ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
+      ctx.beginPath(); let pen=false;
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    ctx.globalAlpha=1;
+  }
+  if(o.after) o.after(ctx,X,Y);
+  ctx.restore();
+  ctx.fillStyle=ink; ctx.font=`13px ${font}`;
+  if(o.xlabel){ ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(o.xlabel,m.l+pw/2,H-2); }
+  if(o.ylabel){ ctx.save(); ctx.translate(12,m.t+ph/2); ctx.rotate(-Math.PI/2); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(o.ylabel,0,0); ctx.restore(); }
+  const leg=o.series.filter(s=>s.name);
+  if(leg.length){
+    ctx.font=`12px ${font}`; const lh=17, lw=Math.max(...leg.map(s=>ctx.measureText(s.name).width))+34;
+    const pos=o.legend||'tl'; const lx=pos.includes('r')?m.l+pw-lw-6:m.l+8; const ly=pos.includes('b')?m.t+ph-leg.length*lh-8:m.t+8;
+    ctx.fillStyle=rgba(css('--surface'),.88); ctx.fillRect(lx-4,ly-4,lw+4,leg.length*lh+6);
+    leg.forEach((s,i)=>{ const yy=ly+i*lh+lh/2; ctx.globalAlpha=s.alpha??1;
+      if(s.points){ ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(lx+11,yy,3.5,0,2*Math.PI); ctx.fill(); }
+      else { ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.beginPath(); ctx.moveTo(lx,yy); ctx.lineTo(lx+22,yy); ctx.stroke(); ctx.setLineDash([]); }
+      ctx.globalAlpha=1; ctx.fillStyle=ink; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(s.name,lx+28,yy); });
+  }
+  return {X,Y};
+}
+const range=(a,b,n)=>Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1));
+const logRange=(a,b,n)=>range(Math.log10(a),Math.log10(b),n).map(v=>10**v);
+
+/* redraw registry (resize, color scheme) */
+const redraws=[];
+function reg(f){ redraws.push(f); f(); }
+let rzT; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>redraws.forEach(f=>f()),120); });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ refreshSpinColors(); redraws.forEach(f=>f()); });
+
+/* visibility flags so off-screen simulations sleep */
+const visible=new Map();
+const io=new IntersectionObserver(es=>es.forEach(e=>visible.set(e.target.id,e.isIntersecting)),{rootMargin:'100px'});
+function watch(id){ visible.set(id,false); io.observe(document.getElementById(id)); }
+
+
+/* ---------- spin colors and small helpers ---------- */
+let SPIN_UP=[0,0,0], SPIN_DN=[0,0,0];
+function refreshSpinColors(){ SPIN_UP=hexRGB(css('--spin-up')); SPIN_DN=hexRGB(css('--spin-down')); }
+refreshSpinColors();
+function bindSlider(id,fn,fmtf){ const el=$(id), out=$(id+'-out'); const u=()=>{ const v=+el.value; if(out) out.textContent=fmtf?fmtf(v):v; fn(v); }; el.addEventListener('input',u); u(); return el; }
+const lncosh2 = x => { const a=Math.abs(x); return a+Math.log1p(Math.exp(-2*a)); }; // ln(2 cosh x)
+
+
+const gam=b=>1/Math.sqrt(1-b*b);
+function setupCv(cv,H){ const dpr=window.devicePixelRatio||1, W=cv.clientWidth||600; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); return {ctx,W,H}; }
+function playButton(id,obj,key,labels){ const b=$(id); const sync=()=>{ b.textContent=obj[key]?labels[0]:labels[1]; b.setAttribute('aria-pressed',String(!obj[key])); }; b.addEventListener('click',()=>{ obj[key]=!obj[key]; obj.last=0; sync(); }); sync(); }
+function drawClock(ctx,x,y,r,t,period,label,color){
+  ctx.beginPath(); ctx.arc(x,y,r,0,2*Math.PI); ctx.fillStyle=css('--surface'); ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=color; ctx.stroke();
+  const a=2*Math.PI*((t/period)%1)-Math.PI/2; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+0.8*r*Math.cos(a),y+0.8*r*Math.sin(a)); ctx.lineWidth=2.2; ctx.stroke();
+  if(label){ ctx.fillStyle=css('--ink'); ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='top'; ctx.fillText(label,x,y+r+4); }
+}
+
+/* ---------- hero: ship passing a row of synchronized clocks ---------- */
+const hero={v:0.8,t:0,run:!reduceMotion,last:0};
+function drawHero(){
+  const cv=$('#hero-cv'), {ctx,W,H}=setupCv(cv,300), span=24, s=W/span, g=gam(hero.v);
+  const up=css('--up'), crit=css('--crit'), muted=css('--muted');
+  const track=H-78;
+  ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,track); ctx.lineTo(W,track); ctx.stroke();
+  for(let k=0;k<6;k++){ const x=(2+4*k)*s; drawClock(ctx,x,H-44,17,hero.t,12,hero.t.toFixed(1)+' s',up); }
+  // ship: proper length 6 contracted to 6/gamma; starts a third of the way across and wraps around
+  const L=6/g, loop=span+L+2, xc=((hero.v*hero.t+8)%loop)-L/2-1, xt=xc-L/2, xn=xc+L/2, h=58, y=track-h-14, nose=Math.min(1.2,L*0.3);
+  ctx.fillStyle=rgba(crit,0.12); ctx.strokeStyle=crit; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(xt*s,y); ctx.lineTo((xn-nose)*s,y); ctx.lineTo(xn*s,y+h/2); ctx.lineTo((xn-nose)*s,y+h); ctx.lineTo(xt*s,y+h); ctx.closePath(); ctx.fill(); ctx.stroke();
+  const tau=hero.t/g, cx=(xc-nose/2)*s; drawClock(ctx,cx,y+h/2,17,tau,12,null,crit);
+  ctx.fillStyle=crit; ctx.font=`600 13px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  const lab='ship clock '+tau.toFixed(1)+' s', lw=ctx.measureText(lab).width; ctx.fillText(lab,Math.min(W-lw/2-4,Math.max(lw/2+4,cx)),y-6);
+  ctx.fillStyle=muted; ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText('K: synchronized clocks at rest, all reading t',8,8);
+  $('#hero-read').innerHTML=`v = ${hero.v.toFixed(2)}c, γ = ${g.toFixed(3)}. The station clocks (blue) are synchronized in K and all read t = ${hero.t.toFixed(1)} s. The ship's own clock (magenta) reads t/γ = ${tau.toFixed(1)} s: moving clocks run slow. The ship (proper length 6 units) is drawn contracted to 6/γ.`;
+}
+(function(){ bindSlider('#hero-v',v=>{ hero.v=v; drawHero(); },v=>v.toFixed(2)); playButton('#hero-play',hero,'run',['Pause','Play']); })();
+watch('hero-cv'); reg(drawHero);
+function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=hero.last?Math.min(now-hero.last,100)/1000:0; hero.last=now; hero.t+=dt; if(hero.t>600) hero.t=0; drawHero(); }
+
+/* ---------- Michelson-Morley ---------- */
+const mm={l:11,v:30,lam:600,lfg:false,run:!reduceMotion,th:0,ph:0,last:0};
+function mmN(th){ if(mm.lfg) return 0; const c=2.998e8, v=mm.v*1e3; return v*v*(2*mm.l)/(c*c*mm.lam*1e-9)*Math.sin(th)**2; }
+function drawApp(){
+  const cv=$('#mm-app'), {ctx,W,H}=setupCv(cv,240), cx=W*0.52, cy=H*0.56, R=Math.min(W,H)*0.36;
+  const ink=css('--ink'), muted=css('--muted'), up=css('--up'), crit=css('--crit'), down=css('--down');
+  // fixed ether wind (from the Earth's point of view the ether streams past opposite to v)
+  ctx.strokeStyle=muted; ctx.fillStyle=muted; ctx.lineWidth=2;
+  const ay=16; ctx.beginPath(); ctx.moveTo(W-14,ay); ctx.lineTo(W-110,ay); ctx.stroke(); ctx.beginPath(); ctx.moveTo(W-116,ay); ctx.lineTo(W-106,ay-5); ctx.lineTo(W-106,ay+5); ctx.closePath(); ctx.fill();
+  ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='right'; ctx.textBaseline='top'; ctx.fillText('ether wind',W-14,ay+7);
+  // rotated apparatus: local x along arm 1, local y along arm 2 (screen y points down, so negate)
+  const th=mm.th, c=Math.cos(th), sn=Math.sin(th), P=(x,y)=>[cx+R*(x*c-y*sn), cy-R*(x*sn+y*c)];
+  // stone slab
+  ctx.fillStyle=rgba(muted,0.10); ctx.strokeStyle=rgba(muted,0.5); ctx.lineWidth=1; ctx.beginPath();
+  [[-0.75,-0.75],[1.15,-0.75],[1.15,1.15],[-0.75,1.15]].forEach(([x,y],i)=>{ const [a,b]=P(x,y); i?ctx.lineTo(a,b):ctx.moveTo(a,b); }); ctx.closePath(); ctx.fill(); ctx.stroke();
+  // beams
+  const seg=(a,b,col,w,dash)=>{ const [x1,y1]=P(...a),[x2,y2]=P(...b); ctx.strokeStyle=col; ctx.lineWidth=w; ctx.setLineDash(dash||[]); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.setLineDash([]); };
+  seg([-0.62,0],[0,0],rgba(down,0.7),2); seg([0,0],[1,0],rgba(up,0.55),2); seg([0,0],[0,1],rgba(crit,0.55),2); seg([0,0],[0,-0.62],rgba(down,0.7),2,[4,3]);
+  // optical elements
+  const plate=(x,y,ang,len,col,w)=>{ const d=[Math.cos(ang)*len/2,Math.sin(ang)*len/2]; seg([x-d[0],y-d[1]],[x+d[0],y+d[1]],col,w); };
+  plate(0,0,Math.PI/4,0.26,ink,3);              // half-silvered mirror A
+  plate(0.25,0,Math.PI/4,0.2,rgba(ink,0.45),3);  // compensator C
+  plate(1,0,Math.PI/2,0.28,ink,4);               // mirror M1
+  plate(0,1,0,0.28,ink,4);                       // mirror M2
+  const box=(x,y,txt)=>{ const [a,b]=P(x,y); ctx.fillStyle=css('--surface'); ctx.strokeStyle=ink; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(a,b,9,0,2*Math.PI); ctx.fill(); ctx.stroke(); ctx.fillStyle=ink; ctx.font=`600 10px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,a,b+0.5); };
+  box(-0.66,0,'S'); box(0,-0.66,'T');
+  const lab=(x,y,txt,col)=>{ const [a,b]=P(x,y); ctx.fillStyle=col||ink; ctx.font=`600 12px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,a,b); };
+  lab(1.0,0.24,'M₁'); lab(0.24,1.0,'M₂'); lab(-0.17,0.17,'A'); lab(0.27,-0.17,'C',muted); lab(0.55,-0.12,'ℓ₁',up); lab(-0.13,0.55,'ℓ₂',crit);
+  // light pulses: out along each arm and back, then into the telescope
+  const ph=mm.ph%1, pulse=(path,col)=>{ const n=path.length-1, f=ph*n, k=Math.min(n-1,Math.floor(f)), u=f-k, a=path[k], b=path[k+1]; const [x,y]=P(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u); ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,4.5,0,2*Math.PI); ctx.fill(); };
+  pulse([[0,0],[1,0],[0,0],[0,-0.62]],up); pulse([[0,0],[0,1],[0,0],[0,-0.62]],crit);
+  ctx.fillStyle=muted; ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText(`θ = ${(mm.th*180/Math.PI%360).toFixed(0)}°`,6,6);
+}
+function drawMM(){
+  drawApp();
+  const cv=$('#mm-fr'), {ctx,W,H}=setupCv(cv,240), N=mmN(mm.th), up=hexRGB(css('--spin-up')), bg=hexRGB(css('--surface')), top=28;
+  const img=ctx.createImageData(Math.round(W),1); const period=W/5;
+  for(let x=0;x<Math.round(W);x++){ const I=0.5+0.5*Math.cos(2*Math.PI*(x/period - N)); for(let k=0;k<3;k++) img.data[4*x+k]=bg[k]+(up[k]-bg[k])*I; img.data[4*x+3]=255; }
+  const tmp=document.createElement('canvas'); tmp.width=img.width; tmp.height=1; tmp.getContext('2d').putImageData(img,0,0);
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(tmp,0,top,W,H-top);
+  ctx.strokeStyle=css('--crit'); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(W/2,top); ctx.lineTo(W/2,H); ctx.stroke();
+  ctx.fillStyle=css('--surface'); ctx.fillRect(0,0,W,top);
+  ctx.fillStyle=css('--ink'); ctx.font=`600 13px ${css('--ui-font')}`; ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText(`θ = ${(mm.th*180/Math.PI%180).toFixed(0)}°   predicted shift ${N.toFixed(3)} fringe`,4,top/2);
+  const ths=range(0,Math.PI,181), Nmax=mm.lfg?0:mmN(Math.PI/2);
+  plot($('#mm-plot'),{height:220,xlim:[0,180],ylim:[-0.02,Math.max(0.1,Nmax*1.2)],xlabel:'rotation angle θ (degrees)',ylabel:'fringe shift',legend:'tl',
+    hlines:[{y:0.005,color:css('--muted')}],vlines:[{x:(mm.th*180/Math.PI)%180,color:css('--muted')}],
+    series:[{data:ths.map(t=>[t*180/Math.PI,mmN(t)]),color:css('--up'),width:2.6,name:mm.lfg?'prediction with contraction':'ether prediction'},{data:[[0,0],[180,0]],color:css('--crit'),width:2,dash:[6,4],name:'observed'}]});
+  const c=2.998e8, v=mm.v*1e3, dT=v*v*2*mm.l/(c**3);
+  $('#mm-read').innerHTML=mm.lfg?`With Lorentz–FitzGerald contraction, Δt = Δt′ at every angle: no shift, in agreement with experiment, but with no explanation of why lengths contract.`
+    :`ℓ₁ = ℓ₂ = ${mm.l.toFixed(1)} m, v = ${mm.v} km/s: Δt′ − Δt ≈ v²(ℓ₁+ℓ₂)/c³ = <b>${fmt(+dT.toPrecision(2))} s</b>, one optical period λ/c = ${fmt(+(mm.lam*1e-9/c).toPrecision(2))} s, so the maximum predicted shift is <b>${Nmax.toFixed(3)} fringe</b>${Nmax>0.005?' (above the 0.005 sensitivity of 1887)':''}. Observed: 0.`;
+  $('#mm-ether').setAttribute('aria-pressed',String(!mm.lfg)); $('#mm-lfg').setAttribute('aria-pressed',String(mm.lfg));
+}
+(function(){
+  const sl=bindSlider('#mm-l',v=>{ mm.l=v; drawMM(); },v=>v.toFixed(1)+' m');
+  bindSlider('#mm-v',v=>{ mm.v=v; drawMM(); },v=>v+' km/s');
+  bindSlider('#mm-lam',v=>{ mm.lam=v; drawMM(); },v=>v+' nm');
+  $('#mm-ether').addEventListener('click',()=>{ mm.lfg=false; drawMM(); }); $('#mm-lfg').addEventListener('click',()=>{ mm.lfg=true; drawMM(); });
+  document.querySelectorAll('#demo-mm [data-mm]').forEach(b=>b.addEventListener('click',()=>{ sl.value=b.dataset.mm; sl.dispatchEvent(new Event('input')); }));
+  playButton('#mm-play',mm,'run',['Pause rotation','Rotate']);
+})();
+watch('demo-mm'); reg(drawMM);
+function mmTick(now){ if(!mm.run||!visible.get('demo-mm')) return; const dt=mm.last?Math.min(now-mm.last,100)/1000:0; mm.last=now; mm.th+=dt*2*Math.PI/40; mm.ph=(mm.ph||0)+dt*0.35; drawMM(); }
+
+/* ---------- simultaneity ---------- */
+const sm={v:0.5,t:0,run:false,last:0};
+const C_NS=0.299792458; // m per ns
+function drawSM(){
+  const cv=$('#sm-cv'), {ctx,W,H}=setupCv(cv,260), X=x=>W/2+x*(W*0.42)/1.1, up=css('--up'), crit=css('--crit'), down=css('--down'), muted=css('--muted'), ink=css('--ink');
+  const t=sm.t, v=sm.v*C_NS, tF=1/C_NS, tR=1/(C_NS+v), tL=1/(C_NS-v);
+  const yK=H-34, yKp=H-128; // ground of K and the moving platform of K'
+  ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(X(-1.1),yK); ctx.lineTo(X(1.1),yK); ctx.stroke();
+  ctx.fillStyle=muted; ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='top';
+  [-1,0,1].forEach(x=>{ ctx.beginPath(); ctx.moveTo(X(x),yK-4); ctx.lineTo(X(x),yK+4); ctx.stroke(); ctx.fillText((x>0?'+':'')+x+' m',X(x),yK+6); });
+  // K' platform moving with Mary
+  const mx=v*t; ctx.strokeStyle=rgba(crit,0.6); ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(X(mx-0.35),yKp); ctx.lineTo(X(mx+0.35),yKp); ctx.stroke();
+  ctx.fillStyle=muted; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText('K′ (moving right at v)',8,8); ctx.textBaseline='bottom'; ctx.fillText('K (at rest)',8,yK-4);
+  // flash bulbs at x = ±1 m (in K), and the two pulses moving inward
+  [-1,1].forEach(x=>{ ctx.fillStyle=t<0.25?down:rgba(down,0.35); ctx.beginPath(); ctx.arc(X(x),yK-46,t<0.25?10:6,0,2*Math.PI); ctx.fill(); });
+  const pL=-1+C_NS*t, pR=1-C_NS*t;
+  ctx.strokeStyle=down; ctx.lineWidth=3;
+  [pL,pR].forEach(p=>{ if(p>-1.1&&p<1.1){ ctx.beginPath(); ctx.moveTo(X(p),yKp-58); ctx.lineTo(X(p),yK-8); ctx.stroke(); } });
+  const person=(x,yFeet,col,txt)=>{ ctx.fillStyle=col; ctx.beginPath(); ctx.arc(X(x),yFeet-30,7,0,2*Math.PI); ctx.fill(); ctx.fillRect(X(x)-3,yFeet-22,6,22);
+    ctx.font=`600 12px ${css('--ui-font')}`; const tw=ctx.measureText(txt).width; ctx.fillStyle=css('--surface'); ctx.fillRect(X(x)-tw/2-4,yFeet-56,tw+8,17);
+    ctx.fillStyle=ink; ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(txt,X(x),yFeet-40); };
+  const fr=t>=tF?': saw both':'', mr=[t>=tR?'saw right':'', t>=tL?'saw left':''].filter(Boolean).join(', ');
+  person(0,yK-8,up,'Frank (K)'+fr); person(mx,yKp-3,crit,'Mary (K′)'+(mr?': '+mr:''));
+  const g=gam(sm.v), dtp=2*g*v/(C_NS*C_NS);
+  $('#sm-read').innerHTML=`In K: both flashes at t = 0. Frank receives both at t = ${tF.toFixed(3)} ns. Mary receives the right flash at ${tR.toFixed(3)} ns and the left at ${tL.toFixed(3)} ns. In K′ the flashes occurred at t′ = ∓γv(1 m)/c²: the right one first, ${dtp.toFixed(3)} ns before the left.`;
+}
+(function(){
+  bindSlider('#sm-v',v=>{ sm.v=v; drawSM(); },v=>v.toFixed(2));
+  const st=bindSlider('#sm-t',v=>{ sm.t=v; drawSM(); },v=>v.toFixed(2)+' ns');
+  sm.slider=st;
+  const b=$('#sm-play'); b.addEventListener('click',()=>{ sm.run=!sm.run; sm.last=0; if(sm.run&&sm.t>=6.9) sm.t=0; b.textContent=sm.run?'Pause':'Play'; b.setAttribute('aria-pressed',String(sm.run)); });
+})();
+watch('demo-sim'); reg(drawSM);
+function smTick(now){ if(!sm.run||!visible.get('demo-sim')) return; const dt=sm.last?Math.min(now-sm.last,100)/1000:0; sm.last=now; sm.t=Math.min(7,sm.t+dt*0.8); sm.slider.value=sm.t; $('#sm-t-out').textContent=sm.t.toFixed(2)+' ns'; if(sm.t>=7){ sm.run=false; $('#sm-play').textContent='Play'; $('#sm-play').setAttribute('aria-pressed','false'); } drawSM(); }
+
+/* ---------- Lorentz vs Galilean ---------- */
+(function(){
+  let b=0.6, tp=1;
+  function draw(){
+    const g=gam(b), ang=range(0,2*Math.PI,240);
+    // Galilean: K time t = t', circle radius t centered at x' = -v t
+    const lor=ang.map(a=>[tp*Math.cos(a),tp*Math.sin(a)]), gal=ang.map(a=>[-b*tp+tp*Math.cos(a),tp*Math.sin(a)]);
+    const cvw=$('#lt-wave'), pw=(cvw.clientWidth||400)-64, ph=300-50, yr=5*ph/pw/2;
+    plot($('#lt-wave'),{height:300,xlim:[-3,2],ylim:[-yr,yr],xlabel:"x′ (light-seconds)",ylabel:"y′",legend:'tl',hlines:[{y:0}],vlines:[{x:0}],
+      series:[{data:gal,color:css('--down'),width:2,dash:[6,4],name:'Galilean prediction'},{data:lor,color:css('--up'),width:2.6,name:'Lorentz (actual)'},
+        {data:[[0,0]],points:true,color:css('--crit'),r:5,name:'O′ (Mary)'},{data:[[-b*tp,0]],points:true,color:css('--muted'),r:4,name:'O (Frank)'}]});
+    const bs=range(0,0.995,300);
+    plot($('#lt-gamma'),{height:300,xlim:[0,1],ylim:[0,8],xlabel:'β = v/c',ylabel:'γ',legend:'tl',
+      series:[{data:bs.map(x=>[x,gam(x)]),color:css('--up'),width:2.6,name:'γ = 1/√(1−β²)'},{data:[[b,g]],points:true,color:css('--crit'),r:6,name:`β = ${b.toFixed(2)}`}]});
+    const x=+$('#lt-x').value, t=+$('#lt-tt').value;
+    const xL=g*(x-b*t), tL=g*(t-b*x), xG=x-b*t;
+    $('#lt-read').innerHTML=`γ = <b>${g.toFixed(4)}</b>. Event (x, t) = (${x}, ${t}) in K → Lorentz: (x′, t′) = (<b>${xL.toFixed(4)}</b>, <b>${tL.toFixed(4)}</b>); Galilean: (${xG.toFixed(4)}, ${t}). Check the invariant: x² − t² = ${(x*x-t*t).toFixed(4)} and x′² − t′² = ${(xL*xL-tL*tL).toFixed(4)}.`;
+  }
+  bindSlider('#lt-b',v=>{b=v;draw();},v=>v.toFixed(2));
+  bindSlider('#lt-t',v=>{tp=v;draw();},v=>v.toFixed(2)+' s');
+  ['#lt-x','#lt-tt'].forEach(id=>$(id).addEventListener('input',draw));
+  reg(draw);
+})();
+
+/* ---------- two light clocks ---------- */
+const lc={v:0.6,contract:true,t:0,run:!reduceMotion,last:0};
+function drawLC(){
+  const cv=$('#lc-cv'), {ctx,W,H}=setupCv(cv,260), g=gam(lc.v), b=lc.v, T0=2;
+  const Lh=lc.contract?1/g:1, Tv=g*T0, Th=2*Lh/(1-b*b);
+  const up=css('--up'), crit=css('--crit'), ink=css('--ink'), muted=css('--muted'), u=Math.min(120,W/5); // pixels per unit length
+  // ground marks scroll left (the camera moves with the ship)
+  ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; const gy=H-14; ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
+  const off=((b*lc.t*u)%60+60)%60; for(let x=-off;x<W;x+=60){ ctx.beginPath(); ctx.moveTo(x,gy-5); ctx.lineTo(x,gy+5); ctx.stroke(); }
+  // lane 1: vertical clock at x = 0.35W
+  const vx=W*0.3, vb=H-40, vt=vb-u;
+  ctx.strokeStyle=ink; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(vx-22,vb); ctx.lineTo(vx+22,vb); ctx.moveTo(vx-22,vt); ctx.lineTo(vx+22,vt); ctx.stroke();
+  const tS=lc.t-(lc.t%Tv); ctx.strokeStyle=rgba(up,0.5); ctx.lineWidth=1.6; ctx.beginPath();
+  for(let k=0;k<=60;k++){ const tt=tS+(lc.t-tS)*k/60, p=(tt%Tv)/Tv, yy=p<0.5?2*p:2-2*p, xx=vx-b*(lc.t-tt)*u; k?ctx.lineTo(xx,vb-yy*u):ctx.moveTo(xx,vb-yy*u); } ctx.stroke();
+  const pv=(lc.t%Tv)/Tv, yv=pv<0.5?2*pv:2-2*pv; ctx.fillStyle=up; ctx.beginPath(); ctx.arc(vx,vb-yv*u,6,0,2*Math.PI); ctx.fill();
+  // lane 2: horizontal clock starting at x = 0.55W
+  const hx=W*0.55, hy=H-40-u*0.5;
+  ctx.strokeStyle=ink; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(hx,hy-22); ctx.lineTo(hx,hy+22); ctx.moveTo(hx+Lh*u,hy-22); ctx.lineTo(hx+Lh*u,hy+22); ctx.stroke();
+  ctx.strokeStyle=rgba(css('--muted'),0.5); ctx.setLineDash([4,4]); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(hx+u,hy-28); ctx.lineTo(hx+u,hy+28); ctx.stroke(); ctx.setLineDash([]);
+  const th=lc.t%Th, t1=Lh/(1-b), xr=th<t1?(1-b)*th:Lh-(1+b)*(th-t1);
+  ctx.fillStyle=crit; ctx.beginPath(); ctx.arc(hx+xr*u,hy,6,0,2*Math.PI); ctx.fill();
+  ctx.font=`600 13px ${css('--ui-font')}`; ctx.textBaseline='top'; ctx.textAlign='left';
+  const nV=Math.floor(lc.t/Tv), nH=Math.floor(lc.t/Th);
+  ctx.fillStyle=up; ctx.fillText(`vertical clock: ${nV} ticks`,8,8);
+  ctx.fillStyle=crit; ctx.fillText(`horizontal clock: ${nH} ticks`,8,26);
+  ctx.fillStyle=muted; ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='right'; ctx.fillText('ship moves right at v; view follows the ship',W-8,8);
+  ctx.textAlign='left'; ctx.fillText('dashed: uncontracted length L₀',hx+Math.max(Lh,1)*u+8,hy-6);
+  $('#lc-read').innerHTML=`Units with c = 1 and L₀ = 1: proper period T₀ = 2. In K the vertical clock ticks every γT₀ = <b>${Tv.toFixed(3)}</b>; the horizontal clock (arm ${lc.contract?'contracted to L₀/γ = '+Lh.toFixed(3):'not contracted, L₀ = 1'}) ticks every 2L/(1 − β²) = <b>${Th.toFixed(3)}</b>. ${lc.contract?'They agree, as relativity requires.':`They disagree by a factor γ = ${g.toFixed(3)}: Mary could detect her own motion.`}`;
+  $('#lc-on').setAttribute('aria-pressed',String(lc.contract)); $('#lc-off').setAttribute('aria-pressed',String(!lc.contract));
+}
+(function(){
+  bindSlider('#lc-v',v=>{ lc.v=v; lc.t=0; drawLC(); },v=>v.toFixed(2));
+  $('#lc-on').addEventListener('click',()=>{ lc.contract=true; lc.t=0; drawLC(); }); $('#lc-off').addEventListener('click',()=>{ lc.contract=false; lc.t=0; drawLC(); });
+  $('#lc-reset').addEventListener('click',()=>{ lc.t=0; drawLC(); });
+  playButton('#lc-play',lc,'run',['Pause','Play']);
+})();
+watch('demo-clock'); reg(drawLC);
+function lcTick(now){ if(!lc.run||!visible.get('demo-clock')) return; const dt=lc.last?Math.min(now-lc.last,100)/1000:0; lc.last=now; lc.t+=dt*0.9; drawLC(); }
+
+/* ---------- Example 2.2 calculator ---------- */
+(function(){
+  function draw(){
+    const L=Math.max(0.01,+$('#tr-L').value), T0=Math.max(0.1,+$('#tr-T').value);
+    const beta=1/Math.sqrt(1+(T0/(2*L))**2), TE=2*L/beta;
+    const bs=range(0.02,0.995,300);
+    plot($('#tr-plot'),{height:230,ylog:true,xlim:[0,1],ylim:[Math.max(0.01,2*L*0.05),2*L/0.02*1.2],xlabel:'β = v/c',ylabel:'trip duration (years)',legend:'tr',
+      hlines:[{y:T0,color:css('--crit')}],vlines:[{x:beta,color:css('--crit')}],
+      series:[{data:bs.map(x=>[x,2*L/x]),color:css('--up'),width:2.6,name:'Earth time 2L/v'},{data:bs.map(x=>[x,2*L/(x*gam(x))]),color:css('--down'),width:2.6,name:'ship time 2L/(γv)'},{data:[[beta,T0]],points:true,color:css('--crit'),r:6,name:'provisions limit'}]});
+    $('#tr-read').innerHTML=`Required speed v = <b>${beta.toFixed(3)}c</b> = ${fmt(+(beta*2.998e8).toPrecision(3))} m/s, γ = ${gam(beta).toFixed(3)}. Ship time ${T0.toFixed(1)} years; Earth time <b>${TE.toFixed(1)} years</b>.`;
+  }
+  ['#tr-L','#tr-T'].forEach(id=>$(id).addEventListener('input',draw));
+  reg(draw);
+})();
+
+/* ---------- appearance of moving boxes ---------- */
+(function(){
+  let v=0.8;
+  const boxes=[[-5,1,4],[1,1,2],[-4,-4,2],[0,-5,4]]; // [x0, y0, side] ; depth 4, near face z = 5
+  function edges(){ const out=[];
+    for(const [x0,y0,w] of boxes){ const xs=[x0,x0+w], ys=[y0,y0+w], zs=[5,9];
+      const P=(i,j,k)=>[xs[i],ys[j],zs[k]];
+      const E=[[[0,0,0],[1,0,0]],[[0,1,0],[1,1,0]],[[0,0,1],[1,0,1]],[[0,1,1],[1,1,1]],[[0,0,0],[0,1,0]],[[1,0,0],[1,1,0]],[[0,0,1],[0,1,1]],[[1,0,1],[1,1,1]],[[0,0,0],[0,0,1]],[[1,0,0],[1,0,1]],[[0,1,0],[0,1,1]],[[1,1,0],[1,1,1]]];
+      for(const [a,b] of E){ const A=P(...a), B=P(...b), pts=[]; for(let s=0;s<=40;s++){ const f=s/40; pts.push([A[0]+(B[0]-A[0])*f,A[1]+(B[1]-A[1])*f,A[2]+(B[2]-A[2])*f]); } out.push(pts); } }
+    return out; }
+  const E=edges();
+  function project(mode){ const g=gam(v);
+    return E.map(pts=>pts.map(([x0,y,z])=>{ let X=x0;
+      if(mode!=='rest'){ const xc=x0/g; X=xc;
+        if(mode==='photo'&&v>0){ const a=1-v*v, bb=-2*xc*v, c=-(xc*xc+y*y+z*z); const te=(-bb-Math.sqrt(bb*bb-4*a*c))/(2*a); X=xc+v*te; } }
+      return [X/z,y/z]; })); }
+  function draw(){
+    const views={rest:project('rest'),snap:project('snap'),photo:project('photo')};
+    // one common scale for all three views, but each view centered on its own boxes
+    const cvb=$('#lk-rest'), pw=(cvb.clientWidth||300)-64, ph=230-50, box={};
+    let hw=0, hh=0;
+    for(const k in views){ let lo=Infinity,hi=-Infinity,ylo=Infinity,yhi=-Infinity; for(const e of views[k]) for(const [u,w] of e){ lo=Math.min(lo,u); hi=Math.max(hi,u); ylo=Math.min(ylo,w); yhi=Math.max(yhi,w); }
+      box[k]=[(lo+hi)/2,(ylo+yhi)/2]; hw=Math.max(hw,(hi-lo)/2*1.1); hh=Math.max(hh,(yhi-ylo)/2*1.1); }
+    if(hw/hh>pw/ph) hh=hw*ph/pw; else hw=hh*pw/ph;
+    for(const [k,id] of [['rest','#lk-rest'],['snap','#lk-snap'],['photo','#lk-photo']])
+      plot($(id),{height:230,xlim:[box[k][0]-hw,box[k][0]+hw],ylim:[box[k][1]-hh,box[k][1]+hh],xlabel:'image x',ylabel:'image y',noYLabels:true,series:views[k].map(e=>({data:e,color:k==='photo'?css('--crit'):css('--up'),width:1.6}))});
+  }
+  bindSlider('#lk-v',x=>{v=x;draw();},x=>x.toFixed(2));
+  reg(draw);
+})();
+
+/* ---------- table of contents highlighting ---------- */
+(function(){
+  const links=[...document.querySelectorAll('nav.toc ol a')], map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const tio=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove('active')); map.get(e.target.id)?.classList.add('active'); } }); },{rootMargin:'-20% 0px -70% 0px'});
+  map.forEach((_,id)=>{ const el=document.getElementById(id); if(el) tio.observe(el); });
+})();
+
+function loop(now){ heroTick(now); mmTick(now); smTick(now); lcTick(now); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+
+window.addEventListener('load',()=>{
+  if(window.renderMathInElement) renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});
+  redraws.forEach(f=>f());
+});
+</script>
+</body>
+</html>

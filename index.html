@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modern Physics: Interactive Lecture Notes</title>
+<meta name="description" content="Interactive lecture notes for the undergraduate Modern Physics course at the Department of Physics, Gyeongsang National University, based on Sang Hoon Lee's lecture notes following Thornton, Rex, and Hood.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+
+
+:root{
+  --paper:#F3F5F7; --surface:#FFFFFF; --ink:#0E1420; --muted:#3E4859; --rule:#C3CBD6;
+  --up:#1537A8; --down:#B35F00; --crit:#B3104E; --mark:#C2EDB0; --mark-edge:#2E8A1E;
+  --spin-up:#0A1F6E; --spin-down:#FFD23F;
+  --serif:"Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --ui-font:"IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0B1019; --surface:#131A27; --ink:#F4F6FA; --muted:#BAC4D3; --rule:#35415A;
+    --up:#8FAEFF; --down:#FFC23D; --crit:#FF7AA6; --mark:#244A1E; --mark-edge:#7EDB6A;
+    --spin-up:#1E3FBF; --spin-down:#FFD23F;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+a{color:var(--up);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--crit);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;font-weight:700}
+h2{font-size:1.9rem;margin:3.6rem 0 .6rem;letter-spacing:-.01em}
+h2 .sec{color:var(--muted);font-weight:400;margin-right:.35em}
+h3{font-size:1.3rem;margin:2.4rem 0 .4rem}
+p,ul,ol{max-width:68ch}
+p,li,figcaption,h3{overflow-wrap:break-word}
+.ui{font-family:var(--ui-font)}
+
+/* hero */
+header.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:3rem;align-items:center;
+  max-width:1180px;margin:0 auto;padding:3.5rem 1.5rem 2.5rem}
+.course{font-family:var(--ui-font);font-size:1rem;color:var(--muted);margin:0 0 1rem}
+.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);margin:0 0 1.2rem;letter-spacing:-.02em}
+.hero h1 span{display:block;font-weight:400;font-style:italic;font-size:.5em;letter-spacing:0;color:var(--muted);margin-top:.35em}
+.hero .lede{font-size:1.2rem;max-width:34ch}
+.lattice-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:12px}
+canvas.lattice{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px}
+.lattice-wrap .controls{margin-top:10px}
+
+/* layout */
+.page{display:grid;grid-template-columns:200px minmax(0,1fr);gap:3rem;max-width:1180px;margin:0 auto;padding:0 1.5rem 4rem}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1.5rem);align-self:start;font-family:var(--ui-font);font-size:.95rem;padding-top:3.8rem}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:.15rem 0}
+nav.toc ol ol{padding-left:.9rem;font-size:.9rem}
+nav.toc a{color:var(--muted);text-decoration:none;display:block;padding:.15rem 0 .15rem .6rem;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.active{color:var(--ink);border-left-color:var(--crit)}
+main{min-width:0}
+
+/* key results echo the green boxes of the handwritten notes */
+.result{background:var(--mark);border-left:4px solid var(--mark-edge);padding:.6rem 1rem;margin:1.2rem 0;max-width:68ch;overflow-x:auto}
+.result p{margin:.2rem 0}
+.aside{color:var(--muted);font-style:italic;border-left:1px solid var(--rule);padding-left:1rem}
+mark{background:linear-gradient(transparent 55%, var(--mark) 55%);color:inherit;padding:0 .1em}
+.question{border:1.5px solid var(--ink);padding:.9rem 1.2rem;margin:2rem 0 1rem;max-width:68ch}
+.question h3{margin:0;font-size:1.2rem}
+.question h3 b{color:var(--crit)}
+.math-scroll{overflow-x:auto;max-width:68ch}
+/* keep KaTeX's absolutely positioned accessibility markup inside scroll boxes */
+.result,.math-scroll,.table-scroll{position:relative}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+
+/* demos */
+figure.demo{margin:1.8rem 0 2.2rem;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.2rem 1rem}
+figure.demo > .title{font-family:var(--ui-font);font-weight:600;font-size:1.05rem;margin:0 0 .7rem}
+figure.demo figcaption{font-size:.95rem;color:var(--muted);margin-top:.8rem;max-width:80ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}
+.grid-lat{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.4rem;align-items:start}
+canvas.plot{display:block;width:100%;height:280px}
+.plot-label{font-family:var(--ui-font);font-size:.9rem;color:var(--muted);margin:0 0 .2rem}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;font-family:var(--ui-font);font-size:.95rem;margin-bottom:.8rem}
+.controls label{display:flex;align-items:center;gap:.5rem}
+.controls input[type=range]{width:150px;accent-color:var(--up)}
+.controls output{font-variant-numeric:tabular-nums;min-width:4.5ch;display:inline-block}
+button,select{font-family:var(--ui-font);font-size:.92rem;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:3px;padding:.3rem .7rem;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.readout{font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;margin:.5rem 0 0}
+.readout b{font-weight:600}
+.swatch{display:inline-block;width:.8em;height:.8em;border-radius:1px;vertical-align:-.05em;margin-right:.25em}
+
+table.exps{border-collapse:collapse;font-size:1rem;margin:1rem 0;min-width:520px}
+table.exps th,table.exps td{text-align:left;padding:.45rem .9rem .45rem 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.exps th{font-family:var(--ui-font);font-weight:600;color:var(--muted)}
+.table-scroll{overflow-x:auto}
+
+ol.timeline{list-style:none;padding:0;margin:1.2rem 0;max-width:72ch;border-left:2px solid var(--rule)}
+ol.timeline li{position:relative;padding:0 0 1.1rem 1.4rem}
+ol.timeline li::before{content:"";position:absolute;left:-7px;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--up)}
+ol.timeline .yr{font-family:var(--ui-font);font-weight:600;margin-right:.6rem}
+
+footer{max-width:1180px;margin:0 auto;padding:2rem 1.5rem 3rem;border-top:1px solid var(--rule);font-size:.95rem;color:var(--muted)}
+footer p{max-width:90ch}
+
+@media (max-width:980px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  nav.toc{display:none}
+  header.hero{grid-template-columns:minmax(0,1fr);gap:1.8rem;padding-top:2rem}
+  .lattice-wrap{max-width:460px}
+}
+@media (max-width:720px){
+  .grid2,.grid-lat{grid-template-columns:minmax(0,1fr)}
+  h2{font-size:1.6rem}
+  figure.demo{padding:.9rem .8rem}
+  .controls input[type=range]{width:110px}
+  .katex-display{font-size:.86em}
+  .result{padding:.5rem .7rem}
+  .controls label{flex-wrap:wrap}
+}
+
+/* chapter 2 additions */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+canvas.kymo{display:block;width:100%;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px;background:var(--spin-down)}
+.chapnav{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-family:var(--ui-font);font-size:1rem;margin:0 0 1rem}
+.chapnav a{color:var(--muted)}
+.checklist{list-style:none;padding:0;margin:.6rem 0 0;font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;max-width:none}
+.checklist li{margin:.15rem 0}
+.checklist .ok{color:var(--mark-edge);font-weight:600}
+.checklist .bad{color:var(--crit);font-weight:600}
+.proof{border-left:2px solid var(--rule);padding-left:1rem;margin:1rem 0;max-width:68ch}
+.proof > p:first-child{margin-top:0}
+.qed{font-family:var(--ui-font);font-size:.85rem;border:1px solid var(--ink);padding:0 .3rem;margin-left:.4rem}
+svg.frustration{display:block;width:100%;max-width:220px;height:auto}
+@media (max-width:900px){ .grid3{grid-template-columns:minmax(0,1fr)} }
+
+.wrap{max-width:900px;margin:0 auto;padding:3.5rem 1.5rem 3rem}
+.wrap h1{font-size:clamp(2.3rem,5.5vw,3.8rem);margin:0 0 1rem;letter-spacing:-.02em}
+ol.chapters{list-style:none;padding:0;margin:2.5rem 0 0;max-width:none;border-top:1px solid var(--rule)}
+li.ch{padding:1.3rem 0;border-bottom:1px solid var(--rule)}
+li.ch a{text-decoration:none;color:var(--ink);display:block}
+li.ch a:hover .t{color:var(--up);text-decoration:underline;text-underline-offset:3px}
+li.ch .num{display:block;font-family:var(--ui-font);font-size:.95rem;color:var(--muted)}
+li.ch .t{display:block;font-size:1.45rem;font-weight:700;line-height:1.2;margin:.15rem 0 .4rem}
+li.ch p{margin:.2rem 0}
+li.ch p.demos{font-family:var(--ui-font);font-size:.95rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="course">Undergraduate course, Department of Physics, Gyeongsang National University</p>
+  <h1>Modern Physics <span style="font-weight:400;color:var(--muted)">(현대물리학)</span></h1>
+  <p class="lede" style="max-width:60ch">A companion to Sang Hoon Lee's lecture notes on S. T. Thornton, A. Rex, and C. E. Hood, <i>Modern Physics for Scientists and Engineers</i> (5th ed.). Each chapter pairs the lecture notes with simulations and calculations that run live in your browser.</p>
+  <ol class="chapters">
+    <li class="ch"><a href="ch02a-special-relativity.html"><span class="num">Chapter 2</span><span class="t">Special theory of relativity, Part 1: from the ether to the Lorentz transformation</span></a><p>Inertial frames and Galilean invariance, the ether and the Michelson–Morley experiment, Einstein's postulates, the Lorentz transformation, time dilation, and length contraction.</p><p class="demos">Demos: the Michelson–Morley interferometer, two flashes and two observers, Galilean vs Lorentz wavefronts, two light clocks on one ship, a trip to Alpha Centauri, what a moving object looks like.</p></li>
+    <li class="ch"><a href="ch02b-spacetime-and-relativistic-dynamics.html"><span class="num">Chapter 2</span><span class="t">Special theory of relativity, Part 2: velocities, spacetime, momentum, and energy</span></a><p>Velocity addition, experimental tests, the twin paradox, spacetime diagrams and the invariant interval, the relativistic Doppler effect, relativistic momentum and energy, and electromagnetism and relativity.</p><p class="demos">Demos: Galileo vs Einstein velocity addition, muons reaching the ground, two events in any frame, the twin paradox in spacetime, the Doppler effect for light, momentum bookkeeping, accelerating electrons, a wire seen from two frames.</p></li>
+    <li class="ch"><a href="ch03-experimental-basis-of-quantum-physics.html"><span class="num">Chapter 3</span><span class="t">The experimental basis of quantum physics</span></a><p>X rays and the electron, Millikan's oil drops, hydrogen line spectra, quantization, blackbody radiation and Planck's constant, the photoelectric effect, x-ray production, the Compton effect, and pair production and annihilation.</p><p class="demos">Demos: Thomson's e/m experiment, a simulated oil-drop experiment, the hydrogen series, Planck vs Rayleigh–Jeans, the photoelectric experiment, the x-ray continuum, Compton scattering, pair production in a magnetic field.</p></li>
+    <li class="ch"><a href="ch04-structure-of-the-atom.html"><span class="num">Chapter 4</span><span class="t">Structure of the atom</span></a><p>The Thomson and Rutherford models, Rutherford scattering, the collapse of the classical atom, the Bohr model and the correspondence principle, reduced mass and hydrogen-like ions, characteristic x rays and Moseley's law, and the Franck–Hertz experiment.</p><p class="demos">Demos: α particles meeting a nucleus, a Geiger–Marsden experiment by Monte Carlo, the death spiral of a classical atom, energy levels and transitions, quantum jumps approaching classical orbits, Moseley's law, the Franck–Hertz experiment.</p></li>
+    <li class="ch"><a href="ch05-wave-properties-of-matter.html"><span class="num">Chapter 5</span><span class="t">Wave properties of matter and quantum mechanics I</span></a><p>X-ray diffraction and Bragg's law, de Broglie waves, electron diffraction, wave packets and group velocity, wave–particle duality and the double slit, the uncertainty principle, the probability interpretation, and the particle in a box.</p><p class="demos">Demos: single-electron double-slit buildup, Bragg reflection, a standing wave around the orbit, a de Broglie wavelength calculator, the Davisson–Germer peak, building a wave packet, phase and group velocity, the double slit with a which-slit detector, uncertainty, standing waves in a box.</p></li>
+    <li class="ch"><a href="ch06-quantum-mechanics-II.html"><span class="num">Chapter 6</span><span class="t">Quantum mechanics II</span></a><p>The Schrödinger equation, normalization and stationary states, expectation values and operators, the infinite, finite, and three-dimensional square wells, the harmonic oscillator, and barriers and tunneling.</p><p class="demos">Demos: a wave packet tunneling (live Schrödinger solver), probability as area, the infinite square well and a sloshing superposition, bound states of a finite well, degeneracy in a box, the quantum harmonic oscillator, barrier transmission, the STM.</p></li>
+    <li class="ch"><a href="ch07-hydrogen-atom.html"><span class="num">Chapter 7</span><span class="t">The hydrogen atom</span></a><p>The Schrödinger equation in spherical coordinates, quantum numbers and space quantization, the normal Zeeman effect, the Stern–Gerlach experiment and intrinsic spin, selection rules, and electron probability densities.</p><p class="demos">Demos: cycling orbital densities, space quantization of L, counting the states of level n, the normal Zeeman effect, the Stern–Gerlach experiment, allowed and forbidden transitions, an orbital explorer for any (n, ℓ, m).</p></li>
+    <li class="ch"><a href="ch08-atomic-physics.html"><span class="num">Chapter 8</span><span class="t">Atomic physics</span></a><p>The Pauli exclusion principle and the periodic table, shielding and ionization energies, Rydberg atoms, total angular momentum and spin-orbit coupling, Hund's rules, LS and jj coupling, term symbols, and the anomalous Zeeman effect.</p><p class="demos">Demos: electrons filling subshells, an interactive periodic table with ionization energies, Rydberg atom sizes, adding L and S, term symbols for two electrons, normal and anomalous Zeeman patterns.</p></li>
+    <li class="ch"><a href="ch09-statistical-physics.html"><span class="num">Chapter 9</span><span class="t">Statistical physics</span></a><p>The Maxwell velocity and speed distributions, equipartition and heat capacities, classical and quantum statistics, the Fermi electron gas and electrical conduction, and Bose–Einstein statistics: blackbody radiation, superfluid helium, and particle exchange symmetry.</p><p class="demos">Demos: a colliding gas relaxing to the Maxwell distribution, degrees of freedom switching on, the Maxwell speed distribution, counting configurations of two particles, three distribution functions, counting states in number space, the Fermi gas at finite temperature, Bose condensation, symmetric and antisymmetric two-particle wave functions.</p></li>
+  </ol>
+  <p style="margin-top:2rem;color:var(--muted)">All pages work on phones, tablets, and desktops, in light and dark mode. Animations are deliberately slow and can be paused.</p>
+  <p style="color:var(--muted)">Created by Claude Opus 5.5 (Anthropic) based on Sang Hoon Lee's lecture notes, for the undergraduate course Modern Physics (현대물리학) of the Department of Physics, Gyeongsang National University.</p>
+</div>
+</body>
+</html>

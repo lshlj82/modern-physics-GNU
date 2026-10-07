@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 5: Wave Properties of Matter and Quantum Mechanics I | Modern Physics</title>
+<meta name="description" content="Interactive lecture notes for Chapter 5 of an undergraduate Modern Physics course: Bragg diffraction, de Broglie waves, the Davisson–Germer experiment, wave packets, phase and group velocity, the double slit, the uncertainty principle, the probability interpretation, and the particle in a box.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+
+
+
+:root{
+  --paper:#F3F5F7; --surface:#FFFFFF; --ink:#0E1420; --muted:#3E4859; --rule:#C3CBD6;
+  --up:#1537A8; --down:#B35F00; --crit:#B3104E; --mark:#C2EDB0; --mark-edge:#2E8A1E;
+  --spin-up:#0A1F6E; --spin-down:#FFD23F;
+  --serif:"Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --ui-font:"IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0B1019; --surface:#131A27; --ink:#F4F6FA; --muted:#BAC4D3; --rule:#35415A;
+    --up:#8FAEFF; --down:#FFC23D; --crit:#FF7AA6; --mark:#244A1E; --mark-edge:#7EDB6A;
+    --spin-up:#1E3FBF; --spin-down:#FFD23F;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:1.0625rem;line-height:1.62;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+a{color:var(--up);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--crit);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;font-weight:700}
+h2{font-size:1.9rem;margin:3.6rem 0 .6rem;letter-spacing:-.01em}
+h2 .sec{color:var(--muted);font-weight:400;margin-right:.35em}
+h3{font-size:1.3rem;margin:2.4rem 0 .4rem}
+p,ul,ol{max-width:68ch}
+p,li,figcaption,h3{overflow-wrap:break-word}
+.ui{font-family:var(--ui-font)}
+
+/* hero */
+header.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:3rem;align-items:center;
+  max-width:1180px;margin:0 auto;padding:3.5rem 1.5rem 2.5rem}
+.course{font-family:var(--ui-font);font-size:1rem;color:var(--muted);margin:0 0 1rem}
+.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);margin:0 0 1.2rem;letter-spacing:-.02em}
+.hero h1 span{display:block;font-weight:400;font-style:italic;font-size:.5em;letter-spacing:0;color:var(--muted);margin-top:.35em}
+.hero .lede{font-size:1.2rem;max-width:34ch}
+.lattice-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:12px}
+canvas.lattice{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px}
+.lattice-wrap .controls{margin-top:10px}
+
+/* layout */
+.page{display:grid;grid-template-columns:200px minmax(0,1fr);gap:3rem;max-width:1180px;margin:0 auto;padding:0 1.5rem 4rem}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 1.5rem);align-self:start;font-family:var(--ui-font);font-size:.95rem;padding-top:3.8rem}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:.15rem 0}
+nav.toc ol ol{padding-left:.9rem;font-size:.9rem}
+nav.toc a{color:var(--muted);text-decoration:none;display:block;padding:.15rem 0 .15rem .6rem;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.active{color:var(--ink);border-left-color:var(--crit)}
+main{min-width:0}
+
+/* key results echo the green boxes of the handwritten notes */
+.result{background:var(--mark);border-left:4px solid var(--mark-edge);padding:.6rem 1rem;margin:1.2rem 0;max-width:68ch;overflow-x:auto}
+.result p{margin:.2rem 0}
+.aside{color:var(--muted);font-style:italic;border-left:1px solid var(--rule);padding-left:1rem}
+mark{background:linear-gradient(transparent 55%, var(--mark) 55%);color:inherit;padding:0 .1em}
+.question{border:1.5px solid var(--ink);padding:.9rem 1.2rem;margin:2rem 0 1rem;max-width:68ch}
+.question h3{margin:0;font-size:1.2rem}
+.question h3 b{color:var(--crit)}
+.math-scroll{overflow-x:auto;max-width:68ch}
+/* keep KaTeX's absolutely positioned accessibility markup inside scroll boxes */
+.result,.math-scroll,.table-scroll{position:relative}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+
+/* demos */
+figure.demo{margin:1.8rem 0 2.2rem;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:1.1rem 1.2rem 1rem}
+figure.demo > .title{font-family:var(--ui-font);font-weight:600;font-size:1.05rem;margin:0 0 .7rem}
+figure.demo figcaption{font-size:.95rem;color:var(--muted);margin-top:.8rem;max-width:80ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}
+.grid-lat{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.4rem;align-items:start}
+canvas.plot{display:block;width:100%;height:280px}
+.plot-label{font-family:var(--ui-font);font-size:.9rem;color:var(--muted);margin:0 0 .2rem}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;font-family:var(--ui-font);font-size:.95rem;margin-bottom:.8rem}
+.controls label{display:flex;align-items:center;gap:.5rem}
+.controls input[type=range]{width:150px;accent-color:var(--up)}
+.controls output{font-variant-numeric:tabular-nums;min-width:4.5ch;display:inline-block}
+button,select{font-family:var(--ui-font);font-size:.92rem;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:3px;padding:.3rem .7rem;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.readout{font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;margin:.5rem 0 0}
+.readout b{font-weight:600}
+.swatch{display:inline-block;width:.8em;height:.8em;border-radius:1px;vertical-align:-.05em;margin-right:.25em}
+
+table.exps{border-collapse:collapse;font-size:1rem;margin:1rem 0;min-width:520px}
+table.exps th,table.exps td{text-align:left;padding:.45rem .9rem .45rem 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.exps th{font-family:var(--ui-font);font-weight:600;color:var(--muted)}
+.table-scroll{overflow-x:auto}
+
+ol.timeline{list-style:none;padding:0;margin:1.2rem 0;max-width:72ch;border-left:2px solid var(--rule)}
+ol.timeline li{position:relative;padding:0 0 1.1rem 1.4rem}
+ol.timeline li::before{content:"";position:absolute;left:-7px;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--up)}
+ol.timeline .yr{font-family:var(--ui-font);font-weight:600;margin-right:.6rem}
+
+footer{max-width:1180px;margin:0 auto;padding:2rem 1.5rem 3rem;border-top:1px solid var(--rule);font-size:.95rem;color:var(--muted)}
+footer p{max-width:90ch}
+
+@media (max-width:980px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  nav.toc{display:none}
+  header.hero{grid-template-columns:minmax(0,1fr);gap:1.8rem;padding-top:2rem}
+  .lattice-wrap{max-width:460px}
+}
+@media (max-width:720px){
+  .grid2,.grid-lat{grid-template-columns:minmax(0,1fr)}
+  h2{font-size:1.6rem}
+  figure.demo{padding:.9rem .8rem}
+  .controls input[type=range]{width:110px}
+  .katex-display{font-size:.86em}
+  .result{padding:.5rem .7rem}
+  .controls label{flex-wrap:wrap}
+}
+
+/* chapter 2 additions */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+canvas.kymo{display:block;width:100%;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:2px;background:var(--spin-down)}
+.chapnav{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-family:var(--ui-font);font-size:1rem;margin:0 0 1rem}
+.chapnav a{color:var(--muted)}
+.checklist{list-style:none;padding:0;margin:.6rem 0 0;font-family:var(--ui-font);font-size:.95rem;font-variant-numeric:tabular-nums;max-width:none}
+.checklist li{margin:.15rem 0}
+.checklist .ok{color:var(--mark-edge);font-weight:600}
+.checklist .bad{color:var(--crit);font-weight:600}
+.proof{border-left:2px solid var(--rule);padding-left:1rem;margin:1rem 0;max-width:68ch}
+.proof > p:first-child{margin-top:0}
+.qed{font-family:var(--ui-font);font-size:.85rem;border:1px solid var(--ink);padding:0 .3rem;margin-left:.4rem}
+svg.frustration{display:block;width:100%;max-width:220px;height:auto}
+@media (max-width:900px){ .grid3{grid-template-columns:minmax(0,1fr)} }
+
+canvas.anim{display:block;width:100%;border-radius:2px;background:var(--surface)}
+.ko{font-family:var(--ui-font);color:var(--muted);font-size:.92em}
+.calc input[type=number]{font-family:var(--ui-font);font-size:.95rem;width:6.5em;padding:.2rem .4rem;border:1px solid var(--rule);border-radius:3px;background:var(--paper);color:var(--ink)}
+
+.calc select{font-family:var(--ui-font)}
+blockquote.epi{margin:0 0 1rem;padding:.2rem 0 .2rem 1rem;border-left:3px solid var(--rule);color:var(--muted);font-style:italic;max-width:68ch}
+blockquote.epi cite{display:block;font-style:normal;font-family:var(--ui-font);font-size:.9rem;margin-top:.2rem}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div>
+    <p class="course">Modern Physics <span class="ko">(현대물리학)</span>, undergraduate course, Department of Physics, Gyeongsang National University</p>
+    <h1>Chapter 5: Wave properties of matter and quantum mechanics I<span>matter waves, wave packets, and uncertainty</span></h1>
+    <p class="lede">If light can behave like particles, can particles behave like waves? De Broglie said yes; electron diffraction proved it. From there come wave packets, the uncertainty principle, probability amplitudes, and the first quantum problem: a particle in a box.</p>
+  </div>
+  <div class="lattice-wrap">
+    <canvas class="anim" id="hero-cv" style="height:320px" aria-label="Electrons arriving one at a time on a screen behind a double slit, building up interference fringes"></canvas>
+    <div class="controls" style="margin:10px 0 0">
+      <button id="hero-play" aria-pressed="false">Pause</button> <button id="hero-reset">Start over</button>
+    </div>
+    <p class="readout" id="hero-read" style="margin-top:.2rem;color:var(--muted)"></p>
+  </div>
+</header>
+
+<div class="page">
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li><a href="#s5-1">5.1 X-ray scattering</a></li>
+    <li><a href="#s5-2">5.2 De Broglie waves</a></li>
+    <li><a href="#s5-3">5.3 Electron scattering</a></li>
+    <li><a href="#s5-4">5.4 Wave motion</a></li>
+    <li><a href="#s5-5">5.5 Waves or particles?</a></li>
+    <li><a href="#s5-6">5.6 Uncertainty principle</a></li>
+    <li><a href="#s5-7">5.7 Probability and Copenhagen</a></li>
+    <li><a href="#s5-8">5.8 Particle in a box</a></li>
+    <li><a href="#reading">Further reading</a></li>
+  </ol>
+  <p style="margin-top:1.5rem"><a href="ch04-structure-of-the-atom.html">Chapter 4</a></p>
+  <p><a href="ch06-quantum-mechanics-II.html">Chapter 6</a></p>
+  <p><a href="index.html">All chapters</a></p>
+</nav>
+
+<main>
+<blockquote class="epi">I thus arrived at the following overall concept which guided my studies: for both matter and radiations, light in particular, it is necessary to introduce the corpuscle concept and the wave concept at the same time.<cite>Louis de Broglie, 1929</cite></blockquote>
+<blockquote class="epi">We regard quantum mechanics as a complete theory for which the fundamental physical and mathematical hypotheses are no longer susceptible of modification.<cite>Werner Heisenberg and Max Born, Solvay Congress, 1927</cite></blockquote>
+
+<!-- ======================= 5.1 ======================= -->
+<section id="s5-1">
+<h2><span class="sec">5.1</span>X-ray scattering</h2>
+<p>In 1912 Laue, Friedrich, and Knipping sent x rays of many wavelengths through a crystal and found a symmetric pattern of dots on a photographic plate: x rays scattered from certain crystal planes interfere constructively. This convincingly proved that x rays are waves, with \(\lambda\approx10^{-11}\)–\(10^{-10}\) m, comparable to the distance between atoms in a crystal (\(\approx10^{-10}\) m), so interference effects are expected. A crystal such as NaCl has many sets of parallel <b>Bragg planes</b>. For constructive interference of the scattered x rays, two conditions must hold:</p>
+<ol>
+  <li>The angle of incidence equals the angle of reflection of the outgoing wave (the "law of reflection", although it actually results from diffraction and interference).</li>
+  <li>The difference in path length between waves scattered from adjacent planes, \(2d\sin\theta\), is an integral number of wavelengths.</li>
+</ol>
+<div class="result"><p>\[ n\lambda = 2d\sin\theta\qquad(n \text{ an integer, the order of reflection}), \]</p></div>
+<p><b>Bragg's law</b>, presented by W. L. Bragg, with \(d\) the spacing between planes. Note that the actual scattering angle from the incident direction is \(2\theta\). A Bragg spectrometer collimates x rays from a tube onto a crystal and detects them as a function of \(2\theta\). <b>Example 5.1:</b> rock salt (NaCl, \(\rho = 2.16\ \text{g/cm}^3\), \(M = 58.5\) g/mol) has \(4.45\times10^{28}\) atoms/m³ and, being cubic, \(d = (4.45\times10^{28})^{-1/3} = 0.282\) nm. An intense first-order maximum at a scattering angle of 20° (\(\theta = 10°\)) gives \(\lambda = 2(0.282\ \text{nm})\sin10°/1 = 0.098\) nm. Crystal structures as complex as DNA were understood from x-ray diffraction photographs (Rosalind Franklin, early 1950s). A powder of many small crystals produces interference maxima as a series of rings: powder x-ray diffraction (XRD).</p>
+
+<figure class="demo" id="demo-bragg">
+  <p class="title">Bragg reflection from crystal planes</p>
+  <div class="controls">
+    <label>Plane spacing \(d\) <input type="range" id="br-d" min="0.1" max="0.5" step="0.001" value="0.282"> <output id="br-d-out"></output></label>
+    <label>Wavelength \(\lambda\) <input type="range" id="br-l" min="0.02" max="0.3" step="0.001" value="0.098"> <output id="br-l-out"></output></label>
+    <label>Glancing angle \(\theta\) <input type="range" id="br-t" min="2" max="88" step="0.1" value="10"> <output id="br-t-out"></output></label>
+    <button id="br-ex">Example 5.1</button>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Rays reflected from adjacent planes</p><canvas class="anim" id="br-cv" style="height:250px" aria-label="Two x-ray paths reflecting from adjacent lattice planes"></canvas></div>
+    <div><p class="plot-label">Reflected intensity vs \(\theta\) (20 planes)</p><canvas class="plot" id="br-I" style="height:250px"></canvas></div>
+  </div>
+  <p class="readout" id="br-read"></p>
+  <figcaption>Left: two rays reflected from adjacent planes; the lower one travels an extra \(2d\sin\theta\) (highlighted). Right: the intensity from 20 planes adding coherently, sharply peaked where \(2d\sin\theta = n\lambda\). Example 5.1's NaCl crystal and 0.098 nm x rays give the first-order peak at \(\theta = 10°\).</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 5.2 ======================= -->
+<section id="s5-2">
+<h2><span class="sec">5.2</span>De Broglie waves</h2>
+<p>Photons have both wave and corpuscular (particle) properties. Louis V. de Broglie asked: why should material particles not have both as well? By symmetry, and since no law of physics prohibits it, he predicted that a particle of momentum \(p\) has a wavelength just like a photon. For a photon, \(hf = pc = p\lambda f\), so \(h = p\lambda\):</p>
+<div class="result"><p>\[ \lambda = \frac hp, \]</p></div>
+<p>the <mark>de Broglie wavelength</mark> of "matter waves". <b>Example 5.2:</b> a tennis ball (57 g at 25 m/s) has \(\lambda = 4.7\times10^{-34}\) m: no slit is that narrow, so its interference or diffraction is impossible to demonstrate. An electron with kinetic energy 50 eV has \(\lambda = hc/\sqrt{2(mc^2)K} = 0.17\) nm, large enough to show wave properties. (Energies in eV and \(hc = 1240\) eV·nm make such calculations easy.)</p>
+<p><b>Bohr's quantization condition.</b> One of Bohr's assumptions was that the electron's angular momentum in a stationary state is an integer multiple of \(h/2\pi = \hbar\). Assume instead a matter wave of wavelength \(\lambda = h/p\) that forms a standing wave around the orbit, \(n\lambda = 2\pi r\). Then \(nh/p = 2\pi r\), \(p = nh/2\pi r\), and</p>
+<div class="result"><p>\[ L = rp = \frac{nh}{2\pi} = n\hbar: \]</p></div>
+<p>Bohr's quantization follows simply from applying de Broglie's wavelength to an electron in a standing wave.</p>
+
+<figure class="demo" id="demo-orbit">
+  <p class="title">A standing wave around the orbit</p>
+  <div class="controls">
+    <label>Number of wavelengths around the orbit <input type="range" id="or-n" min="1" max="8" step="0.05" value="4"> <output id="or-n-out"></output></label>
+  </div>
+  <canvas class="anim" id="or-cv" style="height:260px" aria-label="A wave wrapped around a circular orbit"></canvas>
+  <p class="readout" id="or-read"></p>
+  <figcaption>The wave's displacement drawn around a circular orbit. For a whole number of wavelengths it joins smoothly to itself and can persist as a standing wave; for any other value the wave does not match where it meets itself (magenta gap) and would cancel itself out. The allowed values give \(L = n\hbar\).</figcaption>
+</figure>
+
+<figure class="demo" id="demo-db">
+  <p class="title">De Broglie wavelength calculator</p>
+  <div class="controls calc">
+    <label>Particle <select id="db-p"><option value="0.51099895">electron</option><option value="938.272">proton</option><option value="939.565">neutron</option><option value="3727.38">α particle</option><option value="ball">tennis ball (57 g)</option></select></label>
+    <label id="db-Klab">Kinetic energy (eV) <input type="number" id="db-K" value="50" step="any" min="0"></label>
+  </div>
+  <div class="controls">
+    <button data-db="0.51099895,50">50 eV electron (Ex. 5.2)</button> <button data-db="0.51099895,54">54 eV electron (Ex. 5.3)</button> <button data-db="939.565,0.0388">neutron at 300 K (Ex. 5.4)</button> <button data-db="939.565,0.00996">neutron at 77 K</button> <button data-db="0.51099895,50000">50 keV electron (Ex. 5.7)</button> <button data-db="ball,25">tennis ball (Ex. 5.2)</button>
+  </div>
+  <p class="readout" id="db-read"></p>
+  <figcaption>The calculation uses the relativistic momentum, \(pc = \sqrt{K^2 + 2K\,mc^2}\), so it stays correct at high energy; the readout also gives the nonrelativistic estimate \(\lambda = h/\sqrt{2mK}\). For the tennis ball the input is its speed in m/s. Thermal neutrons have \(K = \tfrac32k_BT\) (0.0388 eV at 300 K).</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 5.3 ======================= -->
+<section id="s5-3">
+<h2><span class="sec">5.3</span>Electron scattering</h2>
+<p>In 1925 a laboratory accident led to the experimental proof of de Broglie's hypothesis. C. Davisson and L. H. Germer at Bell Telephone Laboratories were scattering electrons from a nickel target when a liquid-air bottle exploded near their apparatus, oxidizing the hot nickel. To repair it they heated the target for a long time in hydrogen and under vacuum. Afterward, their data showed large numbers of scattered electrons for certain energies at a given scattering angle: the heat treatment had turned the polycrystalline nickel into a few large crystals. In 1928 data, 54 eV electrons scattered strongly at \(\phi = 50°\). The electrons were being diffracted like x rays. In the <b>Davisson–Germer experiment</b>, electrons from a hot filament are accelerated, focused onto the target, and scattered at an angle \(\phi\) into a movable detector. With \(D\) the interatomic distance and \(d = D\sin\alpha\) the lattice-plane spacing, where \(\alpha + \theta = \pi/2\) and \(\phi = 2\alpha\), the Bragg condition becomes</p>
+<div class="math-scroll">\[ \begin{gathered} n\lambda = 2d\sin\theta = 2d\cos\alpha = 2D\sin\alpha\cos\alpha = D\sin2\alpha = D\sin\phi,\\ \lambda = \frac{D\sin\phi}{n}. \end{gathered} \]</div>
+<p>For nickel, \(D = 0.215\) nm, so \(n = 1\) gives \(\lambda = 0.165\) nm. <b>Example 5.3:</b> the de Broglie wavelength of a 54 eV electron, from \(p^2/2m = eV_0\), is \(\lambda = hc/\sqrt{2(mc^2)(eV_0)}\approx0.167\) nm: good agreement. Transmission electron diffraction from crystals produces dot patterns, and from randomly oriented samples, rings. Neutrons (<b>Example 5.4</b>) in thermal equilibrium have \(K = \tfrac32k_BT\), giving \(\lambda = 0.145\) nm at 300 K and 0.287 nm at 77 K (liquid nitrogen): also suitable for diffraction from crystals, with the advantage of being little affected by electric and magnetic fields.</p>
+
+<figure class="demo" id="demo-dg">
+  <p class="title">The Davisson–Germer peak</p>
+  <div class="controls">
+    <label>Electron energy <input type="range" id="dg-E" min="30" max="80" step="1" value="54"> <output id="dg-E-out"></output></label>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Scattered intensity vs angle (polar plot)</p><canvas class="anim" id="dg-cv" style="height:270px" aria-label="Polar plot of scattered electron intensity"></canvas></div>
+    <div><p class="plot-label">Predicted peak angle vs energy</p><canvas class="plot" id="dg-ang" style="height:270px"></canvas></div>
+  </div>
+  <p class="readout" id="dg-read"></p>
+  <figcaption>A schematic model, not the original data. Left: intensity plotted as radial distance at each scattering angle \(\phi\), like Davisson and Germer's 1928 polar plots. A smooth background is topped by a diffraction peak at \(\sin\phi = \lambda/D\), whose strength is assumed largest near 54 eV, where the condition for the internal crystal planes is also met. Right: the peak angle from \(D\sin\phi = \lambda = h/\sqrt{2mK}\) for nickel's \(D = 0.215\) nm.</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 5.4 ======================= -->
+<section id="s5-4">
+<h2><span class="sec">5.4</span>Wave motion</h2>
+<p>If particles exhibit wave behavior, it must be possible to formulate a wave description of particle motion, an essential step toward the quantum theory. First, a review of wave motion. The simplest wave is sinusoidal; at \(t = 0\), \(\Psi(x,0) = A\sin(2\pi x/\lambda)\), where \(\Psi(x,t)\) is the instantaneous amplitude or displacement (for electromagnetic radiation, the magnitude of \(\vec E\) or \(\vec B\)) and \(A\) the amplitude. As time increases, a wave moving to the right at speed \(v\) is</p>
+<div class="math-scroll">\[ \Psi(x,t) = A\sin\Big[\frac{2\pi}{\lambda}(x-vt)\Big],\qquad v = \frac\lambda T,\qquad f = \frac1T, \]</div>
+<p>where the period \(T\) is the time for the wave to travel one wavelength and the frequency \(f\) is the number of cycles per second. With the <b>wave number</b> \(k\equiv2\pi/\lambda\) and <b>angular frequency</b> \(\omega\equiv2\pi/T = 2\pi f\),</p>
+<div class="result"><p>\[ \Psi(x,t) = A\sin(kx-\omega t),\qquad v_{\rm ph} = \frac\lambda T = \frac\omega k, \]</p></div>
+<p>where the <b>phase velocity</b> \(v_{\rm ph}\) is the velocity of a point of given phase. A wave traveling in the \(-x\) direction is \(A\sin(kx+\omega t)\), and a phase constant gives \(A\sin(kx-\omega t+\phi)\) (\(\phi = \pi/2\) gives \(A\cos(kx-\omega t)\)). The traveling wave satisfies the <b>wave equation</b></p>
+<div class="result"><p>\[ \frac{\partial^2\Psi}{\partial x^2} = \frac{1}{v^2}\frac{\partial^2\Psi}{\partial t^2}, \]</p></div>
+<p>and in fact any function \(\Psi(x-vt)\) does: with \(y = x-vt\), \(\partial^2\Psi/\partial x^2 = d^2\Psi/dy^2\) and \(\partial^2\Psi/\partial t^2 = v^2d^2\Psi/dy^2\). By the <b>principle of superposition</b>, two or more waves traversing the same region act independently and simply add. In quantum mechanics we will use waves to represent a moving particle.</p>
+<p>A <mark>wave packet</mark>: adding many waves of different amplitudes and frequencies in particular ways gives a net amplitude that differs from zero only over a small region \(\Delta x\). Start with two waves of equal amplitude:</p>
+<div class="math-scroll">\[ \begin{aligned} \Psi(x,t) &= A\big[\cos(k_1x-\omega_1t) + \cos(k_2x-\omega_2t)\big]\\ &= 2A\cos\Big(\frac{\Delta k}{2}x - \frac{\Delta\omega}{2}t\Big)\cos(k_{\rm av}x - \omega_{\rm av}t), \end{aligned} \]</div>
+<p>with \(\Delta k = k_1-k_2\), \(\Delta\omega = \omega_1-\omega_2\), \(k_{\rm av} = \tfrac12(k_1+k_2)\), \(\omega_{\rm av} = \tfrac12(\omega_1+\omega_2)\). The first factor is an <b>envelope</b> moving at the <b>group velocity</b> \(u_{\rm gr} = \Delta\omega/\Delta k\); the second oscillates within it at the phase velocity \(\omega_{\rm av}/k_{\rm av}\). Two waves are not localized in space, but between adjacent zeros of the envelope the phase of \(\cos(\frac{\Delta k}{2}x - \frac{\Delta\omega}{2}t)\) changes by \(\pi\), so</p>
+<div class="result"><p>\[ \Delta k\,\Delta x = 2\pi,\qquad \Delta\omega\,\Delta t = 2\pi. \]</p></div>
+<p>To know the position of the envelope precisely (small \(\Delta x\)) we need a large range of wave numbers (large \(\Delta k\)): this will become Heisenberg's uncertainty principle. Similarly \(\Delta t\) and \(\Delta\omega\) are related, the bandwidth relation important in electronics. In general a wave packet is a <b>Fourier series</b> \(\Psi = \sum_iA_i\cos(k_ix-\omega_it)\), or for a continuous spectrum a <b>Fourier integral</b> \(\Psi(x,t) = \int\tilde A(k)\cos(kx-\omega t)\,dk\).</p>
+
+<figure class="demo" id="demo-pk">
+  <p class="title">Building a wave packet (Problem 69)</p>
+  <div class="controls">
+    <span role="group" aria-label="Packet"><button id="pk-p69" aria-pressed="true">Problem 69: seven waves</button> <button id="pk-g" aria-pressed="false">Gaussian spectrum</button></span>
+    <label>Spread in wave number <input type="range" id="pk-s" min="0.5" max="6" step="0.1" value="2"> <output id="pk-s-out"></output></label>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Amplitudes \(A_n\) of the component waves</p><canvas class="plot" id="pk-A" style="height:230px"></canvas></div>
+    <div><p class="plot-label">The sum \(\psi(x) = \sum_nA_n\cos(2\pi nx)\)</p><canvas class="plot" id="pk-x" style="height:230px"></canvas></div>
+  </div>
+  <p class="readout" id="pk-read"></p>
+  <figcaption>Problem 69: \(\psi_n = A_n\cos(2\pi nx)\) for \(n = 9\) to 15, with \(A_{12} = 1\) and amplitudes falling to 1/2, 1/3, 1/4 on either side. The waves all agree at \(x = 0\), where the packet is centered, and again at every whole number of \(x\), so the packet repeats with period 1. A Gaussian set of amplitudes (second button) shows the trade-off directly: a wider spread of wave numbers makes a narrower packet.</figcaption>
+</figure>
+
+<p><b>Gaussian wave packet.</b> Take \(\Psi(x,0) = Ae^{-\Delta k^2x^2}\cos(k_0x)\): waves oscillating at \(k_0\) inside a Gaussian envelope \(e^{-\Delta k^2x^2}\), built from a Gaussian distribution of wave numbers \(\propto e^{-(k-k_0)^2/2\sigma^2}\) of width \(\sigma = \Delta k\) about \(k_0\). There is a good probability of finding the particle between \(x = 0\), where \(\psi = A\), and \(x = \Delta x/2\), where \(\psi = Ae^{-\Delta k^2\Delta x^2/4}\approx0.6A\); so \(\Delta k^2\Delta x^2/4\approx0.5\), or \(\Delta k\Delta x\approx1.4\). A more careful calculation gives \(\Delta k\,\Delta x = \tfrac12\): of order unity, as in the two-wave case.</p>
+<p>Generalizing the two-wave group velocity, a wave packet moves at</p>
+<div class="result"><p>\[ u_{\rm gr} = \frac{d\omega}{dk}, \]</p></div>
+<p>evaluated at the center of the packet, \(k = k_0\). For a de Broglie wave, \(E = hf = \hbar\omega\) and \(p = h/\lambda = \hbar k\), so \(u_{\rm gr} = d(\hbar\omega)/d(\hbar k) = dE/dp\). With the relativistic \(E^2 = p^2c^2 + m^2c^4\), \(2E\,dE = 2p\,dp\,c^2\), so \(u_{\rm gr} = dE/dp = pc^2/E\). Since \(\omega = kv_{\rm ph}\),</p>
+<div class="math-scroll">\[ u_{\rm gr} = \frac{d\omega}{dk} = \frac{d}{dk}(v_{\rm ph}k) = v_{\rm ph} + k\frac{dv_{\rm ph}}{dk}, \]</div>
+<p>so \(u_{\rm gr}\) can be larger or smaller than \(v_{\rm ph}\). A medium is <b>nondispersive</b> when \(u_{\rm gr} = v_{\rm ph}\), the same for all frequencies, as for electromagnetic waves in vacuum (no ether needed). For a nonrelativistic particle of mass \(m\) and speed \(v\), \(v_{\rm ph} = \lambda f = E/p = (p^2/2m)/p = v/2\): the particle does <i>not</i> move with the phase velocity. <b>Example 5.5:</b> instead \(u_{\rm gr} = pc^2/E = mvc^2/mc^2 = v\), or nonrelativistically \(u_{\rm gr} = dE/dp = d(p^2/2m)/dp = v\). The particle, acting as a wave, moves with the group velocity. <b>Example 5.6:</b> deep-water waves have \(v_{\rm ph} = \sqrt{g\lambda/2\pi} = \sqrt{g/k}\), so \(u_{\rm gr} = \tfrac12v_{\rm ph}\): throw a rock in a still pond and the individual waves run right through the expanding group and disappear. A Gaussian packet also spreads out as time progresses.</p>
+
+<figure class="demo" id="demo-gv">
+  <p class="title">Phase velocity and group velocity</p>
+  <div class="controls">
+    <span role="group" aria-label="Dispersion"><button data-gv="vac" aria-pressed="true">Light in vacuum</button> <button data-gv="water" aria-pressed="false">Deep-water waves</button> <button data-gv="free" aria-pressed="false">Free particle (de Broglie)</button></span>
+    <button id="gv-play" aria-pressed="false">Pause</button>
+  </div>
+  <canvas class="plot" id="gv-cv" style="height:250px"></canvas>
+  <p class="readout" id="gv-read"></p>
+  <figcaption>Two waves with nearby wave numbers \(k_0\pm\delta\) and frequencies from three dispersion relations, scaled so that the phase velocity at \(k_0\) is the same. The magenta dot rides one crest (phase velocity \(\omega/k\)); the orange dot rides the peak of the envelope (group velocity \(d\omega/dk\)). In vacuum (\(\omega = ck\)) they move together; for deep water (\(\omega\propto\sqrt k\)) the group moves at half the phase velocity, so crests appear at the back of the group and vanish at the front; for a free particle (\(\omega\propto k^2\)) the group moves at twice the phase velocity, which is the particle's speed.</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 5.5 ======================= -->
+<section id="s5-5">
+<h2><span class="sec">5.5</span>Waves or particles?</h2>
+<p>This is the <mark>wave–particle duality</mark>, for both electromagnetic radiation (photons) and particles with mass (matter waves such as electrons). In Young's double-slit experiment, light through two slits a distance \(d\) apart gives constructive interference on a distant screen where \(n\lambda = d\sin\theta\), clearly a wave phenomenon. If the light intensity is reduced so far that photons arrive one at a time, each lands as a single dot, yet after many counts the interference pattern emerges. The same happens with electrons (Jönsson's electron double-slit experiment). <b>Example 5.7:</b> 50 keV electrons through slits 500 nm wide and 2000 nm apart, with the screen 350 mm away. The relativistic wavelength is \(\lambda = hc/pc = 5.36\times10^{-3}\) nm (the nonrelativistic estimate, \(5.48\times10^{-3}\) nm, is 2% too large), so \(\sin\theta = \lambda/d = 2.68\times10^{-6}\) and adjacent maxima are \(y = \ell\theta = 938\) nm apart, too small to see with the naked eye; Jönsson magnified the pattern with electron lenses.</p>
+
+<figure class="demo" id="demo-ds">
+  <p class="title">The double slit, with and without a which-slit detector</p>
+  <div class="controls">
+    <label>Slit separation \(d\) (nm) <input type="range" id="ds-d" min="500" max="5000" step="50" value="2000"> <output id="ds-d-out"></output></label>
+    <label>Slit width \(a\) (nm) <input type="range" id="ds-a" min="100" max="1500" step="50" value="500"> <output id="ds-a-out"></output></label>
+    <label>Electron energy (keV) <input type="range" id="ds-E" min="5" max="100" step="1" value="50"> <output id="ds-E-out"></output></label>
+  </div>
+  <div class="controls">
+    <span role="group" aria-label="Detector"><button id="ds-off" aria-pressed="true">No detector</button> <button id="ds-on" aria-pressed="false">Detect which slit</button></span>
+  </div>
+  <canvas class="plot" id="ds-plot" style="height:260px"></canvas>
+  <p class="readout" id="ds-read"></p>
+  <figcaption>Probability of an electron landing at position \(y\) on a screen 350 mm away. Without a detector, the amplitudes from the two slits add, and \(|\Psi_1+\Psi_2|^2\) shows fringes inside the single-slit envelope. With a detector that tells which slit each electron used, the probabilities add instead, \(|\Psi_1|^2+|\Psi_2|^2\), and the fringes vanish. The default is Example 5.7, with maxima 938 nm apart.</figcaption>
+</figure>
+
+<p><b>Which slit?</b> Suppose we try to determine which slit each electron passes through, by scattering a photon from it near the slits. To resolve the slits, the photon's wavelength must be smaller than \(d\), so its momentum \(p_{\rm ph} = h/\lambda_{\rm ph} > h/d\). But to show interference, the electrons must have a wavelength of order \(d\), so \(p_{\rm el} = h/\lambda_{\rm el}\sim h/d\). Then \(p_{\rm ph} > p_{\rm el}\), and the photon changes the electron's direction. More quantitatively, locating the electron within \(\Delta y\lt d/2\) gives it \(\Delta p_y>\hbar/d\), an angular uncertainty \(\Delta\theta\approx\Delta p_y/p = \lambda/2\pi d\), comparable to the angle between a maximum (\(\theta\approx\lambda/d\)) and the adjacent minimum (\(\theta\approx\lambda/2d\)). The interference pattern is washed out: if we insist on identifying the electrons as particles and knowing which slit they pass through, their wave characteristics disappear. We cannot treat the electron as both a particle and a wave simultaneously.</p>
+<p>Bohr resolved the dilemma by pointing out that the particle-like and wave-like aspects of nature are complementary. <b>Bohr's principle of complementarity:</b> it is not possible to describe physical observables simultaneously in terms of both particles and waves. Physical observables are quantities that can be measured experimentally, such as position, velocity, momentum, and energy. In any instance we must use either the particle or the wave description; the interference pattern of the double slit, for example, requires the wave description. Experiments dictate what happens; the rules lead naturally to a probability interpretation. If detectors line the screen, the interference pattern gives the probability of the electron being detected by each one; once it is registered by one detector, the probability of its being seen in any other is zero. Matter and radiation propagate as waves but interact (are created, annihilated, or detected) as particles.</p>
+</section>
+
+<!-- ======================= 5.6 ======================= -->
+<section id="s5-6">
+<h2><span class="sec">5.6</span>The uncertainty principle</h2>
+<p>Recall \(\Delta k\Delta x = 2\pi\) for two waves and \(\Delta k\Delta x = \tfrac12\) for a Gaussian packet. Since \(\Delta k\Delta x>0\), it is impossible to measure simultaneously, with no uncertainty, the precise values of \(k\) and \(x\) for the same particle. With \(k = 2\pi/\lambda = 2\pi p/h = p/\hbar\), \(\Delta k = \Delta p/\hbar\), so for the Gaussian packet \(\Delta p\,\Delta x = \hbar/2\). This is <mark>Heisenberg's uncertainty principle</mark> (1927), which applies in all three dimensions:</p>
+<div class="result"><p>\[ \Delta p_x\Delta x\ge\frac\hbar2,\qquad \Delta p_y\Delta y\ge\frac\hbar2,\qquad \Delta p_z\Delta z\ge\frac\hbar2, \]</p></div>
+<p>no matter how good an experimental measurement is made. (\(\Delta x\,\Delta p_y\), by contrast, can be zero.) If we want to know a particle's momentum precisely, we cannot specify its location precisely. For a particle known to lie within a width \(\ell\) along \(x\), \(\Delta x\le\ell/2\), so \(\Delta p\ge\hbar/2\Delta x\ge\hbar/\ell\), and classically \(\Delta v = \Delta p/m\ge\hbar/m\ell\). Its minimum kinetic energy is</p>
+<div class="result"><p>\[ K_{\min} = \frac{p_{\min}^2}{2m}\ge\frac{(\Delta p)^2}{2m}\ge\frac{\hbar^2}{2m\ell^2}: \]</p></div>
+<p>a confined particle cannot have zero kinetic energy. <b>Example 5.8:</b> a tennis ball in a 35 m court has \(\Delta p\ge3\times10^{-36}\) kg·m/s, no problem at all; an electron within the hydrogen atom (\(\Delta x = a_0\)) has \(\Delta p\ge1\times10^{-24}\) kg·m/s, corresponding to about \(10^6\) m/s, comparable to its speed in the first Bohr orbit. <b>Example 5.9:</b> treating hydrogen as one-dimensional of length \(2a_0\) gives \(K_{\min} = \hbar^2/2m\ell^2 = 3.4\) eV; a three-dimensional estimate gives about twice that, reasonable for the ground state, whose kinetic energy is 13.6 eV (since \(K + U = -13.6\) eV with \(U = -2K\)).</p>
+<p><b>Energy–time uncertainty.</b> For the Gaussian packet \(\Delta\omega\Delta t = \tfrac12\), and \(\Delta E = h\Delta f = \hbar\Delta\omega\), so</p>
+<div class="result"><p>\[ \Delta E\,\Delta t\ge\frac\hbar2, \]</p></div>
+<p>another form of the uncertainty principle. Other <i>conjugate</i> variables are related similarly, such as the angular momentum \(L\) and angle \(\theta\). Einstein, among others, tried to find situations that violate the principle; at the 1927 Solvay conference he proposed a new <i>gedanken</i> experiment each morning, and each evening Bohr refuted it. <b>Example 5.10:</b> an electron confined within a nucleus (\(\Delta x\approx6\times10^{-15}\) m) would need \(p\ge1.64\times10^7\) eV/\(c\) and, relativistically, a kinetic energy of about 15.9 MeV, far larger than the energies of electrons emitted by nuclei in beta decay (Conceptual Example 5.11): electrons are not confined in the nucleus but are created when emitted. <b>Example 5.12:</b> an excited atomic state lasting \(\Delta t\approx10^{-8}\) s has an energy width \(\Delta E\ge\hbar/2\Delta t = 3.3\times10^{-8}\) eV; for 300 nm light (\(f = 10^{15}\) Hz) that is \(\Delta f = 8\times10^6\) Hz, a fractional width \(\Delta f/f = 8\times10^{-9}\).</p>
+
+<figure class="demo" id="demo-unc">
+  <p class="title">Narrow in position, wide in momentum</p>
+  <div class="controls">
+    <label>Position spread \(\Delta x\) <input type="range" id="un-x" min="0.3" max="3" step="0.05" value="1"> <output id="un-x-out"></output></label>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Wave packet \(\psi(x)\) and probability \(|\psi|^2\)</p><canvas class="plot" id="un-psi" style="height:230px"></canvas></div>
+    <div><p class="plot-label">Its spectrum of wave numbers \(|\tilde A(k)|^2\)</p><canvas class="plot" id="un-k" style="height:230px"></canvas></div>
+  </div>
+  <div class="controls calc">
+    <span>Confine a particle:</span>
+    <label>Particle <select id="un-p"><option value="0.51099895">electron</option><option value="938.272">proton</option></select></label>
+    <label>within \(\Delta x\) (nm) <input type="number" id="un-dx" value="0.0529" step="any" min="0"></label>
+    <button data-dx="0.0529">hydrogen atom (Ex. 5.8)</button> <button data-dx="0.000006">nucleus, Δx = 6 fm (Ex. 5.10)</button>
+  </div>
+  <p class="readout" id="un-read"></p>
+  <figcaption>Top: a Gaussian wave packet (arbitrary units) and the Gaussian spread of wave numbers that builds it. Squeezing the packet in \(x\) broadens it in \(k\); the product of the standard deviations stays exactly \(\Delta x\,\Delta k = \tfrac12\), the minimum allowed. Bottom: the smallest momentum spread \(\Delta p = \hbar/2\Delta x\) for a confined particle, and the kinetic energy that goes with a momentum of that size, computed relativistically.</figcaption>
+</figure>
+</section>
+
+<!-- ======================= 5.7 ======================= -->
+<section id="s5-7">
+<h2><span class="sec">5.7</span>Probability, wave functions, and the Copenhagen interpretation</h2>
+<p>For light, the instantaneous wave intensity, \(\epsilon_0cE^2\propto E^2\), is proportional to the probability of observing light. In the double-slit buildup, the probability of a photon landing between \(y\) and \(y+dy\) is proportional to \(E^2dy\); the energy flux is \(I = \epsilon_0c\overline{E^2}\) as a wave and \(I = Nhf\) as \(N\) photons. For the electron in the wave description, \(\Psi(x,t)\), the superposition of many waves forming the wave packet, is the <mark>wave function</mark>, and it determines the probability. \(\Psi\) itself has no physical significance and can be complex, \(x + iy\) with \(i^2 = -1\). Its squared magnitude \(|\Psi|^2 = \Psi^*\Psi = (x-iy)(x+iy) = x^2+y^2\) is the <b>probability density</b>: the probability of observing an electron between \(y\) and \(y+dy\) at a given time is</p>
+<div class="result"><p>\[ P(y)\,dy = |\Psi(y,t)|^2\,dy. \]</p></div>
+<p>The electron must be observed somewhere along the screen with probability 1, which gives the <b>normalization</b> condition</p>
+<div class="result"><p>\[ \int_{-\infty}^{\infty}P(y)\,dy = \int_{-\infty}^{\infty}|\Psi(y,t)|^2\,dy = 1. \]</p></div>
+<p>Max Born (Nobel Prize 1954) proposed this probability interpretation in 1926. Using wave functions \(\Psi(x,y,z,t)\) instead of classical positions \(x(t), y(t), z(t)\) is a clean break between classical and modern physics; the rules for obtaining observables from \(\Psi\) come in Chapter 6.</p>
+<p><b>The Copenhagen interpretation</b> rests on (1) Heisenberg's uncertainty principle, (2) Bohr's complementarity principle, and (3) Born's statistical interpretation. Consider a single electron passing through the double slit: we can determine precisely where it hits the screen by noting a flash. The Copenhagen interpretation rejects arguments about where the electron was between the time it was emitted and the time it flashed on the screen. The measurement process randomly chooses one of the possibilities allowed by the wave function, and the wave function instantaneously changes to represent the final outcome. Bohr argued that it is not the task of physics to find out how nature is, because we can never understand the quantum world or assign physical meaning to the wave function; measurement outcomes are the only reality in physics.</p>
+<p>Many physicists objected, and some still do: to its nondeterministic nature and to the vague measurement process that turns probabilities into definite results. Einstein, Planck, de Broglie, and Schrödinger never accepted it; Einstein wrote to Born in 1926 that "God does not throw dice." Famous paradoxes include Schrödinger's cat (1935), the Einstein–Podolsky–Rosen paradox (1935), and Bell's theorem (1964). Hugh Everett III proposed the "Many Worlds" interpretation in 1957, in which every quantum event produces parallel universes. Nevertheless, the Copenhagen interpretation remains the favored one.</p>
+</section>
+
+<!-- ======================= 5.8 ======================= -->
+<section id="s5-8">
+<h2><span class="sec">5.8</span>Particle in a box</h2>
+<p>A particle of mass \(m\) is trapped in a one-dimensional box of width \(\ell\). From the uncertainty principle, \(K_{\min}\ge\hbar^2/2m\ell^2\). Its probability of being outside the box is zero, so the amplitude of its wave must vanish at the walls and beyond (the boundary condition). The waves that fit are sinusoidal, \(\sin(n\pi x/\ell) = \sin(2\pi x/\lambda_n)\), with a whole number of half-wavelengths across the box:</p>
+<div class="result"><p>\[ \frac{\lambda}{2}n = \ell\quad\Longrightarrow\quad\lambda_n = \frac{2\ell}{n}\qquad(n = 1,2,\dots), \]</p></div>
+<p>quantized wavelengths. Treating the problem nonrelativistically, with no potential energy inside (and an infinite potential outside), \(E = K = \tfrac12mv^2 = p^2/2m = (h/\lambda)^2/2m\), so</p>
+<div class="result"><p>\[ E_n = \frac{h^2}{2m\lambda_n^2} = n^2\frac{h^2}{8m\ell^2}\qquad(n = 1,2,3,\dots). \]</p></div>
+<p>Each \(E_n\) is a possible <mark>energy level</mark>. The uncertainty bound \(K_{\min}\ge\hbar^2/2m\ell^2 = h^2/8\pi^2m\ell^2\) is consistent with \(E_1 = h^2/8m\ell^2\), which is \(\pi^2\) times larger. The probability of finding the particle between \(x\) and \(x+dx\) is \(P_n\,dx\propto|\psi_n(x)|^2dx\). \(E_0 = 0\) is not possible, because \(n=0\) corresponds to \(\psi_0 = 0\); the lowest energy level is \(E_1\), with \(P_1\propto|\psi_1|^2\), most probably found in the middle of the box. This model is our first application of quantum theory: quantization of energy arises from fitting a whole number of half-waves into the box, and energy levels, first met in the Bohr model, arise naturally from waves. <b>Example 5.13:</b> an electron in a one-dimensional "atom" of size 0.1 nm has \(E_n = n^2(hc)^2/8mc^2\ell^2 = n^2(38\ \text{eV})\): 38, 152, and 342 eV for the first three levels.</p>
+
+<figure class="demo" id="demo-box">
+  <p class="title">Standing waves in a box</p>
+  <div class="controls">
+    <label>Box width \(\ell\) (nm) <input type="range" id="bx-l" min="0.05" max="2" step="0.01" value="0.1"> <output id="bx-l-out"></output></label>
+    <label>Highlight level \(n\) <input type="range" id="bx-n" min="1" max="5" step="1" value="1"> <output id="bx-n-out"></output></label>
+    <label>Particle <select id="bx-p"><option value="0.51099895">electron</option><option value="938.272">proton</option></select></label>
+  </div>
+  <div class="grid2">
+    <div><p class="plot-label">Wave functions \(\psi_n\) drawn at their energies</p><canvas class="plot" id="bx-psi" style="height:290px"></canvas></div>
+    <div><p class="plot-label">Probability densities \(|\psi_n|^2\)</p><canvas class="plot" id="bx-P" style="height:290px"></canvas></div>
+  </div>
+  <p class="readout" id="bx-read"></p>
+  <figcaption>The first five standing waves in a box with infinitely high walls, each drawn at the height of its energy level (the levels grow as \(n^2\)). The default reproduces Example 5.13. The highlighted level's probability density has \(n\) humps; the dashed line marks the uncertainty-principle bound \(\hbar^2/2m\ell^2\), which lies below \(E_1\) as it must.</figcaption>
+</figure>
+<p class="aside">This completes Chapter 5. <a href="ch06-quantum-mechanics-II.html">Chapter 6</a> introduces the Schrödinger equation.</p>
+</section>
+
+<section id="reading">
+<h2>Further reading</h2>
+<ul>
+  <li>S. T. Thornton, A. Rex, and C. E. Hood, <i>Modern Physics for Scientists and Engineers</i>, 5th ed. (Cengage Learning), Chapter 5.</li>
+  <li>L. de Broglie, "Recherches sur la théorie des quanta," <i>Ann. Phys.</i> (Paris) <b>3</b>, 22 (1925).</li>
+  <li>C. Davisson and L. H. Germer, "Diffraction of electrons by a crystal of nickel," <i>Phys. Rev.</i> <b>30</b>, 705 (1927).</li>
+  <li>C. Jönsson, "Electron diffraction at multiple slits," <i>Am. J. Phys.</i> <b>42</b>, 4 (1974).</li>
+  <li>W. Heisenberg, "Über den anschaulichen Inhalt der quantentheoretischen Kinematik und Mechanik," <i>Z. Phys.</i> <b>43</b>, 172 (1927).</li>
+  <li>A. Tonomura, J. Endo, T. Matsuda, T. Kawasaki, and H. Ezawa, "Demonstration of single-electron buildup of an interference pattern," <i>Am. J. Phys.</i> <b>57</b>, 117 (1989).</li>
+</ul>
+</section>
+</main>
+</div>
+
+<footer>
+  <nav class="chapnav" aria-label="Chapters">
+    <a href="index.html">All chapters</a>
+    <a href="ch04-structure-of-the-atom.html">Previous: Chapter 4</a>
+    <a href="ch06-quantum-mechanics-II.html">Next: Chapter 6, Quantum mechanics II</a>
+  </nav>
+  <p>Interactive companion to Sang Hoon Lee's lecture notes on Chapter 5 of S. T. Thornton, A. Rex, and C. E. Hood, <i>Modern Physics for Scientists and Engineers</i> (5th ed.). The text paraphrases the notes; the diagrams and simulations are original. Created by Claude Opus 5.5 (Anthropic) based on Sang Hoon Lee's lecture notes, for the undergraduate course Modern Physics (현대물리학) of the Department of Physics, Gyeongsang National University. All calculations run client side with no data collection.</p>
+</footer>
+
+<script>
+"use strict";
+/* ---------- utilities ---------- */
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hexRGB(h){ h=h.replace('#',''); if(h.length===3) h=h.split('').map(c=>c+c).join(''); const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function rgba(hex,a){ const [r,g,b]=hexRGB(hex); return `rgba(${r},${g},${b},${a})`; }
+const SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const sup = s => String(s).split('').map(c=>SUP[c]||c).join('');
+function fmt(v){
+  if(v===0) return '0';
+  const a=Math.abs(v);
+  if(a>=1e4||a<1e-3){ const e=Math.floor(Math.log10(a)+1e-9); const mm=v/10**e; return (Math.abs(Math.abs(mm)-1)<1e-6?(mm<0?'−':''):(+mm.toFixed(1))+'×')+'10'+sup(e); }
+  return String(+v.toPrecision(3)).replace('-','−');
+}
+function niceTicks(a,b,n){
+  const raw=(b-a)/n, mag=10**Math.floor(Math.log10(raw)), norm=raw/mag;
+  const step=(norm<1.5?1:norm<3?2:norm<7?5:10)*mag, t=[];
+  for(let v=Math.ceil(a/step-1e-9)*step; v<=b+step*1e-6; v+=step){ const vv=Math.abs(v)<step*1e-6?0:v; t.push({v:vv,label:fmt(+vv.toPrecision(12))}); }
+  return t;
+}
+function logTicks(a,b){
+  const k0=Math.ceil(Math.log10(a)-1e-9), k1=Math.floor(Math.log10(b)+1e-9), span=k1-k0, t=[];
+  const mants = span<=1 ? [1,2,5] : [1];
+  const every = span>7 ? 2 : 1;
+  for(let k=k0-1;k<=k1;k++) for(const mt of mants){
+    const v=mt*10**k; if(v<a*(1-1e-9)||v>b*(1+1e-9)) continue;
+    if(mt===1 && (k-k0)%every!==0) { t.push({v,label:''}); continue; }
+    t.push({v,label: span<=1||(k>=-1&&k<=2)? fmt(v) : '10'+sup(k)});
+  }
+  return t;
+}
+/* generic canvas plot */
+function plot(cv,o){
+  const H=o.height||cv.clientHeight||280, dpr=window.devicePixelRatio||1, w=cv.clientWidth||600;
+  cv.width=Math.round(w*dpr); cv.height=Math.round(H*dpr);
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,H);
+  const ink=css('--ink'), muted=css('--muted'), rule=css('--rule'), font=css('--ui-font');
+  const m={l:52,r:12,t:10,b:40}, pw=w-m.l-m.r, ph=H-m.t-m.b;
+  const fx=o.xlog?Math.log10:(v=>v), fy=o.ylog?Math.log10:(v=>v);
+  const ax0=fx(o.xlim[0]),ax1=fx(o.xlim[1]),ay0=fy(o.ylim[0]),ay1=fy(o.ylim[1]);
+  const X=v=>m.l+(fx(v)-ax0)/(ax1-ax0)*pw, Y=v=>m.t+ph-(fy(v)-ay0)/(ay1-ay0)*ph;
+  ctx.font=`12px ${font}`; ctx.lineWidth=1;
+  const xt=o.xlog?logTicks(...o.xlim):niceTicks(...o.xlim,o.xticks||Math.max(3,Math.round(pw/90)));
+  const yt=o.ylog?logTicks(...o.ylim):niceTicks(...o.ylim,o.yticks||Math.max(3,Math.round(ph/55)));
+  ctx.strokeStyle=rule; ctx.fillStyle=muted;
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for(const t of xt){ const px=Math.round(X(t.v))+.5; ctx.beginPath(); ctx.moveTo(px,m.t); ctx.lineTo(px,m.t+ph); ctx.stroke(); if(t.label&&!o.noXLabels) ctx.fillText(t.label,px,m.t+ph+5); }
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(const t of yt){ const py=Math.round(Y(t.v))+.5; ctx.beginPath(); ctx.moveTo(m.l,py); ctx.lineTo(m.l+pw,py); ctx.stroke(); if(t.label&&!o.noYLabels) ctx.fillText(t.label,m.l-6,py); }
+  ctx.strokeStyle=muted; ctx.strokeRect(m.l+.5,m.t+.5,pw,ph);
+  ctx.save(); ctx.beginPath(); ctx.rect(m.l,m.t,pw,ph); ctx.clip();
+  for(const v of (o.vlines||[])){ ctx.strokeStyle=v.color||muted; ctx.setLineDash(v.dash||[4,4]); ctx.beginPath(); const px=X(v.x); ctx.moveTo(px,m.t); ctx.lineTo(px,m.t+ph); ctx.stroke(); ctx.setLineDash([]);
+    if(v.label){ ctx.fillStyle=v.color||muted; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText(v.label,px+4,m.t+4); } }
+  for(const v of (o.hlines||[])){ ctx.strokeStyle=v.color||muted; ctx.setLineDash(v.dash||[4,4]); ctx.beginPath(); const py=Y(v.y); ctx.moveTo(m.l,py); ctx.lineTo(m.l+pw,py); ctx.stroke(); ctx.setLineDash([]); }
+  const ok=(x,y)=>isFinite(x)&&isFinite(y)&&(!o.xlog||x>0)&&(!o.ylog||y>0);
+  for(const s of o.series){
+    ctx.globalAlpha=s.alpha??1;
+    if(s.points){
+      ctx.fillStyle=s.color;
+      for(const [x,y] of s.data){ if(!ok(x,y)) continue; ctx.beginPath(); ctx.arc(X(x),Y(y),s.r||3.2,0,2*Math.PI); ctx.fill(); }
+    } else {
+      ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
+      ctx.beginPath(); let pen=false;
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    ctx.globalAlpha=1;
+  }
+  if(o.after) o.after(ctx,X,Y);
+  ctx.restore();
+  ctx.fillStyle=ink; ctx.font=`13px ${font}`;
+  if(o.xlabel){ ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(o.xlabel,m.l+pw/2,H-2); }
+  if(o.ylabel){ ctx.save(); ctx.translate(12,m.t+ph/2); ctx.rotate(-Math.PI/2); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(o.ylabel,0,0); ctx.restore(); }
+  const leg=o.series.filter(s=>s.name);
+  if(leg.length){
+    ctx.font=`12px ${font}`; const lh=17, lw=Math.max(...leg.map(s=>ctx.measureText(s.name).width))+34;
+    const pos=o.legend||'tl'; const lx=pos.includes('r')?m.l+pw-lw-6:m.l+8; const ly=pos.includes('b')?m.t+ph-leg.length*lh-8:m.t+8;
+    ctx.fillStyle=rgba(css('--surface'),.88); ctx.fillRect(lx-4,ly-4,lw+4,leg.length*lh+6);
+    leg.forEach((s,i)=>{ const yy=ly+i*lh+lh/2; ctx.globalAlpha=s.alpha??1;
+      if(s.points){ ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(lx+11,yy,3.5,0,2*Math.PI); ctx.fill(); }
+      else { ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.beginPath(); ctx.moveTo(lx,yy); ctx.lineTo(lx+22,yy); ctx.stroke(); ctx.setLineDash([]); }
+      ctx.globalAlpha=1; ctx.fillStyle=ink; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(s.name,lx+28,yy); });
+  }
+  return {X,Y};
+}
+const range=(a,b,n)=>Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1));
+const logRange=(a,b,n)=>range(Math.log10(a),Math.log10(b),n).map(v=>10**v);
+
+/* redraw registry (resize, color scheme) */
+const redraws=[];
+function reg(f){ redraws.push(f); f(); }
+let rzT; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>redraws.forEach(f=>f()),120); });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ refreshSpinColors(); redraws.forEach(f=>f()); });
+
+/* visibility flags so off-screen simulations sleep */
+const visible=new Map();
+const io=new IntersectionObserver(es=>es.forEach(e=>visible.set(e.target.id,e.isIntersecting)),{rootMargin:'100px'});
+function watch(id){ visible.set(id,false); io.observe(document.getElementById(id)); }
+
+
+/* ---------- spin colors and small helpers ---------- */
+let SPIN_UP=[0,0,0], SPIN_DN=[0,0,0];
+function refreshSpinColors(){ SPIN_UP=hexRGB(css('--spin-up')); SPIN_DN=hexRGB(css('--spin-down')); }
+refreshSpinColors();
+function bindSlider(id,fn,fmtf){ const el=$(id), out=$(id+'-out'); const u=()=>{ const v=+el.value; if(out) out.textContent=fmtf?fmtf(v):v; fn(v); }; el.addEventListener('input',u); u(); return el; }
+const lncosh2 = x => { const a=Math.abs(x); return a+Math.log1p(Math.exp(-2*a)); }; // ln(2 cosh x)
+
+
+const gam=b=>1/Math.sqrt(1-b*b);
+function setupCv(cv,H){ const dpr=window.devicePixelRatio||1, W=cv.clientWidth||600; cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); return {ctx,W,H}; }
+function playButton(id,obj,key,labels){ const b=$(id); const sync=()=>{ b.textContent=obj[key]?labels[0]:labels[1]; b.setAttribute('aria-pressed',String(!obj[key])); }; b.addEventListener('click',()=>{ obj[key]=!obj[key]; obj.last=0; sync(); }); sync(); }
+function drawClock(ctx,x,y,r,t,period,label,color){
+  ctx.beginPath(); ctx.arc(x,y,r,0,2*Math.PI); ctx.fillStyle=css('--surface'); ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=color; ctx.stroke();
+  const a=2*Math.PI*((t/period)%1)-Math.PI/2; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+0.8*r*Math.cos(a),y+0.8*r*Math.sin(a)); ctx.lineWidth=2.2; ctx.stroke();
+  if(label){ ctx.fillStyle=css('--ink'); ctx.font=`12px ${css('--ui-font')}`; ctx.textAlign='center'; ctx.textBaseline='top'; ctx.fillText(label,x,y+r+4); }
+}
+
+
+const HC=1239.84193, HBARC=197.3269804; // eV·nm
+function tagText(ctx,txt,x,y,col,align,W,H){ ctx.font=`600 12px ${css('--ui-font')}`; const w=ctx.measureText(txt).width;
+  let lx=align==='right'?x-w:align==='center'?x-w/2:x; lx=Math.max(4,Math.min(W-w-4,lx)); const ly=Math.max(10,Math.min(H-10,y));
+  ctx.fillStyle=css('--surface'); ctx.fillRect(lx-3,ly-9,w+6,18); ctx.fillStyle=col; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(txt,lx,ly); }
+const sinc=x=>Math.abs(x)<1e-9?1:Math.sin(x)/x;
+function lamRel(K,mc2){ return HC/Math.sqrt(K*K+2*K*mc2); } // K, mc2 in eV -> nm
+
+/* ---------- hero: single-electron double-slit buildup ---------- */
+const hero={run:!reduceMotion,last:0,acc:0,dots:[],max:5000};
+function heroPdf(u){ // u in [-1,1] across the screen: five fringes each side inside a single-slit envelope
+  const fr=Math.cos(Math.PI*5*u)**2, env=sinc(Math.PI*1.25*u)**2; return fr*env; }
+function heroAdd(n){ for(let i=0;i<n;i++){ let u,ok=false; while(!ok){ u=Math.random()*2-1; ok=Math.random()<heroPdf(u); } hero.dots.push([u,Math.random()]); } }
+function drawHero(){
+  const cv=$('#hero-cv'), {ctx,W,H}=setupCv(cv,320), x0=16, x1=W-16, y0=14, y1=H-86;
+  ctx.fillStyle='#05060a'; ctx.fillRect(x0,y0,x1-x0,y1-y0);
+  ctx.fillStyle='rgba(150,190,255,0.85)'; hero.dots.forEach(([u,v])=>{ ctx.fillRect(x0+(x1-x0)*(u+1)/2-1,y0+(y1-y0)*v-1,2,2); });
+  // histogram below
+  const nb=120, hb=new Array(nb).fill(0); hero.dots.forEach(([u])=>{ hb[Math.min(nb-1,Math.floor((u+1)/2*nb))]++; });
+  const hmax=Math.max(1,...hb), hy0=H-10, hh=60; ctx.fillStyle=css('--up');
+  hb.forEach((c,i)=>{ const bw=(x1-x0)/nb, h=hh*c/hmax; ctx.fillRect(x0+i*bw,hy0-h,bw-0.5,h); });
+  ctx.strokeStyle=css('--crit'); ctx.lineWidth=1.5; ctx.beginPath();
+  const norm=hero.dots.length?hero.dots.length/nb*2:0; let m=0; for(let k=0;k<=300;k++){ m=Math.max(m,heroPdf(k/150-1)); }
+  for(let k=0;k<=300;k++){ const u=k/150-1, y=hy0-hh*heroPdf(u)/m*(hero.dots.length?1:0); k?ctx.lineTo(x0+(x1-x0)*(u+1)/2,y):ctx.moveTo(x0+(x1-x0)*(u+1)/2,y); } if(hero.dots.length) ctx.stroke();
+  $('#hero-read').innerHTML=`<b>${hero.dots.length.toLocaleString('en-US')}</b> electrons so far. Each one arrives as a single dot at a random place, yet the dots pile up into interference fringes (histogram below, with the predicted |Ψ|² in magenta). A simulation in the spirit of Tonomura's 1989 experiment.`;
+}
+(function(){ playButton('#hero-play',hero,'run',['Pause','Play']); $('#hero-reset').addEventListener('click',()=>{ hero.dots=[]; drawHero(); }); })();
+watch('hero-cv'); reg(drawHero);
+function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=hero.last?Math.min(now-hero.last,100)/1000:0; hero.last=now;
+  const rate=hero.dots.length<200?8:hero.dots.length<1000?40:120; hero.acc+=dt*rate; const n=Math.floor(hero.acc); hero.acc-=n;
+  if(n){ heroAdd(n); if(hero.dots.length>hero.max) hero.dots=[]; drawHero(); } }
+
+/* ---------- 5.1 Bragg ---------- */
+(function(){
+  let d=0.282, lam=0.098, th=10;
+  function draw(){
+    const cv=$('#br-cv'), {ctx,W,H}=setupCv(cv,250), sp=Math.min(70,(H-60)/2.4), yA=H*0.45, yB=yA+sp, t=th*Math.PI/180;
+    // atoms on planes
+    ctx.fillStyle=css('--muted'); for(let j=0;j<3;j++) for(let x=20;x<W;x+=sp*0.9){ ctx.beginPath(); ctx.arc(x,yA+j*sp,3.5,0,2*Math.PI); ctx.fill(); }
+    ctx.strokeStyle=rgba(css('--muted'),0.4); ctx.setLineDash([3,4]); for(let j=0;j<3;j++){ ctx.beginPath(); ctx.moveTo(0,yA+j*sp); ctx.lineTo(W,yA+j*sp); ctx.stroke(); } ctx.setLineDash([]);
+    const xc=W*0.5, L=Math.min(W*0.45,260), dx=Math.cos(t), dy=Math.sin(t);
+    const ray=(xr,yr,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(xr-L*dx,yr-L*dy); ctx.lineTo(xr,yr); ctx.lineTo(xr+L*dx,yr-L*dy); ctx.stroke(); };
+    ray(xc,yA,css('--up')); const xb=xc+0; ray(xb,yB,css('--down'));
+    // extra path: segments from the perpendicular feet
+    ctx.strokeStyle=css('--crit'); ctx.lineWidth=4; const s=sp*Math.sin(t);
+    ctx.beginPath(); ctx.moveTo(xb-s*dx,yB-s*dy); ctx.lineTo(xb,yB); ctx.lineTo(xb+s*dx,yB-s*dy); ctx.stroke();
+    tagText(ctx,'θ',xc-34,yA-8,css('--ink'),'center',W,H); tagText(ctx,`d = ${d.toFixed(3)} nm`,W-8,yA+sp/2,css('--muted'),'right',W,H);
+    tagText(ctx,`extra path 2d sin θ = ${(2*d*Math.sin(t)).toFixed(4)} nm`,8,H-12,css('--crit'),'left',W,H);
+    const N=20, ths=range(0.5,89.5,1500);
+    const I=a=>{ const ph=Math.PI*2*d*Math.sin(a*Math.PI/180)/lam, s1=Math.sin(ph); return Math.abs(s1)<1e-9?1:(Math.sin(N*ph)/(N*s1))**2; };
+    plot($('#br-I'),{height:250,xlim:[0,90],ylim:[0,1.1],xlabel:'θ (degrees)',ylabel:'relative intensity',vlines:[{x:th,color:css('--crit')}],series:[{data:ths.map(a=>[a,I(a)]),color:css('--up'),width:2}]});
+    const r=2*d*Math.sin(t)/lam, peaks=[]; for(let n=1;n<=6;n++){ const s2=n*lam/(2*d); if(s2<=1) peaks.push(`n=${n}: ${(Math.asin(s2)*180/Math.PI).toFixed(2)}°`); }
+    $('#br-read').innerHTML=`2d sin θ / λ = <b>${r.toFixed(3)}</b> wavelengths ${Math.abs(r-Math.round(r))<0.02&&Math.round(r)>0?'(constructive: a Bragg peak)':''}. Bragg angles: ${peaks.join(', ')||'none (λ > 2d)'}.`;
+  }
+  const sd=bindSlider('#br-d',x=>{d=x;draw();},x=>x.toFixed(3)+' nm'), sl=bindSlider('#br-l',x=>{lam=x;draw();},x=>x.toFixed(3)+' nm'), st=bindSlider('#br-t',x=>{th=x;draw();},x=>x.toFixed(1)+'°');
+  $('#br-ex').addEventListener('click',()=>{ [[sd,0.282],[sl,0.098],[st,10]].forEach(([s,v])=>{ s.value=v; s.dispatchEvent(new Event('input')); }); });
+  reg(draw);
+})();
+
+/* ---------- 5.2 orbit standing wave ---------- */
+(function(){
+  let n=4;
+  function draw(){
+    const cv=$('#or-cv'), {ctx,W,H}=setupCv(cv,260), cx=W/2, cy=H/2, R=Math.min(W,H)*0.34, A=R*0.14;
+    ctx.strokeStyle=rgba(css('--muted'),0.5); ctx.setLineDash([3,4]); ctx.beginPath(); ctx.arc(cx,cy,R,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=css('--crit'); ctx.beginPath(); ctx.arc(cx,cy,5,0,2*Math.PI); ctx.fill();
+    ctx.strokeStyle=css('--up'); ctx.lineWidth=2.4; ctx.beginPath();
+    for(let k=0;k<=720;k++){ const a=2*Math.PI*k/720, r=R+A*Math.sin(n*a), x=cx+r*Math.cos(a), y=cy-r*Math.sin(a); k?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke();
+    const end=R+A*Math.sin(n*2*Math.PI), whole=Math.abs(n-Math.round(n))<0.03;
+    if(!whole){ ctx.strokeStyle=css('--crit'); ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx+R,cy); ctx.lineTo(cx+end,cy); ctx.stroke(); }
+    $('#or-read').innerHTML= whole? `n = ${Math.round(n)}: the wave closes on itself. With λ = h/p and nλ = 2πr, the angular momentum is L = rp = <b>${Math.round(n)}ħ</b>.` : `${n.toFixed(2)} wavelengths: the wave does not join itself, so this orbit cannot support a standing wave.`;
+  }
+  bindSlider('#or-n',x=>{n=x;draw();},x=>x.toFixed(2));
+  reg(draw);
+})();
+
+/* ---------- 5.2 de Broglie calculator ---------- */
+(function(){
+  function draw(){
+    const pv=$('#db-p').value, K=+$('#db-K').value;
+    if(pv==='ball'){ $('#db-Klab').firstChild.textContent='Speed (m/s) '; const lam=6.62607e-34/(0.057*K); $('#db-read').innerHTML=`Tennis ball at ${K} m/s: λ = h/mv = <b>${fmt(+lam.toPrecision(3))} m</b>, about 10⁻¹⁹ times the size of a nucleus.`; return; }
+    $('#db-Klab').firstChild.textContent='Kinetic energy (eV) ';
+    const mc2=+pv*1e6, lr=lamRel(K,mc2), ln=HC/Math.sqrt(2*mc2*K), pc=Math.sqrt(K*K+2*K*mc2);
+    $('#db-read').innerHTML= K>0? `K = ${fmt(+K.toPrecision(4))} eV: pc = ${fmt(+pc.toPrecision(4))} eV, λ = h/p = <b>${fmt(+lr.toPrecision(4))} nm</b> (nonrelativistic estimate ${fmt(+ln.toPrecision(4))} nm, ${((ln/lr-1)*100).toFixed(2)}% larger).` : 'Enter a positive kinetic energy.';
+  }
+  $('#db-p').addEventListener('change',()=>{ if($('#db-p').value==='ball') $('#db-K').value=25; draw(); }); $('#db-K').addEventListener('input',draw);
+  document.querySelectorAll('#demo-db [data-db]').forEach(b=>b.addEventListener('click',()=>{ const [p,k]=b.dataset.db.split(','); $('#db-p').value=p; $('#db-K').value=k; draw(); }));
+  reg(draw);
+})();
+
+/* ---------- 5.3 Davisson-Germer ---------- */
+(function(){
+  let E=54; const D=0.215;
+  function draw(){
+    const lam=HC/Math.sqrt(2*0.51099895e6*E), s=lam/D, phiP=s<=1?Math.asin(s)*180/Math.PI:null, A=Math.exp(-0.5*((E-54)/6)**2);
+    const I=f=>0.55*Math.cos(f*Math.PI/180)**0.6+0.25+(phiP!==null?0.9*A*Math.exp(-0.5*((f-phiP)/5)**2):0);
+    const cv=$('#dg-cv'), {ctx,W,H}=setupCv(cv,270), ox=W*0.15, oy=H-24, R=Math.min(W*0.75,H-40)/1.6;
+    ctx.strokeStyle=rgba(css('--muted'),0.4); ctx.lineWidth=1; for(let a=0;a<=90;a+=15){ const r=a*Math.PI/180; ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox+1.7*R*Math.sin(r),oy-1.7*R*Math.cos(r)); ctx.stroke(); }
+    ctx.fillStyle=css('--muted'); ctx.font=`11px ${css('--ui-font')}`; ctx.textAlign='left'; ctx.textBaseline='middle'; [0,30,60,90].forEach(a=>{ const r=a*Math.PI/180; ctx.fillText(a+'°',ox+1.72*R*Math.sin(r)+2,oy-1.72*R*Math.cos(r)); });
+    ctx.strokeStyle=css('--up'); ctx.lineWidth=2.6; ctx.beginPath(); for(let k=0;k<=180;k++){ const f=k/2, r=I(f)*R, x=ox+r*Math.sin(f*Math.PI/180), y=oy-r*Math.cos(f*Math.PI/180); k?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke();
+    if(phiP!==null){ const r=phiP*Math.PI/180; ctx.strokeStyle=css('--crit'); ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox+1.7*R*Math.sin(r),oy-1.7*R*Math.cos(r)); ctx.stroke(); ctx.setLineDash([]); }
+    ctx.fillStyle=css('--ink'); ctx.beginPath(); ctx.arc(ox,oy,4,0,2*Math.PI); ctx.fill(); tagText(ctx,`${E} eV`,W-8,16,css('--ink'),'right',W,H);
+    const Es=range(30,80,200);
+    plot($('#dg-ang'),{height:270,xlim:[30,80],ylim:[30,90],xlabel:'electron energy (eV)',ylabel:'peak angle φ (degrees)',vlines:[{x:E,color:css('--crit')}],hlines:[{y:50,color:css('--muted')}],
+      series:[{data:Es.map(e=>[e,Math.asin(HC/Math.sqrt(2*0.51099895e6*e)/D)*180/Math.PI]),color:css('--up'),width:2.6}]});
+    $('#dg-read').innerHTML=`E = ${E} eV: λ = h/√(2mK) = <b>${lam.toFixed(4)} nm</b>, so sin φ = λ/D gives <b>φ = ${phiP!==null?phiP.toFixed(1)+'°':'no solution'}</b>. At 54 eV: λ = 0.167 nm and φ ≈ 51°, close to the observed 50° (which corresponds to λ = D sin 50° = 0.165 nm).`;
+  }
+  bindSlider('#dg-E',x=>{E=x;draw();},x=>x+' eV');
+  reg(draw);
+})();
+
+/* ---------- 5.4 wave packet builder ---------- */
+(function(){
+  let mode='p69', s=2;
+  function comps(){ if(mode==='p69'){ const A={9:1/4,10:1/3,11:1/2,12:1,13:1/2,14:1/3,15:1/4}; return Object.entries(A).map(([n,a])=>[+n,a]); }
+    const out=[]; for(let n=1;n<=40;n++){ const a=Math.exp(-0.5*((n-20)/s)**2); if(a>1e-3) out.push([n,a]); } return out; }
+  function draw(){
+    const C=comps(), xs=range(-1.5,1.5,1200), psi=x=>C.reduce((acc,[n,a])=>acc+a*Math.cos(2*Math.PI*n*x),0), tot=C.reduce((a,c)=>a+c[1],0);
+    plot($('#pk-A'),{height:230,xlim:[mode==='p69'?7:0,mode==='p69'?17:41],ylim:[0,1.1],xlabel:'n (wave number k = 2πn)',ylabel:'A_n',series:[],
+      after:(ctx,X,Y)=>{ ctx.fillStyle=css('--up'); C.forEach(([n,a])=>{ ctx.fillRect(X(n)-3,Y(a),6,Y(0)-Y(a)); }); }});
+    const ex=[]; if(mode==='p69'){ [9,12,15].forEach((n,i)=>ex.push({data:xs.map(x=>[x,C.find(c=>c[0]===n)[1]*Math.cos(2*Math.PI*n*x)]),color:css('--muted'),width:0.8,alpha:0.5})); }
+    plot($('#pk-x'),{height:230,xlim:[-1.5,1.5],ylim:[-tot*1.1,tot*1.1],xlabel:'x',ylabel:'ψ(x)',vlines:[{x:0},{x:1,color:css('--muted')},{x:-1,color:css('--muted')}],
+      series:[...ex,{data:xs.map(x=>[x,psi(x)]),color:css('--crit'),width:2}]});
+    // rms widths: k spread from amplitudes, x spread from |psi|^2 over one period
+    const W=C.reduce((a,[n,aa])=>a+aa*aa,0), km=C.reduce((a,[n,aa])=>a+aa*aa*n,0)/W, dk=2*Math.PI*Math.sqrt(C.reduce((a,[n,aa])=>a+aa*aa*(n-km)**2,0)/W);
+    const xg=range(-0.5,0.5,2000), p2=xg.map(x=>psi(x)**2), P=p2.reduce((a,b)=>a+b,0), dx=Math.sqrt(xg.reduce((a,x,i)=>a+x*x*p2[i],0)/P);
+    $('#pk-read').innerHTML=`${C.length} component waves. The packet is centered at x = 0 and repeats at every integer x (all components have whole-number n). Root-mean-square widths: Δk = ${dk.toFixed(2)}, Δx = ${dx.toFixed(4)}, product Δk·Δx = <b>${(dk*dx).toFixed(2)}</b> (of order 1).`;
+    $('#pk-p69').setAttribute('aria-pressed',String(mode==='p69')); $('#pk-g').setAttribute('aria-pressed',String(mode==='g'));
+    $('#pk-s').disabled=mode==='p69';
+  }
+  $('#pk-p69').addEventListener('click',()=>{mode='p69';draw();}); $('#pk-g').addEventListener('click',()=>{mode='g';draw();});
+  bindSlider('#pk-s',x=>{s=x;draw();},x=>x.toFixed(1));
+  reg(draw);
+})();
+
+/* ---------- 5.4 phase vs group velocity ---------- */
+const gv={mode:'vac',t:0,run:!reduceMotion,last:0};
+function drawGV(){
+  const k0=10, dlt=0.6, w=k=>gv.mode==='vac'?k:gv.mode==='water'?Math.sqrt(k0*k):k*k/(2*k0);
+  const k1=k0+dlt, k2=k0-dlt, w1=w(k1), w2=w(k2), kav=k0, wav=(w1+w2)/2, vph=wav/kav, vgr=(w1-w2)/(k1-k2), L=4*Math.PI/dlt, xs=range(0,L,1400), t=gv.t;
+  const psi=x=>Math.cos(k1*x-w1*t)+Math.cos(k2*x-w2*t), env=x=>2*Math.abs(Math.cos(dlt*x-(w1-w2)/2*t));
+  const mod=v=>((v%L)+L)%L, x0=Math.PI/dlt, xc0=Math.PI*(2*Math.round((k0*x0/Math.PI-1)/2)+1)/k0, xg=mod(x0+vgr*t), xp0=mod(xc0+vph*t); // envelope peak at x0; carrier crest (psi max) at xc0
+  // crest nearest the tracked phase point
+  plot($('#gv-cv'),{height:250,xlim:[0,L],ylim:[-2.4,2.4],xlabel:'x',ylabel:'Ψ',noXLabels:true,
+    series:[{data:xs.map(x=>[x,env(x)]),color:css('--muted'),width:1.2,dash:[4,4]},{data:xs.map(x=>[x,-env(x)]),color:css('--muted'),width:1.2,dash:[4,4]},{data:xs.map(x=>[x,psi(x)]),color:css('--up'),width:2.2}],
+    after:(ctx,X,Y)=>{ ctx.fillStyle=css('--down'); ctx.beginPath(); ctx.arc(X(xg),Y(env(xg)),7,0,2*Math.PI); ctx.fill(); ctx.fillStyle=css('--crit'); ctx.beginPath(); ctx.arc(X(xp0),Y(psi(xp0)),6,0,2*Math.PI); ctx.fill(); }});
+  const names={vac:'light in vacuum, ω = ck',water:'deep water, ω ∝ √k',free:'free particle, ω = ħk²/2m'};
+  $('#gv-read').innerHTML=`${names[gv.mode]}: phase velocity ω/k = <b>${vph.toFixed(2)}</b>, group velocity dω/dk = <b>${vgr.toFixed(2)}</b> (ratio ${(vgr/vph).toFixed(2)}).`;
+  document.querySelectorAll('#demo-gv [data-gv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gv===gv.mode)));
+}
+(function(){ document.querySelectorAll('#demo-gv [data-gv]').forEach(b=>b.addEventListener('click',()=>{ gv.mode=b.dataset.gv; gv.t=0; drawGV(); })); playButton('#gv-play',gv,'run',['Pause','Play']); })();
+watch('demo-gv'); reg(drawGV);
+function gvTick(now){ if(!gv.run||!visible.get('demo-gv')) return; const dt=gv.last?Math.min(now-gv.last,100)/1000:0; gv.last=now; gv.t+=dt*0.8; drawGV(); }
+
+/* ---------- 5.5 double slit ---------- */
+(function(){
+  let d=2000, a=500, E=50, det=false; const L=350e6; // nm
+  function draw(){
+    const lam=lamRel(E*1e3,0.51099895e6), ys=range(-4000,4000,1600);
+    const I=y=>{ const th=y/L, b=Math.PI*a*th/lam, g=Math.PI*d*th/lam, env=sinc(b)**2; return det?env:env*Math.cos(g)**2; };
+    plot($('#ds-plot'),{height:260,xlim:[-4000,4000],ylim:[0,1.1],xlabel:'position on the screen y (nm)',ylabel:'probability density (relative)',
+      series:[{data:ys.map(y=>[y,sinc(Math.PI*a*(y/L)/lam)**2]),color:css('--muted'),width:1.2,dash:[4,4]},{data:ys.map(y=>[y,I(y)]),color:det?css('--down'):css('--up'),width:2.4}]});
+    $('#ds-read').innerHTML=`${E} keV electrons: λ = <b>${(lam*1e3).toFixed(3)}×10⁻³ nm</b> (relativistic). ${det?'With which-slit detection the fringes are gone; only the single-slit envelope (dashed) remains.':`Adjacent maxima are ℓλ/d = <b>${(L*lam/d).toFixed(0)} nm</b> apart.`}`;
+    $('#ds-off').setAttribute('aria-pressed',String(!det)); $('#ds-on').setAttribute('aria-pressed',String(det));
+  }
+  bindSlider('#ds-d',x=>{d=x;draw();},x=>x+' nm'); bindSlider('#ds-a',x=>{a=x;draw();},x=>x+' nm'); bindSlider('#ds-E',x=>{E=x;draw();},x=>x+' keV');
+  $('#ds-off').addEventListener('click',()=>{det=false;draw();}); $('#ds-on').addEventListener('click',()=>{det=true;draw();});
+  reg(draw);
+})();
+
+/* ---------- 5.6 uncertainty ---------- */
+(function(){
+  let sx=1; const k0=6;
+  function draw(){
+    const xs=range(-8,8,1200), sk=1/(2*sx), env=x=>Math.exp(-x*x/(4*sx*sx));
+    plot($('#un-psi'),{height:230,xlim:[-8,8],ylim:[-1.1,1.1],xlabel:'x',ylabel:'ψ, |ψ|²',legend:'tr',
+      series:[{data:xs.map(x=>[x,env(x)*Math.cos(k0*x)]),color:css('--up'),width:1.6,name:'ψ (real part)'},{data:xs.map(x=>[x,env(x)**2]),color:css('--crit'),width:2.4,name:'|ψ|²'}]});
+    const ks=range(0,12,600);
+    plot($('#un-k'),{height:230,xlim:[0,12],ylim:[0,1.1],xlabel:'k',ylabel:'|Ã(k)|²',series:[{data:ks.map(k=>[k,Math.exp(-((k-k0)**2)/(2*sk*sk))]),color:css('--down'),width:2.4}]});
+    const mc2=+$('#un-p').value*1e6, dx=+$('#un-dx').value, dpc=HBARC/(2*dx), K=Math.sqrt(dpc*dpc+mc2*mc2)-mc2;
+    $('#un-read').innerHTML=`Wave packet: Δx = ${sx.toFixed(2)}, Δk = 1/(2Δx) = ${sk.toFixed(3)}, Δx·Δk = <b>0.500</b>. Confined particle: Δx = ${dx} nm gives Δp ≥ ħ/2Δx = <b>${fmt(+dpc.toPrecision(3))} eV/c</b>${K>1?`; a momentum of that size means K ≈ <b>${K>1e6?(K/1e6).toFixed(1)+' MeV':K>1e3?(K/1e3).toFixed(2)+' keV':K.toFixed(2)+' eV'}</b>`:''}.`;
+  }
+  bindSlider('#un-x',x=>{sx=x;draw();},x=>x.toFixed(2));
+  $('#un-p').addEventListener('change',draw); $('#un-dx').addEventListener('input',draw);
+  document.querySelectorAll('#demo-unc [data-dx]').forEach(b=>b.addEventListener('click',()=>{ $('#un-dx').value=b.dataset.dx; draw(); }));
+  reg(draw);
+})();
+
+/* ---------- 5.8 particle in a box ---------- */
+(function(){
+  let l=0.1, nh=1;
+  function draw(){
+    const mc2=+$('#bx-p').value*1e6, E1=HC*HC/(8*mc2*l*l), Kmin=HBARC*HBARC/(2*mc2*l*l), xs=range(0,1,300), N=5, amp=E1*0.9;
+    const ser=[], ser2=[];
+    for(let n=1;n<=N;n++){ const En=n*n*E1, hl=n===nh;
+      ser.push({data:[[0,En],[1,En]],color:css('--muted'),width:1,dash:[3,3]});
+      ser.push({data:xs.map(x=>[x,En+amp*Math.sin(n*Math.PI*x)]),color:hl?css('--crit'):css('--up'),width:hl?2.8:1.6,alpha:hl?1:0.7});
+      ser2.push({data:xs.map(x=>[x,En+amp*1.9*Math.sin(n*Math.PI*x)**2]),color:hl?css('--crit'):css('--up'),width:hl?2.8:1.6,alpha:hl?1:0.7});
+      ser2.push({data:[[0,En],[1,En]],color:css('--muted'),width:1,dash:[3,3]}); }
+    const ytop=N*N*E1+amp*2;
+    const fmtE=e=>e>=1e6?(e/1e6).toPrecision(3)+' MeV':e>=1e3?(e/1e3).toPrecision(3)+' keV':e>=1?e.toPrecision(3)+' eV':(e*1e3).toPrecision(3)+' meV';
+    plot($('#bx-psi'),{height:290,xlim:[0,1],ylim:[0,ytop],xlabel:'x / ℓ',ylabel:'energy',noYLabels:true,vlines:[{x:0,color:css('--ink')},{x:1,color:css('--ink')}],hlines:[{y:Kmin,color:css('--down')}],series:ser});
+    plot($('#bx-P'),{height:290,xlim:[0,1],ylim:[-amp*0.2,ytop+amp],xlabel:'x / ℓ',ylabel:'energy',noYLabels:true,vlines:[{x:0,color:css('--ink')},{x:1,color:css('--ink')}],series:ser2});
+    $('#bx-read').innerHTML=`ℓ = ${l.toFixed(2)} nm: E<sub>n</sub> = n²h²/8mℓ² = n² × <b>${fmtE(E1)}</b>, so E₁, E₂, E₃ = ${[1,2,3].map(n=>fmtE(n*n*E1)).join(', ')}. Highlighted n = ${nh}: E = ${fmtE(nh*nh*E1)}, λ = 2ℓ/n = ${(2*l/nh).toFixed(3)} nm. Uncertainty bound ħ²/2mℓ² = ${fmtE(Kmin)} (orange line), π² times smaller than E₁.${Math.abs(l-0.1)<1e-9&&mc2<1e6?' (The book rounds E₁ to 38 eV, giving 38, 152, and 342 eV.)':''}`;
+  }
+  bindSlider('#bx-l',x=>{l=x;draw();},x=>x.toFixed(2)+' nm'); bindSlider('#bx-n',x=>{nh=x;draw();},x=>x);
+  $('#bx-p').addEventListener('change',draw);
+  reg(draw);
+})();
+
+/* ---------- table of contents highlighting ---------- */
+(function(){
+  const links=[...document.querySelectorAll('nav.toc ol a')], map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const tio=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(a=>a.classList.remove('active')); map.get(e.target.id)?.classList.add('active'); } }); },{rootMargin:'-20% 0px -70% 0px'});
+  map.forEach((_,id)=>{ const el=document.getElementById(id); if(el) tio.observe(el); });
+})();
+
+function loop(now){ heroTick(now); gvTick(now); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+
+window.addEventListener('load',()=>{
+  if(window.renderMathInElement) renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});
+  redraws.forEach(f=>f());
+});
+</script>
+</body>
+</html>
