@@ -437,7 +437,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;
@@ -585,7 +585,7 @@ function vcTick(now){ if(!vc.run||!visible.get('demo-vec')) return; const dt=vc.
     const tot=xs.map((x,i)=>[x,[-dl,0,dl].reduce((a,c)=>a+Math.exp(-0.5*((x-c)/w)**2),0)]);
     plot($('#ze-sp'),{height:270,xlim:[-X,X],ylim:[0,1.3],xlabel:'Δλ (pm)',ylabel:'intensity',noYLabels:true,series:[{data:tot,color:css('--ink'),width:2}],
       after:(ctx2,X,Y)=>{ [-dl,0,dl].forEach((c,i)=>{ ctx2.strokeStyle=cols[2-i]; ctx2.lineWidth=1.5; ctx2.setLineDash([3,3]); ctx2.beginPath(); ctx2.moveTo(X(c),Y(0)); ctx2.lineTo(X(c),Y(1.15)); ctx2.stroke(); ctx2.setLineDash([]); }); }});
-    $('#ze-read').innerHTML=`B = ${B.toFixed(2)} T: ΔE = μ<sub>B</sub>B = <b>${(dE*1e4).toFixed(3)}×10⁻⁴ eV</b> (μ<sub>B</sub> = 9.274×10⁻²⁴ J/T = 5.788×10⁻⁵ eV/T), so the lines sit at Δλ = 0, ±<b>${dl.toFixed(3)} pm</b> around 121.567 nm. Larmor frequency f<sub>L</sub> = eB/4πm = ${(B*14.0).toFixed(1)} GHz.`;
+    $('#ze-read').innerHTML=`B = ${B.toFixed(2)} T: ΔE = μ<sub>B</sub>B = <b>${(dE*1e4).toFixed(3)}×10⁻⁴ eV</b> (μ<sub>B</sub> = 9.274×10⁻²⁴ J/T = 5.788×10⁻⁵ eV/T), so the lines sit at Δλ = 0, ±<b>${dl.toFixed(3)} pm</b> around 121.567 nm. Larmor frequency f<sub>L</sub> = eB/(4πm) = ${(B*14.0).toFixed(1)} GHz.`;
   }
   bindSlider('#ze-B',x=>{B=x;draw();},x=>x.toFixed(2)+' T');
   reg(draw);

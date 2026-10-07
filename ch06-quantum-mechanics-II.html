@@ -475,7 +475,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;
@@ -617,7 +617,7 @@ function drawISW(){
   plot($('#is-ex'),{height:250,xlim:[Math.max(0,t-3*T),Math.max(3*T,t)],ylim:[0,1],xlabel:'time (units of ħ/E₁)',ylabel:'⟨x⟩ / L',hlines:[{y:0.5,color:css('--muted')}],noXLabels:true,
     series:[{data:isw.hist,color:css('--crit'),width:2.4}]});
   const n=isw.n, p2=isw.sup?(Math.PI**2*(1+4)/2):(n*Math.PI)**2;
-  $('#is-read').innerHTML= isw.sup? `Superposition of n = 1 and 2: ⟨x⟩ = <b>${ex.toFixed(3)}L</b> (oscillating with period h/(E₂ − E₁) = h/3E₁), ⟨p⟩ = ${pk.toFixed(3)} ħ/L, normalization ${norm.toFixed(4)}.`
+  $('#is-read').innerHTML= isw.sup? `Superposition of n = 1 and 2: ⟨x⟩ = <b>${ex.toFixed(3)}L</b> (oscillating with period h/(E₂ − E₁) = h/(3E₁)), ⟨p⟩ = ${pk.toFixed(3)} ħ/L, normalization ${norm.toFixed(4)}.`
     : `n = ${n}: E<sub>n</sub> = ${n*n}E₁. ⟨x⟩ = <b>${ex.toFixed(3)}L</b>, ⟨x²⟩ = <b>${ex2.toFixed(4)}L²</b> (exact 1/3 − 1/2n²π² = ${(1/3-1/(2*n*n*Math.PI**2)).toFixed(4)}), ⟨p⟩ = ${Math.abs(pk)<5e-4?'0':pk.toFixed(3)}, ⟨p²⟩ = (nπħ/L)² = ${p2.toFixed(2)} ħ²/L², so ⟨p²⟩/2m = E<sub>n</sub>.`;
   $('#is-single').setAttribute('aria-pressed',String(!isw.sup)); $('#is-sup').setAttribute('aria-pressed',String(isw.sup));
 }

@@ -470,7 +470,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;

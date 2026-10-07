@@ -506,7 +506,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;
@@ -640,7 +640,7 @@ function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=
 (function(){
   function draw(){
     const pv=$('#db-p').value, K=+$('#db-K').value;
-    if(pv==='ball'){ $('#db-Klab').firstChild.textContent='Speed (m/s) '; const lam=6.62607e-34/(0.057*K); $('#db-read').innerHTML=`Tennis ball at ${K} m/s: λ = h/mv = <b>${fmt(+lam.toPrecision(3))} m</b>, about 10⁻¹⁹ times the size of a nucleus.`; return; }
+    if(pv==='ball'){ $('#db-Klab').firstChild.textContent='Speed (m/s) '; const lam=6.62607e-34/(0.057*K); $('#db-read').innerHTML=`Tennis ball at ${K} m/s: λ = h/(mv) = <b>${fmt(+lam.toPrecision(3))} m</b>, about 10⁻¹⁹ times the size of a nucleus.`; return; }
     $('#db-Klab').firstChild.textContent='Kinetic energy (eV) ';
     const mc2=+pv*1e6, lr=lamRel(K,mc2), ln=HC/Math.sqrt(2*mc2*K), pc=Math.sqrt(K*K+2*K*mc2);
     $('#db-read').innerHTML= K>0? `K = ${fmt(+K.toPrecision(4))} eV: pc = ${fmt(+pc.toPrecision(4))} eV, λ = h/p = <b>${fmt(+lr.toPrecision(4))} nm</b> (nonrelativistic estimate ${fmt(+ln.toPrecision(4))} nm, ${((ln/lr-1)*100).toFixed(2)}% larger).` : 'Enter a positive kinetic energy.';
@@ -706,7 +706,7 @@ function drawGV(){
   plot($('#gv-cv'),{height:250,xlim:[0,L],ylim:[-2.4,2.4],xlabel:'x',ylabel:'Ψ',noXLabels:true,
     series:[{data:xs.map(x=>[x,env(x)]),color:css('--muted'),width:1.2,dash:[4,4]},{data:xs.map(x=>[x,-env(x)]),color:css('--muted'),width:1.2,dash:[4,4]},{data:xs.map(x=>[x,psi(x)]),color:css('--up'),width:2.2}],
     after:(ctx,X,Y)=>{ ctx.fillStyle=css('--down'); ctx.beginPath(); ctx.arc(X(xg),Y(env(xg)),7,0,2*Math.PI); ctx.fill(); ctx.fillStyle=css('--crit'); ctx.beginPath(); ctx.arc(X(xp0),Y(psi(xp0)),6,0,2*Math.PI); ctx.fill(); }});
-  const names={vac:'light in vacuum, ω = ck',water:'deep water, ω ∝ √k',free:'free particle, ω = ħk²/2m'};
+  const names={vac:'light in vacuum, ω = ck',water:'deep water, ω ∝ √k',free:'free particle, ω = ħk²/(2m)'};
   $('#gv-read').innerHTML=`${names[gv.mode]}: phase velocity ω/k = <b>${vph.toFixed(2)}</b>, group velocity dω/dk = <b>${vgr.toFixed(2)}</b> (ratio ${(vgr/vph).toFixed(2)}).`;
   document.querySelectorAll('#demo-gv [data-gv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gv===gv.mode)));
 }
@@ -740,7 +740,7 @@ function gvTick(now){ if(!gv.run||!visible.get('demo-gv')) return; const dt=gv.l
     const ks=range(0,12,600);
     plot($('#un-k'),{height:230,xlim:[0,12],ylim:[0,1.1],xlabel:'k',ylabel:'|Ã(k)|²',series:[{data:ks.map(k=>[k,Math.exp(-((k-k0)**2)/(2*sk*sk))]),color:css('--down'),width:2.4}]});
     const mc2=+$('#un-p').value*1e6, dx=+$('#un-dx').value, dpc=HBARC/(2*dx), K=Math.sqrt(dpc*dpc+mc2*mc2)-mc2;
-    $('#un-read').innerHTML=`Wave packet: Δx = ${sx.toFixed(2)}, Δk = 1/(2Δx) = ${sk.toFixed(3)}, Δx·Δk = <b>0.500</b>. Confined particle: Δx = ${dx} nm gives Δp ≥ ħ/2Δx = <b>${fmt(+dpc.toPrecision(3))} eV/c</b>${K>1?`; a momentum of that size means K ≈ <b>${K>1e6?(K/1e6).toFixed(1)+' MeV':K>1e3?(K/1e3).toFixed(2)+' keV':K.toFixed(2)+' eV'}</b>`:''}.`;
+    $('#un-read').innerHTML=`Wave packet: Δx = ${sx.toFixed(2)}, Δk = 1/(2Δx) = ${sk.toFixed(3)}, Δx·Δk = <b>0.500</b>. Confined particle: Δx = ${dx} nm gives Δp ≥ ħ/(2Δx) = <b>${fmt(+dpc.toPrecision(3))} eV/c</b>${K>1?`; a momentum of that size means K ≈ <b>${K>1e6?(K/1e6).toFixed(1)+' MeV':K>1e3?(K/1e3).toFixed(2)+' keV':K.toFixed(2)+' eV'}</b>`:''}.`;
   }
   bindSlider('#un-x',x=>{sx=x;draw();},x=>x.toFixed(2));
   $('#un-p').addEventListener('change',draw); $('#un-dx').addEventListener('input',draw);
@@ -763,7 +763,7 @@ function gvTick(now){ if(!gv.run||!visible.get('demo-gv')) return; const dt=gv.l
     const fmtE=e=>e>=1e6?(e/1e6).toPrecision(3)+' MeV':e>=1e3?(e/1e3).toPrecision(3)+' keV':e>=1?e.toPrecision(3)+' eV':(e*1e3).toPrecision(3)+' meV';
     plot($('#bx-psi'),{height:290,xlim:[0,1],ylim:[0,ytop],xlabel:'x / ℓ',ylabel:'energy',noYLabels:true,vlines:[{x:0,color:css('--ink')},{x:1,color:css('--ink')}],hlines:[{y:Kmin,color:css('--down')}],series:ser});
     plot($('#bx-P'),{height:290,xlim:[0,1],ylim:[-amp*0.2,ytop+amp],xlabel:'x / ℓ',ylabel:'energy',noYLabels:true,vlines:[{x:0,color:css('--ink')},{x:1,color:css('--ink')}],series:ser2});
-    $('#bx-read').innerHTML=`ℓ = ${l.toFixed(2)} nm: E<sub>n</sub> = n²h²/8mℓ² = n² × <b>${fmtE(E1)}</b>, so E₁, E₂, E₃ = ${[1,2,3].map(n=>fmtE(n*n*E1)).join(', ')}. Highlighted n = ${nh}: E = ${fmtE(nh*nh*E1)}, λ = 2ℓ/n = ${(2*l/nh).toFixed(3)} nm. Uncertainty bound ħ²/2mℓ² = ${fmtE(Kmin)} (orange line), π² times smaller than E₁.${Math.abs(l-0.1)<1e-9&&mc2<1e6?' (The book rounds E₁ to 38 eV, giving 38, 152, and 342 eV.)':''}`;
+    $('#bx-read').innerHTML=`ℓ = ${l.toFixed(2)} nm: E<sub>n</sub> = n²h²/(8mℓ²) = n² × <b>${fmtE(E1)}</b>, so E₁, E₂, E₃ = ${[1,2,3].map(n=>fmtE(n*n*E1)).join(', ')}. Highlighted n = ${nh}: E = ${fmtE(nh*nh*E1)}, λ = 2ℓ/n = ${(2*l/nh).toFixed(3)} nm. Uncertainty bound ħ²/(2mℓ²) = ${fmtE(Kmin)} (orange line), π² times smaller than E₁.${Math.abs(l-0.1)<1e-9&&mc2<1e6?' (The book rounds E₁ to 38 eV, giving 38, 152, and 342 eV.)':''}`;
   }
   bindSlider('#bx-l',x=>{l=x;draw();},x=>x.toFixed(2)+' nm'); bindSlider('#bx-n',x=>{nh=x;draw();},x=>x);
   $('#bx-p').addEventListener('change',draw);

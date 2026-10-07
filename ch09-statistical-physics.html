@@ -477,7 +477,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;
@@ -572,7 +572,7 @@ function drawHero(){
   ctx.strokeStyle=css('--crit'); ctx.lineWidth=2; ctx.beginPath(); for(let k=0;k<=100;k++){ const v=vmax*k/100, X=x0+(x1-x0)*k/100, Y=y1-(y1-y0)*pdf(v)/ymax; k?ctx.lineTo(X,Y):ctx.moveTo(X,Y); } ctx.stroke();
   const xv0=x0+(x1-x0)*v0/vmax; ctx.strokeStyle=css('--muted'); ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(xv0,y0); ctx.lineTo(xv0,y1); ctx.stroke(); ctx.setLineDash([]);
   tagText(ctx,'starting speed',xv0,y0-10,css('--muted'),'center',W,H); tagText(ctx,'speed →',x1,y1+12,css('--muted'),'right',W,H);
-  $('#hero-read').innerHTML=`${hero.N} disks, all started at the same speed in random directions. Elastic collisions share out the energy, and the speed histogram settles into the two-dimensional Maxwell distribution (magenta), P(v) ∝ v e<sup>−mv²/2kT</sup>; in three dimensions the factor v becomes v². Colors: slow (blue), typical, fast (magenta).`;
+  $('#hero-read').innerHTML=`${hero.N} disks, all started at the same speed in random directions. Elastic collisions share out the energy, and the speed histogram settles into the two-dimensional Maxwell distribution (magenta), <span style="white-space:nowrap">P(v) ∝ v e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>. In three dimensions the extra phase-space factor gives the Maxwell speed distribution, <span style="white-space:nowrap">F(v) ∝ v² e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>. Colors: slow (blue), typical, fast (magenta).`;
 }
 (function(){ heroInit(); playButton('#hero-play',hero,'run',['Pause','Play']); $('#hero-reset').addEventListener('click',()=>{ heroInit(); drawHero(); }); })();
 watch('hero-cv'); reg(drawHero);
@@ -637,10 +637,10 @@ function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=
   let mu=0;
   function draw(){
     const xs=range(0.001,4.5,500), fd=x=>1/(Math.exp(x-mu)+1), mb=x=>Math.exp(-(x-mu)), be=x=>x>mu?1/Math.expm1(x-mu):NaN;
-    plot($('#ds-plot'),{height:260,xlim:[0,4.5],ylim:[0,1.6],xlabel:'E / k_BT',ylabel:'statistical factor F',legend:'tr',vlines:[{x:Math.max(0,mu),color:css('--muted')}],
+    plot($('#ds-plot'),{height:260,xlim:[0,4.5],ylim:[0,1.6],xlabel:'E / (k_BT)',ylabel:'statistical factor F',legend:'tr',vlines:[{x:Math.max(0,mu),color:css('--muted')}],
       series:[{data:xs.map(x=>[x,be(x)]).filter(p=>!(p[1]>3)),color:css('--crit'),width:2.2,dash:[2,3],name:'Bose–Einstein'},{data:xs.map(x=>[x,mb(x)]),color:css('--down'),width:2.2,dash:[6,4],name:'Maxwell–Boltzmann'},{data:xs.map(x=>[x,fd(x)]),color:css('--up'),width:2.6,name:'Fermi–Dirac'}]});
     const r=n=>4*Math.exp(-10.2/(8.617e-5*n));
-    $('#ds-read').innerHTML=`μ = ${mu.toFixed(2)} k<sub>B</sub>T: at E = 3k<sub>B</sub>T the factors are FD ${fd(3).toFixed(4)}, MB ${mb(3).toFixed(4)}, BE ${3>mu?be(3).toFixed(4):'undefined'}. Example 9.6 (hydrogen, n₂/n₁ = 4e<sup>−10.2 eV/kT</sup>): 293 K → 10<sup>${Math.log10(r(293)).toFixed(0)}</sup>, 5000 K → ${r(5000).toExponential(1)}, 10⁶ K → ${r(1e6).toFixed(2)}.`;
+    $('#ds-read').innerHTML=`μ = ${mu.toFixed(2)} k<sub>B</sub>T: at E = 3k<sub>B</sub>T the factors are FD ${fd(3).toFixed(4)}, MB ${mb(3).toFixed(4)}, BE ${3>mu?be(3).toFixed(4):'undefined'}. Example 9.6 (hydrogen, n₂/n₁ = 4e<sup>−10.2 eV/(k<sub>B</sub>T)</sup>): 293 K → 10<sup>${Math.log10(r(293)).toFixed(0)}</sup>, 5000 K → ${r(5000).toExponential(1)}, 10⁶ K → ${r(1e6).toFixed(2)}.`;
   }
   bindSlider('#ds-mu',x=>{mu=x;draw();},x=>x.toFixed(2));
   reg(draw);
@@ -683,7 +683,7 @@ function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=
       after:(ctx,X,Y)=>{ ctx.fillStyle=rgba(css('--up'),0.18); ctx.beginPath(); ctx.moveTo(X(0),Y(0)); xs.forEach(x=>ctx.lineTo(X(x),Y(Math.sqrt(x)*Ff(x,mu,t)))); ctx.lineTo(X(xmax),Y(0)); ctx.closePath(); ctx.fill(); }});
     const U=Uof(t), dt=Math.max(0.002,t*0.02), C=t>0?(Uof(t+dt)-Uof(Math.max(0,t-dt)))/(t+dt-Math.max(0,t-dt)):0, som=Math.PI**2*t/2, T=t*TF;
     const room=Math.PI**2*293/(2*TF);
-    $('#fm-read').innerHTML=`T/T<sub>F</sub> = ${t.toFixed(3)} (T = ${T.toFixed(0)} K for this metal): μ = <b>${mu.toFixed(4)} E<sub>F</sub></b>, mean energy ${U.toFixed(4)} E<sub>F</sub> (3/5 at T = 0), C<sub>V</sub> = <b>${C.toFixed(4)} Nk<sub>B</sub></b> (Sommerfeld π²T/2T<sub>F</sub> = ${som.toFixed(4)}; classical limit 1.5). E<sub>F</sub> = ${EF} eV, Fermi speed u<sub>F</sub> = ${(Math.sqrt(2*EF*1.602e-19/9.109e-31)/1e6).toFixed(2)}×10⁶ m/s; at 293 K, c<sub>V</sub> = π²RT/2T<sub>F</sub> = <b>${room.toFixed(4)}R</b> (Example 9.8).`;
+    $('#fm-read').innerHTML=`T/T<sub>F</sub> = ${t.toFixed(3)} (T = ${T.toFixed(0)} K for this metal): μ = <b>${mu.toFixed(4)} E<sub>F</sub></b>, mean energy ${U.toFixed(4)} E<sub>F</sub> (3/5 at T = 0), C<sub>V</sub> = <b>${C.toFixed(4)} Nk<sub>B</sub></b> (Sommerfeld π²T/(2T<sub>F</sub>) = ${som.toFixed(4)}; classical limit 1.5). E<sub>F</sub> = ${EF} eV, Fermi speed u<sub>F</sub> = ${(Math.sqrt(2*EF*1.602e-19/9.109e-31)/1e6).toFixed(2)}×10⁶ m/s; at 293 K, c<sub>V</sub> = π²RT/(2T<sub>F</sub>) = <b>${room.toFixed(4)}R</b> (Example 9.8).`;
   }
   bindSlider('#fm-t',x=>{t=x;draw();},x=>x.toFixed(3)); $('#fm-m').addEventListener('change',draw);
   reg(draw);

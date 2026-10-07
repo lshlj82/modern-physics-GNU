@@ -454,7 +454,7 @@ function plot(cv,o){
     } else {
       ctx.strokeStyle=s.color; ctx.lineWidth=s.width||2; ctx.setLineDash(s.dash||[]); ctx.lineJoin='round';
       ctx.beginPath(); let pen=false;
-      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=X(x),py=Y(y); if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
+      for(const [x,y] of s.data){ if(!ok(x,y)){pen=false;continue;} const px=Math.max(m.l-2*pw,Math.min(m.l+3*pw,X(x))),py=Math.max(m.t-2*ph,Math.min(m.t+3*ph,Y(y))); /* clamp: Safari drops paths with huge coordinates */ if(pen) ctx.lineTo(px,py); else {ctx.moveTo(px,py); pen=true;} }
       ctx.stroke(); ctx.setLineDash([]);
     }
     ctx.globalAlpha=1;
@@ -575,7 +575,7 @@ function heroTick(now){
     ctx.fillStyle=css('--surface'); ctx.fillRect(4,4,Math.max(210,50*sc+12),40); tagText(ctx,'α particles enter from the left',8,14,css('--muted'),'left',W,H);
     ctx.strokeStyle=css('--ink'); ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(10,34); ctx.lineTo(10+50*sc,34); ctx.stroke(); ctx.fillStyle=css('--ink'); ctx.font=`11px ${css('--ui-font')}`; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText('50 fm',16+50*sc,34);
     const thomsonMax=(2*Z*k/K)/(1e5)*180/Math.PI; // ~ Z1Z2 e^2/(4 pi eps0 K R) with R = 1e5 fm, in degrees
-    $('#ru-read').innerHTML=`K = ${K.toFixed(1)} MeV on Z = ${Z}: head-on distance of closest approach r<sub>min</sub> = Z₁Z₂e²/4πε₀K = <b>${D.toFixed(1)} fm</b>. A particle aimed at b = 10 fm scatters by ${(2*Math.atan(D/20)*180/Math.PI).toFixed(1)}°. A Thomson atom of radius 10⁻¹⁰ m could deflect it by at most about ${thomsonMax.toFixed(3)}°.`;
+    $('#ru-read').innerHTML=`K = ${K.toFixed(1)} MeV on Z = ${Z}: head-on distance of closest approach r<sub>min</sub> = Z₁Z₂e²/(4πε₀K) = <b>${D.toFixed(1)} fm</b>. A particle aimed at b = 10 fm scatters by ${(2*Math.atan(D/20)*180/Math.PI).toFixed(1)}°. A Thomson atom of radius 10⁻¹⁰ m could deflect it by at most about ${thomsonMax.toFixed(3)}°.`;
   }
   bindSlider('#ru-K',x=>{K=x;draw();},x=>x.toFixed(1)+' MeV');
   $('#ru-Z').addEventListener('change',e=>{ Z=+e.target.value; draw(); });
