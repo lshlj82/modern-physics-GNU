@@ -6,21 +6,19 @@ Each chapter is a single, self-contained HTML page that pairs the lecture notes 
 
 ## Chapters
 
-Live pages (GitHub Pages). Start from the [course home page](https://YOUR-USERNAME.github.io/YOUR-REPO/).
+Live pages (GitHub Pages). Start from the [course home page](https://lshlj82.github.io/modern-physics-GNU/).
 
 | Chapter | Demo page | Source |
 |---|---|---|
-| 2. Special theory of relativity, Part 1 (§2.1–2.5) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch02a-special-relativity.html) | [`ch02a-special-relativity.html`](ch02a-special-relativity.html) |
-| 2. Special theory of relativity, Part 2 (§2.6–2.14) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch02b-spacetime-and-relativistic-dynamics.html) | [`ch02b-spacetime-and-relativistic-dynamics.html`](ch02b-spacetime-and-relativistic-dynamics.html) |
-| 3. The experimental basis of quantum physics (§3.1–3.9) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch03-experimental-basis-of-quantum-physics.html) | [`ch03-experimental-basis-of-quantum-physics.html`](ch03-experimental-basis-of-quantum-physics.html) |
-| 4. Structure of the atom (§4.1–4.7) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch04-structure-of-the-atom.html) | [`ch04-structure-of-the-atom.html`](ch04-structure-of-the-atom.html) |
-| 5. Wave properties of matter and quantum mechanics I (§5.1–5.8) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch05-wave-properties-of-matter.html) | [`ch05-wave-properties-of-matter.html`](ch05-wave-properties-of-matter.html) |
-| 6. Quantum mechanics II (§6.1–6.7) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch06-quantum-mechanics-II.html) | [`ch06-quantum-mechanics-II.html`](ch06-quantum-mechanics-II.html) |
-| 7. The hydrogen atom (§7.1–7.6) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch07-hydrogen-atom.html) | [`ch07-hydrogen-atom.html`](ch07-hydrogen-atom.html) |
-| 8. Atomic physics (§8.1–8.3) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch08-atomic-physics.html) | [`ch08-atomic-physics.html`](ch08-atomic-physics.html) |
-| 9. Statistical physics (§9.1–9.7) | [Open demo](https://YOUR-USERNAME.github.io/YOUR-REPO/ch09-statistical-physics.html) | [`ch09-statistical-physics.html`](ch09-statistical-physics.html) |
-
-The demo links assume the site is published with GitHub Pages; replace `YOUR-USERNAME` and `YOUR-REPO` throughout this file with your GitHub user name and repository name.
+| 2. Special theory of relativity, Part 1 (§2.1–2.5) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch02a-special-relativity.html) | [`ch02a-special-relativity.html`](ch02a-special-relativity.html) |
+| 2. Special theory of relativity, Part 2 (§2.6–2.14) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch02b-spacetime-and-relativistic-dynamics.html) | [`ch02b-spacetime-and-relativistic-dynamics.html`](ch02b-spacetime-and-relativistic-dynamics.html) |
+| 3. The experimental basis of quantum physics (§3.1–3.9) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch03-experimental-basis-of-quantum-physics.html) | [`ch03-experimental-basis-of-quantum-physics.html`](ch03-experimental-basis-of-quantum-physics.html) |
+| 4. Structure of the atom (§4.1–4.7) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch04-structure-of-the-atom.html) | [`ch04-structure-of-the-atom.html`](ch04-structure-of-the-atom.html) |
+| 5. Wave properties of matter and quantum mechanics I (§5.1–5.8) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch05-wave-properties-of-matter.html) | [`ch05-wave-properties-of-matter.html`](ch05-wave-properties-of-matter.html) |
+| 6. Quantum mechanics II (§6.1–6.7) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch06-quantum-mechanics-II.html) | [`ch06-quantum-mechanics-II.html`](ch06-quantum-mechanics-II.html) |
+| 7. The hydrogen atom (§7.1–7.6) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch07-hydrogen-atom.html) | [`ch07-hydrogen-atom.html`](ch07-hydrogen-atom.html) |
+| 8. Atomic physics (§8.1–8.3) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch08-atomic-physics.html) | [`ch08-atomic-physics.html`](ch08-atomic-physics.html) |
+| 9. Statistical physics (§9.1–9.7) | [Open demo](https://lshlj82.github.io/modern-physics-GNU/ch09-statistical-physics.html) | [`ch09-statistical-physics.html`](ch09-statistical-physics.html) |
 
 ## Chapter 2, Part 1: what's inside
 
@@ -154,8 +152,8 @@ The page header is a gas of colliding disks whose speed histogram relaxes to the
 No build step and no dependencies. Clone the repository and open any HTML file in a modern browser:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
-cd YOUR-REPO
+git clone https://github.com/lshlj82/modern-physics-GNU.git
+cd modern-physics-GNU
 open index.html        # macOS
 xdg-open index.html    # Linux
 start index.html       # Windows
@@ -167,7 +165,7 @@ An internet connection is needed the first time for the web fonts and for [KaTeX
 
 1. Push the repository to GitHub.
 2. Go to **Settings → Pages**, choose **Deploy from a branch**, and select `main` with the `/ (root)` folder.
-3. The course home page will be served at `https://YOUR-USERNAME.github.io/YOUR-REPO/`.
+3. The course home page will be served at `https://lshlj82.github.io/modern-physics-GNU/`.
 
 ## Repository layout
 
