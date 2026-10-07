@@ -145,7 +145,7 @@ From Maxwell's molecules to Fermi and Bose gases.
 - *When does a Bose gas condense? (§9.7).* $T_c$ for ⁴He (3.06 K vs the observed 2.17 K), the condensate fraction, and the degeneracy parameter of Example 9.9.
 - *Two particles in a box (§9.7).* Densities for distinguishable particles, bosons, and fermions: bunching, antibunching, and the Pauli principle.
 
-The page header is a gas of colliding disks whose speed histogram relaxes to the Maxwell distribution.
+The page header is a gas of colliding hard spheres in a slowly turning cube (with a 2D option) whose speed histogram relaxes to the Maxwell distribution.
 
 ## Running locally
 

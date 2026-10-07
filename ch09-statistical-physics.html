@@ -164,8 +164,9 @@ canvas.sq{display:block;width:100%;aspect-ratio:1;border-radius:3px}
     <p class="lede">What are the relative probabilities of finding an atom in any particular state? Not a simple question. Maxwell and Boltzmann answered it for classical gases; quantum mechanics changes the counting, and the answer splits into two kinds of particles, fermions and bosons.</p>
   </div>
   <div class="lattice-wrap">
-    <canvas class="anim" id="hero-cv" style="height:330px" aria-label="A two-dimensional gas of colliding disks whose speed histogram approaches the Maxwell distribution"></canvas>
+    <canvas class="anim" id="hero-cv" style="height:330px" aria-label="A gas of colliding spheres in a rotating cube whose speed histogram approaches the Maxwell distribution"></canvas>
     <div class="controls" style="margin:10px 0 0">
+      <span role="group" aria-label="Dimension"><button data-dim="3" aria-pressed="true">3D gas</button> <button data-dim="2" aria-pressed="false">2D gas</button></span>
       <button id="hero-play" aria-pressed="false">Pause</button> <button id="hero-reset">Start over</button>
     </div>
     <p class="readout" id="hero-read" style="margin-top:.2rem;color:var(--muted)"></p>
@@ -538,45 +539,72 @@ function tagText(ctx,txt,x,y,col,align,W,H){ ctx.font=`600 12px ${css('--ui-font
   ctx.fillStyle=css('--surface'); ctx.fillRect(lx-3,ly-9,w+6,18); ctx.fillStyle=col; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(txt,lx,ly); }
 function simpson(f,a,b,n){ n=n||400; if(n%2) n++; const h=(b-a)/n; let s=f(a)+f(b); for(let i=1;i<n;i++) s+=(i%2?4:2)*f(a+i*h); return s*h/3; }
 
-/* ---------- hero: 2D hard-disk gas ---------- */
-const hero={run:!reduceMotion,last:0,N:160,r:0.012,steps:0};
-function heroInit(){ hero.p=[]; const N=hero.N, v0=0.18; const cols=Math.ceil(Math.sqrt(N));
-  for(let i=0;i<N;i++){ const a=Math.random()*2*Math.PI; hero.p.push({x:(i%cols+0.5)/cols, y:(Math.floor(i/cols)+0.5)/cols, vx:v0*Math.cos(a), vy:v0*Math.sin(a)}); }
-  hero.v0=v0; hero.steps=0; hero.hist=[]; }
+/* ---------- hero: hard-sphere gas (3D by default, 2D optional) ---------- */
+const hero={run:!reduceMotion,last:0,dim:3,steps:0,ang:0.6};
+function heroInit(){
+  const D=hero.dim; hero.N=D===3?260:160; hero.r=D===3?0.034:0.012; hero.v0=D===3?0.25:0.18; hero.p=[]; hero.hist=[]; hero.steps=0;
+  const N=hero.N, v0=hero.v0, k=Math.ceil(Math.pow(N,1/D));
+  for(let i=0;i<N;i++){ let vx,vy,vz;
+    if(D===3){ const u=2*Math.random()-1, a=2*Math.PI*Math.random(), sn=Math.sqrt(1-u*u); vx=v0*sn*Math.cos(a); vy=v0*sn*Math.sin(a); vz=v0*u; }
+    else { const a=2*Math.PI*Math.random(); vx=v0*Math.cos(a); vy=v0*Math.sin(a); vz=0; }
+    const ix=i%k, iy=Math.floor(i/k)%k, iz=D===3?Math.floor(i/(k*k)):0;
+    hero.p.push({x:(ix+0.5)/k,y:(iy+0.5)/k,z:D===3?(iz+0.5)/k:0.5,vx,vy,vz}); } }
 function heroStep(dt){
-  const P=hero.p, r=hero.r, N=P.length;
-  P.forEach(q=>{ q.x+=q.vx*dt; q.y+=q.vy*dt; if(q.x<r){q.x=r;q.vx=Math.abs(q.vx);} if(q.x>1-r){q.x=1-r;q.vx=-Math.abs(q.vx);} if(q.y<r){q.y=r;q.vy=Math.abs(q.vy);} if(q.y>1-r){q.y=1-r;q.vy=-Math.abs(q.vy);} });
-  // cell grid for neighbor search
-  const G=Math.floor(1/(2*r)), cells=new Map();
-  P.forEach((q,i)=>{ const k=Math.min(G-1,Math.floor(q.x*G))+','+Math.min(G-1,Math.floor(q.y*G)); if(!cells.has(k)) cells.set(k,[]); cells.get(k).push(i); });
-  P.forEach((q,i)=>{ const cx=Math.min(G-1,Math.floor(q.x*G)), cy=Math.min(G-1,Math.floor(q.y*G));
-    for(let dx=-1;dx<=1;dx++) for(let dy=-1;dy<=1;dy++){ const L=cells.get((cx+dx)+','+(cy+dy)); if(!L) continue;
-      for(const j of L){ if(j<=i) continue; const o=P[j], ex=o.x-q.x, ey=o.y-q.y, d2=ex*ex+ey*ey; if(d2>=4*r*r||d2===0) continue;
-        const d=Math.sqrt(d2), nx=ex/d, ny=ey/d, rv=(o.vx-q.vx)*nx+(o.vy-q.vy)*ny; if(rv>=0) continue;
-        q.vx+=rv*nx; q.vy+=rv*ny; o.vx-=rv*nx; o.vy-=rv*ny; const ov=(2*r-d)/2; q.x-=ov*nx; q.y-=ov*ny; o.x+=ov*nx; o.y+=ov*ny; } } });
+  const P=hero.p, r=hero.r, D=hero.dim;
+  P.forEach(q=>{ q.x+=q.vx*dt; q.y+=q.vy*dt; q.z+=q.vz*dt;
+    if(q.x<r){q.x=r;q.vx=Math.abs(q.vx);} if(q.x>1-r){q.x=1-r;q.vx=-Math.abs(q.vx);}
+    if(q.y<r){q.y=r;q.vy=Math.abs(q.vy);} if(q.y>1-r){q.y=1-r;q.vy=-Math.abs(q.vy);}
+    if(D===3){ if(q.z<r){q.z=r;q.vz=Math.abs(q.vz);} if(q.z>1-r){q.z=1-r;q.vz=-Math.abs(q.vz);} } });
+  const G=Math.max(1,Math.floor(1/(2*r))), cell=v=>Math.min(G-1,Math.floor(v*G)), cells=new Map();
+  P.forEach((q,i)=>{ const key=cell(q.x)+','+cell(q.y)+','+(D===3?cell(q.z):0); if(!cells.has(key)) cells.set(key,[]); cells.get(key).push(i); });
+  P.forEach((q,i)=>{ const cx=cell(q.x), cy=cell(q.y), cz=D===3?cell(q.z):0;
+    for(let dx=-1;dx<=1;dx++) for(let dy=-1;dy<=1;dy++) for(let dz=(D===3?-1:0);dz<=(D===3?1:0);dz++){ const L=cells.get((cx+dx)+','+(cy+dy)+','+(cz+dz)); if(!L) continue;
+      for(const j of L){ if(j<=i) continue; const o=P[j], ex=o.x-q.x, ey=o.y-q.y, ez=o.z-q.z, d2=ex*ex+ey*ey+ez*ez; if(d2>=4*r*r||d2===0) continue;
+        const d=Math.sqrt(d2), nx=ex/d, ny=ey/d, nz=ez/d, rv=(o.vx-q.vx)*nx+(o.vy-q.vy)*ny+(o.vz-q.vz)*nz; if(rv>=0) continue;
+        q.vx+=rv*nx; q.vy+=rv*ny; q.vz+=rv*nz; o.vx-=rv*nx; o.vy-=rv*ny; o.vz-=rv*nz;
+        const ov=(2*r-d)/2; q.x-=ov*nx; q.y-=ov*ny; q.z-=ov*nz; o.x+=ov*nx; o.y+=ov*ny; o.z+=ov*nz; } } });
   hero.steps++;
 }
 function drawHero(){
-  const cv=$('#hero-cv'), {ctx,W,H}=setupCv(cv,330), S=Math.min(W*0.5,H-20), ox=8, oy=(H-S)/2;
-  ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; ctx.strokeRect(ox,oy,S,S);
-  const v0=hero.v0, sp=hero.p.map(q=>Math.hypot(q.vx,q.vy));
-  hero.p.forEach((q,i)=>{ const t=Math.min(1,sp[i]/(2.2*v0)); ctx.fillStyle=t<0.45?css('--up'):t<0.75?css('--ink'):css('--crit'); ctx.beginPath(); ctx.arc(ox+q.x*S,oy+(1-q.y)*S,Math.max(1.8,hero.r*S),0,2*Math.PI); ctx.fill(); });
-  // running histogram of speeds (accumulated over recent frames)
+  const cv=$('#hero-cv'), {ctx,W,H}=setupCv(cv,330), D=hero.dim, S=Math.min(W*0.5,H-20), ox=8, oy=(H-S)/2;
+  const v0=hero.v0, sp=hero.p.map(q=>Math.hypot(q.vx,q.vy,q.vz)), colOf=v=>{ const t=Math.min(1,v/(2.2*v0)); return t<0.45?css('--up'):t<0.75?css('--ink'):css('--crit'); };
+  if(D===2){
+    ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; ctx.strokeRect(ox,oy,S,S);
+    hero.p.forEach((q,i)=>{ ctx.fillStyle=colOf(sp[i]); ctx.beginPath(); ctx.arc(ox+q.x*S,oy+(1-q.y)*S,Math.max(1.8,hero.r*S),0,2*Math.PI); ctx.fill(); });
+  } else {
+    // perspective view of the unit cube, turning slowly about the vertical axis
+    const ca=Math.cos(hero.ang), sa=Math.sin(hero.ang), tilt=0.38, ct=Math.cos(tilt), st=Math.sin(tilt), cam=3.0, cxs=ox+S/2, cys=oy+S/2, sc=S*0.95;
+    const proj=(x,y,z)=>{ x-=0.5; y-=0.5; z-=0.5; const X1=x*ca+z*sa, Z1=-x*sa+z*ca, Y2=y*ct-Z1*st, Z2=y*st+Z1*ct, f=cam/(cam-Z2); return [cxs+X1*f*sc*0.74, cys-Y2*f*sc*0.74, Z2, f]; };
+    const V=[]; for(let a=0;a<2;a++) for(let b=0;b<2;b++) for(let c=0;c<2;c++) V.push(proj(a,b,c));
+    const E=[[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]];
+    const edge=(e,back)=>{ const A=V[e[0]], B=V[e[1]], zm=(A[2]+B[2])/2; if((zm<0)!==back) return; ctx.strokeStyle=back?rgba(css('--muted'),0.35):rgba(css('--muted'),0.8); ctx.lineWidth=back?1:1.4; ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke(); };
+    E.forEach(e=>edge(e,true));
+    const order=hero.p.map((q,i)=>{ const pr=proj(q.x,q.y,q.z); return [pr,i]; }).sort((a,b)=>a[0][2]-b[0][2]);
+    order.forEach(([pr,i])=>{ const rad=Math.max(1.5,hero.r*sc*0.62*pr[3]), fade=0.55+0.45*(pr[2]+0.9)/1.8; ctx.globalAlpha=Math.max(0.35,Math.min(1,fade)); ctx.fillStyle=colOf(sp[i]); ctx.beginPath(); ctx.arc(pr[0],pr[1],rad,0,2*Math.PI); ctx.fill(); });
+    ctx.globalAlpha=1; E.forEach(e=>edge(e,false));
+  }
+  // running histogram of speeds against the Maxwell distribution for this dimension (mean v^2 = v0^2)
   hero.hist.push(...sp); if(hero.hist.length>hero.N*60) hero.hist.splice(0,hero.hist.length-hero.N*60);
-  const x0=ox+S+30, x1=W-10, y0=oy+20, y1=oy+S-22, nb=24, vmax=3*v0, bins=new Array(nb).fill(0);
+  const x0=ox+S+30, x1=W-10, y0=oy+20, y1=oy+S-22, nb=24, vmax=(D===3?2.6:3)*v0, bins=new Array(nb).fill(0);
   hero.hist.forEach(v=>{ const k=Math.floor(v/vmax*nb); if(k<nb) bins[k]++; });
-  const tot=hero.hist.length, s2=v0*v0/2; // 2D Maxwell (Rayleigh): P(v) = (v/s2) exp(-v^2/2 s2), mean v^2 = v0^2
-  const pdf=v=>(v/s2)*Math.exp(-v*v/(2*s2)), dens=bins.map(c=>c/(tot*vmax/nb)), ymax=Math.max(pdf(Math.sqrt(s2))*1.25,...dens);
-  ctx.strokeStyle=css('--rule'); ctx.beginPath(); ctx.moveTo(x0,y1); ctx.lineTo(x1,y1); ctx.stroke();
+  const tot=hero.hist.length, s2=v0*v0/D;
+  const pdf=D===3?(v=>Math.sqrt(2/Math.PI)*v*v/Math.pow(s2,1.5)*Math.exp(-v*v/(2*s2))):(v=>(v/s2)*Math.exp(-v*v/(2*s2)));
+  const dens=bins.map(c=>c/(tot*vmax/nb)), peak=pdf(Math.sqrt((D-1)*s2)), ymax=Math.max(peak*1.25,...dens);
+  ctx.strokeStyle=css('--rule'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x0,y1); ctx.lineTo(x1,y1); ctx.stroke();
   ctx.fillStyle=rgba(css('--up'),0.55); dens.forEach((d,k)=>{ const bx=x0+(x1-x0)*k/nb, bw=(x1-x0)/nb-1, h=(y1-y0)*d/ymax; ctx.fillRect(bx,y1-h,bw,h); });
   ctx.strokeStyle=css('--crit'); ctx.lineWidth=2; ctx.beginPath(); for(let k=0;k<=100;k++){ const v=vmax*k/100, X=x0+(x1-x0)*k/100, Y=y1-(y1-y0)*pdf(v)/ymax; k?ctx.lineTo(X,Y):ctx.moveTo(X,Y); } ctx.stroke();
   const xv0=x0+(x1-x0)*v0/vmax; ctx.strokeStyle=css('--muted'); ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(xv0,y0); ctx.lineTo(xv0,y1); ctx.stroke(); ctx.setLineDash([]);
   tagText(ctx,'starting speed',xv0,y0-10,css('--muted'),'center',W,H); tagText(ctx,'speed →',x1,y1+12,css('--muted'),'right',W,H);
-  $('#hero-read').innerHTML=`${hero.N} disks, all started at the same speed in random directions. Elastic collisions share out the energy, and the speed histogram settles into the two-dimensional Maxwell distribution (magenta), <span style="white-space:nowrap">P(v) ∝ v e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>. In three dimensions the extra phase-space factor gives the Maxwell speed distribution, <span style="white-space:nowrap">F(v) ∝ v² e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>. Colors: slow (blue), typical, fast (magenta).`;
+  const f3='<span style="white-space:nowrap">F(v) ∝ v² e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>', f2='<span style="white-space:nowrap">P(v) ∝ v e<sup>−mv²/(2k<sub>B</sub>T)</sup></span>';
+  $('#hero-read').innerHTML= D===3
+    ? `${hero.N} hard spheres in a box, all started at the same speed in random directions. Elastic collisions share out the energy, and the speed histogram settles into the Maxwell speed distribution (magenta), ${f3}. Colors: slow (blue), typical, fast (magenta); nearer spheres are drawn larger and brighter.`
+    : `${hero.N} disks in two dimensions, all started at the same speed. Here the speed histogram settles into the two-dimensional Maxwell distribution, ${f2}, with a single factor of v instead of the v² that comes from the spherical shell in three dimensions.`;
+  document.querySelectorAll('[data-dim]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dim===D)));
 }
-(function(){ heroInit(); playButton('#hero-play',hero,'run',['Pause','Play']); $('#hero-reset').addEventListener('click',()=>{ heroInit(); drawHero(); }); })();
+(function(){ heroInit(); playButton('#hero-play',hero,'run',['Pause','Play']); $('#hero-reset').addEventListener('click',()=>{ heroInit(); drawHero(); });
+  document.querySelectorAll('[data-dim]').forEach(b=>b.addEventListener('click',()=>{ hero.dim=+b.dataset.dim; heroInit(); drawHero(); })); })();
 watch('hero-cv'); reg(drawHero);
-function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=hero.last?Math.min(now-hero.last,100)/1000:0; hero.last=now; const n=Math.max(1,Math.round(dt*120)); for(let k=0;k<n;k++) heroStep(1/120); drawHero(); }
+function heroTick(now){ if(!hero.run||!visible.get('hero-cv')) return; const dt=hero.last?Math.min(now-hero.last,100)/1000:0; hero.last=now; const n=Math.max(1,Math.round(dt*120)); for(let k=0;k<n;k++) heroStep(1/120); if(hero.dim===3) hero.ang+=dt*0.15; drawHero(); }
 
 /* ---------- 9.3 heat capacities ---------- */
 (function(){
