@@ -191,7 +191,7 @@ An internet connection is needed the first time for the web fonts and for [KaTeX
 - **Rendering:** HTML5 canvas for every plot and animation, with a small built-in plotting helper; no charting library. Diagrams and simulations are original and do not reproduce textbook figures.
 - **Animations:** time-based (not frame-based), deliberately slow, paused when off screen, and paused at start for visitors who prefer reduced motion.
 - **Appearance of moving objects:** each point of a wireframe is placed at its retarded position, solving $c^2t_e^2 = x(t_e)^2 + y^2 + z^2$ for the emission time $t_e<0$, then projected through a pinhole camera.
-- **Accessibility:** light and dark color schemes follow the operating-system setting; layouts reflow down to phone widths.
+- **Accessibility:** light and dark color schemes follow the operating-system setting, and a sun/moon button in the top-right corner switches by hand, and the choice is remembered across pages; layouts reflow down to phone widths.
 
 ## References
 
