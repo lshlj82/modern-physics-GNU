@@ -147,6 +147,8 @@ From Maxwell's molecules to Fermi and Bose gases.
 
 The page header is a gas of colliding hard spheres in a slowly turning cube (with a 2D option) whose speed histogram relaxes to the Maxwell distribution.
 
+A closing section, *Where to go next*, points to the department's next-level statistical physics courses: [Statistical Physics 1](https://lshlj82.github.io/statphys1-GNU/) (통계물리1) and [Statistical Physics 2](https://lshlj82.github.io/statphys2-GNU/) (통계물리2), with the Statistical Physics 2 demos that continue §9.2–9.7 listed section by section, and beyond them the graduate courses [Phase Transitions and Critical Phenomena](https://lshlj82.github.io/phase-transition-and-critical-phenomena-GNU/) and [Special Topics in Complex Systems](https://lshlj82.github.io/special-topics-in-complex-systems-GNU/).
+
 ## Running locally
 
 No build step and no dependencies. Clone the repository and open any HTML file in a modern browser:
